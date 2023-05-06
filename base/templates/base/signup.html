@@ -1,0 +1,86 @@
+{% extends "main.html" %}
+
+{% block stylesheet %}
+<style>
+    .main {
+        width: 50%;
+        height: 50%;
+        margin: auto;
+    }
+    .f {
+        margin: 5%;
+        margin-bottom: 2%;
+        margin-top: 0;
+    }
+    .f label {
+        margin-left: 2%;
+    }
+    .f input {
+        border-radius: 10px;
+        border: none;
+        width: 95%;
+        background-color: rgba(0, 0, 0, 0.1);
+        height: 30px;
+        padding-left: 10px;
+        margin-bottom: 5px;
+    }
+    .f h5 {
+        margin: 0;
+        color: red;
+    }
+    
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="main">
+    <div style="background-color: white; border: 1px solid rgba(0, 0, 0, 0.5);width: 50%; border-radius: 10px;position: absolute;top: 50%;transform: translateY(-50%);">
+        <h1 style="text-align: center;">Create Account</h1>
+        <form class="f" method="POST" action="">
+            {% csrf_token %}
+            <div style="display: grid; grid-template-columns: 40% 60%;">
+                <label>Your name:</label>
+                <input type="text" name="name" placeholder="Enter name:" required/>
+                <label>Set your username:</label>
+                <div>
+                    {% if username %}<h5>User name Exists</h5>{% endif %}
+                    <input type="text" name="username" placeholder="Enter username:" required/>
+                </div>
+
+                <label>Enter College email:</label>
+                <div>
+                    {% if email %}<h5>Email Linked to another account</h5>{% endif %}
+                    <input type="text" name="email" placeholder="Enter email:" required/>
+                </div>
+
+                <label>Create Password:</label>
+                <div>
+                    {% if password %}
+                    <ul class="messages" style="margin: 0; padding-left: 10px;">
+                        {% for error in password %}
+                        <li>
+                            <h5>{{error}}</h5>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                    <input type="password" name="password" placeholder="Enter password:" required/>
+                </div>
+                <label>Re-enter Password:</label>
+                <input type="password" name="re-password" placeholder="Re-enter password:" required/>
+                
+                <label>Enter Captcha: </label>
+                <div>
+                    {% if captcha %}<h5>Wrong Captcha</h5>{% endif %}
+                    {{form.captcha}}
+                </div>
+            </div>
+            <div style="display: flex; margin: auto; width: 40%; margin-top: 2%;justify-content: space-between;">
+                <input type="submit" value="Sign up" style="width: 30%;"/>
+                <a href="{% url 'login' %}">Already have an account?</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

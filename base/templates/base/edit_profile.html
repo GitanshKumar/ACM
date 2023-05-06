@@ -1,0 +1,69 @@
+{% extends "main.html" %}
+
+{% block stylesheet %}
+<style>
+    .form-group {
+        display: grid;
+        grid-template-columns: 25% 75%;
+    }
+    .form-group a, .form-group:visited {
+        text-decoration: none;
+    }
+    .form-group a:hover {
+        text-decoration: underline;
+    }
+    .f label {
+        margin-left: 2%;
+    }
+    .f input, .f textarea, .f select {
+        border-radius: 10px;
+        border: none;
+        background-color: rgba(0, 0, 0, 0.1);
+        min-height: 30px;
+        resize: vertical;
+        padding-left: 10px;
+        margin-bottom: 5px;
+    }
+    .file input {
+        background-color: transparent;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="width: 60%; margin: auto;">
+    <div style="padding: 10px; background-color: white; border: 1px solid rgba(0, 0, 0, 0.5);width: 60%; border-radius: 10px;position: absolute;top: 50%;transform: translateY(-50%);">
+        <h1 style="text-align: center;">Edit Profile</h1>
+        <form class="f" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group" style="display: grid;grid-template-columns: 1fr 1fr 1fr 1fr;">
+                <label for="{{ form.year.id_for_label }}">Year:</label>
+                {{ form.year }}
+                <label style="margin-left: 15px;" for="{{ form.year.id_for_label }}">Admission No.:</label>
+                {{ form.admission }}
+            </div>
+            <div class="form-group" style="display: grid;grid-template-columns: 1fr 1fr 1fr 1fr;">
+                <label for="{{ form.linked_in.id_for_label }}">LinkedIn:</label>
+                {{ form.linked_in }}
+                <label style="margin-left: 15px;" for="{{ form.github.id_for_label }}">GitHub:</label>
+                {{ form.github }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.desc.id_for_label }}">Description:</label>
+                {{ form.desc }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.desc.id_for_label }}">Core(Branch):</label>
+                {{ form.core }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.profile_pic.id_for_label }}">Profile Picture:</label>
+                <div class="file">{{ form.profile_pic }}</div>
+            </div>
+            <div style="margin: auto; width: fit-content; margin-top: 1%;">
+                <input type="submit" value="Confirm"/>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

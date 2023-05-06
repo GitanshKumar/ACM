@@ -1,0 +1,83 @@
+{% extends "main.html" %}
+
+{% block stylesheet %}
+<style>
+    .main {
+        height: calc(100% - 50px);
+        width: 98%;
+        display: grid;
+        grid-template-columns: 35% 65%;
+    }
+    .main a:link, .main a:visited {
+        color: black;
+        text-decoration: none;
+    }
+    .main a:hover {
+        text-decoration: underline;
+    }
+    .event {
+        display: block;
+        max-height: 400px;
+        margin: 2%;
+        background-color: white;
+        height: 90%;
+        border-radius: 8px;
+        box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5);
+        transition: all 0.15s;
+    }
+    .event:hover {
+        transform: scale(1.04);
+    }
+    .image-container {
+        text-align: center;
+        margin: auto;
+        padding: 2%;
+        height: 70%;
+        transition: all 0.15s;
+    }
+    
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="main">
+    <div>
+        
+    </div>
+    <div style="height: 100%; overflow-y: auto;">
+        <h1>Ongoing and Latest Events</h1>
+        <div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr;padding-bottom: 1%; margin: 1%;">
+            {% for event in ongoing %}
+            <a class="event" href="{% url 'event' event.name %}">
+                <div class="image-container">
+                    <img style="object-fit: contain;" src="/{{event.image}}" width="100%" height="100%"/>
+                </div>
+                <div style="margin: 2%;margin-left: 5%;">
+                    <h3 style="margin: 0;">{{event.name}}</h3>
+                    <div style="margin-top: 5px;">
+                        Date: {{event.event_date}}<br>
+                        Status: {% if event.ongoing %} <b>Registrations Open</b> {% else %} Registrations Closed {% endif %}
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+            {% for event in other %}
+            <a class="event" href="{% url 'event' event.name %}">
+                <div class="image-container">
+                    <img style="object-fit: contain;" src="/{{event.image}}" width="100%" height="100%"/>
+                </div>
+                <div style="margin: 2%;margin-left: 5%;">
+                    <h3 style="margin: 0;">{{event.name}}</h3>
+                    <div style="margin-top: 5px;">
+                        Date: {{event.event_date}}<br>
+                        Status: {% if event.ongoing %} <b>Registrations Open</b> {% else %} Registrations Closed {% endif %}
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

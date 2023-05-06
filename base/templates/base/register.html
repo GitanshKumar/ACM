@@ -1,0 +1,55 @@
+{% extends "main.html" %}
+
+{% block stylesheet %}
+<style>
+    .main {
+        width: 50%;
+        margin: auto;
+    }
+    .f {
+        margin: 5%;
+        margin-top: 0;
+        display: grid;
+    }
+    .f label {
+        margin-left: 2%;
+    }
+    .f input {
+        border-radius: 10px;
+        border: none;
+        background-color: rgba(0, 0, 0, 0.1);
+        height: 30px;
+        padding-left: 10px;
+        margin-bottom: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="main">
+    <h1 style="margin-top: 10%; text-align: center;">{{event.name}}</h1>
+    <div style="border: 1px solid rgba(0, 0, 0, 0.5);background-color: white; width: 50%; border-radius: 30px;position: absolute;top: 50%;transform: translateY(-50%);">
+        <h4 style="color: red; text-align: center;">{{error}}</h4>
+        <h2 style="text-align: center;">Register</h2>
+        <form class="f" method="POST" action="">
+            {% csrf_token %}
+            {% if join %}
+                <label>Enter Team id</label>
+                <input type="text" name="team_id" placeholder="Enter Team ID:"/>
+            {% else %}
+                <label>Your Team name</label>
+                <input type="text" name="team_name" placeholder="Enter Team Name:"/>
+            {% endif %}
+            <label>Your email (updates will be sent on this)</label>
+            <input type="text" name="email" placeholder="Enter email:" value="{{user.email}}"/>
+            
+            <label>Your Admission</label>
+            <input type="text" name="admission" placeholder="Enter Admission id:" value="{{user.admission}}"/>
+            
+            <div style="text-align: center; margin-top: 1%;">
+                <input style="padding-left: auto;" type="submit" value="Confirm" />
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

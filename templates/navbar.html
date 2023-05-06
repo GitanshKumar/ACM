@@ -1,0 +1,178 @@
+<style>
+    .home, .home:link, .home:visited{
+        color: black;
+        text-decoration: none;
+        font-family: 'Inria Sans', sans-serif;
+        font-size: 16px;
+        font-weight: bold;
+        background-color: transparent;
+        border: 0px;
+    }
+    .logo {
+        font-family: 'Inria Sans', sans-serif;
+        font-size: 18px;
+        font-weight: bold;
+        background-color: rgb(16, 79, 100);
+        color: white;
+        border: 0px;
+        border-radius: 14px;
+        width: 36px;
+        height: 36px;
+        margin-left: 1%;
+        padding-right: 4px;
+        padding-left: 4px;
+        padding-bottom: 2px;
+        transform: rotate(-45deg);
+        margin-top: 6px;
+    }
+    .logo span {
+        display: inline-block;
+        transform: rotate(45deg);
+    }
+    .navbar{
+        position: relative;
+        width: 100%;
+        background-color: rgb(210, 233, 227);
+        height: 50px;
+        box-shadow: 0 2px 20px 0px rgba(0, 0, 0, 0.5);
+        z-index: 2;
+    }
+    .nav {
+        float: right;
+        margin-right: 5%;
+        margin-top: 12.5px;
+        font-weight: bold;
+        font-size: 18px;
+        transition: color 0.15s;
+    }
+    .nav:visited, .nav:link {
+        text-decoration: none;
+        color: black;
+    }
+    .nav:hover {
+        color: rgb(16, 79, 100);
+    }
+    .social {
+        margin: auto;
+        padding: 5px 5px 0 5px;
+        height: 90%;
+        position: relative;
+        opacity: 0;
+        display: flex;
+        justify-content: space-between;
+        text-align: center;
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 10px 10px 0 0;
+        transition: all 0.15s;
+    }
+    .social img {
+        width: 75%;
+        transform: scale(0.8);
+        transition: transform 0.2s;
+    }
+    .social img:hover {
+        transform: scale(1);
+    }
+    .hidden-social {
+        width: 20%;
+        margin: auto;
+    }
+    .hidden-social:hover .social {
+        opacity: 1;
+    }
+    .dropdown {
+        cursor: pointer;
+        float: right;
+        margin-right: 5%;
+        margin-top: 12.5px;
+        font-weight: bold;
+        font-size: 18px;
+        transition: color 0.15s;
+        z-index: 1;
+    }
+    .dropdown-content {
+        height: 0;
+        overflow: hidden;
+        position: absolute;
+        right: 1%;
+        transition: opacity 0.3s, display 0s;
+    }
+    .dropdown:hover .dropdown-content {
+        height: fit-content;
+    }
+    .dropdown-content div {
+        opacity: 0;
+        margin-top: 20px;
+        transition: all 0.15s;
+    }
+    .dropdown:hover .dropdown-content div {
+        opacity: 1;
+        margin-top: 15px;
+    }
+    .dropdown a, .dropdown a:link, .dropdown:visited {
+        text-decoration: none;
+        color: white;
+        margin: 5% 0 0 10%;
+    }
+    .dropdown a:hover {
+        text-decoration: underline;
+    }
+    .line1, .line2, .line3{
+        height: 3px;
+        margin: 3px 0 0 0;
+        width: 25px;
+        border-radius: 5px;
+        border: 1px solid black;
+        transition: all 0.3s;
+    }
+    .line2 {
+        width: 12px;
+    }
+    .line3 {
+        width: 18px;
+    }
+    .dropdown:hover .line1, .dropdown:hover .line2, .dropdown:hover .line3{
+        width: 25px;
+        background-color: rgba(0, 0, 0, 0.75);
+    }
+</style>
+
+<div class="navbar">
+    <a class="home" href="{% url 'home' %}">
+        <button class="logo">
+            <span>acm</span>
+        </button>
+        <span>ABES-EC</span>
+    </a>
+    <div class="dropdown" style="float: right; font-weight: normal;">
+        <div class="hov">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+        <div class="dropdown-content">
+            <div style="display: grid; background-color: rgba(0, 0, 0, 0.5); width: 120px; border-radius: 0 0 10px 10px;">
+                {% if request.user.is_authenticated %}
+                <a href="{% url 'profile' request.user.username %}">{{request.user.username}}/</a>
+                <a href="{% url 'logout' %}" style="margin-bottom: 5%;">logout/</a>
+                {% else %}
+                <a href="{% url 'signup' %}">Sign Up/</a>
+                <a href="{% url 'login' %}">Login/</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <a class="nav" href="{% url 'team' %}">team/</a>
+    <a class="nav" href="{% url 'events' %}">events/</a>
+    <a class="nav" href="{% url 'aboutus' %}">aboutus/</a>
+</div>
+<div style="position: absolute;bottom: 0; width: 100%; z-index: 1;">
+    <div class="hidden-social">
+        <div class="social">
+            <a href="https://www.linkedin.com/in/acm-abes-ec-6967b71b6/"><img src="/images/icons/linkedin.png"></a>
+            <a href="https://www.facebook.com/abesec.acm/"><img src="/images/icons/facebook.png"></a>
+            <a href="https://instagram.com/acm_abesec?igshid=YmMyMTA2M2Y="><img src="/images/icons/instagram.png"></a>
+            <a href="https://www.youtube.com/@acmabesec3967"><img src="/images/icons/youtube.png"></a>
+        </div>
+    </div>
+</div>

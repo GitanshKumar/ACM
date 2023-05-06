@@ -1,0 +1,137 @@
+{% extends "main.html" %}
+
+{% block stylesheet %}
+<style>
+    .aboutus-container {
+        display: grid;
+        width: 80%;
+        margin: auto;
+        grid-template-columns: 20% 80%;
+        height: calc(100% - 50px);
+    }
+    .links {
+        font-size: 18px;
+        display: flex;
+        flex-direction: column;
+    }
+    .links a:link, .links a:visited {
+        color: black;
+        text-decoration: none;
+        margin-bottom: 5%;
+    }
+    .main {
+        height: 100%;
+        overflow-y: auto;
+    }
+    .pro-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        text-align: center;
+    }
+    .pro-container img {
+        border-radius: 50%;
+        width: 30%;
+        border: 2px solid black;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="aboutus-container">
+    <div>
+        <h1 style="font-size: 40px; margin-top: 5%;">About Us</h1>
+        <div class="links">
+            <a href="#acm">ACM</a>
+            <a href="#facteam">Faculty Team</a>
+            <a href="#chapter">Student Chapter</a>
+            <a href="#wchapter">Women Chapter</a>
+            <a href="#alumni">Alumni</a>
+        </div>
+    </div>
+    <div class="main">
+        <div id="acm">
+            <div style="background-color: white; box-shadow:0 1px 1px 0 rgba(0,0,0,0.5); margin: 1%; border-radius: 8px;">
+                <div style="margin: 2%; padding-bottom: 1%; padding-top: 1%;">
+                    <h1 style="margin-left: 5%;">ACM</h1>
+                    <p>ACM, or the Association for Computing Machinery, is a professional organization dedicated to advancing the field of computing. With over 100,000 members across the globe, ACM serves as a hub for researchers, practitioners, and educators in computing and related disciplines.</p>
+                    <p>Founded in 1947, ACM has a rich history of contributing to the development of computer science and promoting its use for the benefit of society. The organization publishes numerous journals and conference proceedings, as well as a variety of educational resources for students and professionals alike.</p>
+                    <p>ACM also sponsors a number of special interest groups (SIGs) focused on specific areas of computing, such as artificial intelligence, computer graphics, and human-computer interaction. These SIGs provide a forum for members with similar interests to collaborate and share knowledge.</p>
+                    <p>addition to its publications and SIGs, ACM offers a range of professional development opportunities, including conferences, workshops, and online courses. The organization also recognizes excellence in the field through awards and honors, such as the Turing Award, often referred to as the "Nobel Prize of Computing."</p>
+                    <p>At its core, ACM is driven by a commitment to advancing the field of computing and promoting its positive impact on society. Whether you are a student, researcher, or practitioner in the field, ACM is a valuable resource for connecting with others and staying up-to-date on the latest developments in computing.</p>
+                </div>
+            </div>
+        </div>
+        <div id="facteam">
+            <div style="background-color: white; box-shadow:0 1px 1px 0 rgba(0,0,0,0.5); margin: 1%; border-radius: 8px;">
+                <div style="margin: 2%; padding-bottom: 1%; padding-top: 1%;">
+                    <h1>Faculty Team</h1>
+                    <div class="pro-container">
+                        {% for fac in faculty %}
+                            <div>
+                                <a href="{% url 'profile' fac.user.username %}"><img src="/{{fac.profile_pic}}"></a>
+                                <h4 style="margin-bottom: 2px;">{{fac.name}}</h4>
+                                <p style="margin: 0;">{{fac.core}}</p>
+                                <p style="margin: 0 0 10% 0;">{{fac.role}}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="chapter">
+            <div style="background-color: white; box-shadow:0 1px 1px 0 rgba(0,0,0,0.5); margin: 1%; border-radius: 8px;">
+                <div style="margin: 2%; padding-bottom: 1%; padding-top: 1%;">
+                    <h1>Student Chapter</h1>
+                    <div class="pro-container">
+                        {% for stu in student %}
+                            <div>
+                                <a href="{% url 'profile' stu.user.username %}"><img src="/{{stu.profile_pic}}"></a>
+                                <h3 style="margin: 5px;">{{stu.name}}</h3>
+                                <p style="margin-top: 0;">
+                                    {{stu.role}}<br>
+                                    {{stu.core}}
+                                </p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="wchapter">
+            <div style="background-color: white; box-shadow:0 1px 1px 0 rgba(0,0,0,0.5); margin: 1%; border-radius: 8px;">
+                <div style="margin: 2%; padding-bottom: 1%; padding-top: 1%;">
+                    <h1>Women Chapter</h1>
+                    <div class="pro-container">
+                        {% for stu in wchapter %}
+                            <div>
+                                <a href="{% url 'profile' stu.user.username %}"><img src="/{{stu.profile_pic}}"></a>
+                                <h4 style="margin-bottom: 2px;">{{stu.name}}</h4>
+                                <p style="margin: 0;">{{stu.core}}</p>
+                                <p style="margin: 0 0 10% 0;">{{stu.role}}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="alumni" style="margin-bottom: 5%;">
+            <div style="background-color: white; box-shadow:0 1px 1px 0 rgba(0,0,0,0.5); margin: 1%; border-radius: 8px;">
+                <div style="margin: 2%; padding-bottom: 1%; padding-top: 1%;">
+                    <h1>Our Alumni's</h1>
+                    <div class="pro-container">
+                        {% for alu in alumnis %}
+                            <div>
+                                <a href="{% url 'profile' alu.user.username %}"><img src="/{{alu.profile_pic}}"></a>
+                                <h4 style="margin-bottom: 2px;">{{alu.name}}</h4>
+                                <p style="margin: 0;">{{alu.core}}</p>
+                                <p style="margin: 0 0 10% 0;">{{alu.role}}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

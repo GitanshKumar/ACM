@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Welcome to ACM ABES</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inria+Sans&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+                margin: 0;
+                height: 100%;
+                background-color: #f6f8fa;
+                font-family: 'Inria Sans', sans-serif;
+            }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            margin: 15px 0 15px 0;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.5); 
+            border: 1px solid black;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.8);
+            border-radius: 10px;
+        }
+        .messages {
+            width: fit-content;
+            margin: auto;
+            color: rgb(136, 24, 24);
+        }
+    </style>
+    {% block stylesheet %}{% endblock %}
+</head>
+<body>
+    {% include 'navbar.html' %}
+
+    {% block content %}
+
+    {% endblock %}
+</body>
+</html>

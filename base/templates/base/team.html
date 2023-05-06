@@ -1,0 +1,99 @@
+{% extends "main.html" %}
+
+{% block stylesheet %}
+<style>
+    .main-container {
+        position: absolute;
+        top: 0; bottom: 0; left: 0; right: 0;
+        width: 100%;
+        overflow-y: auto;
+    }
+    ::-webkit-scrollbar-track {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    .stu-container {
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        margin: auto;
+        margin-top: 2%;
+        border-radius: 8px;
+        background-color: white;
+        box-shadow: 0 1PX 1px 0px rgba(0, 0, 0, 0.5);
+    }
+    .pro-container {
+        display: grid;
+        grid-template-columns: 50% 50%;
+        column-gap: 2%;
+    }
+    .pro {
+        display: grid;
+        grid-template-columns: 30% 70% 0%;
+        margin-bottom: 5%;
+        width: 95%;
+        transition: all 0.5s;
+    }
+    .desc {
+        opacity: 0;
+        height: 120px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        border-radius: 20px;
+        transition: opacity 0.5s;
+    }
+    .pro:hover {
+        grid-template-columns: 20% 30% 50%;
+    }
+    .pro:hover .desc{
+        opacity: 1;
+    }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="height: calc(100% - 50px); width: 80%; display: flex; position: relative; margin: auto;">
+    <div class="main-container">
+        <div class="stu-container">
+            <div style="margin: 1%;">
+                <h1 style="margin-left: 2%;">ACM Student Chapter</h1>
+                <div class="pro-container">
+                    {% for stu in student %}
+                    <div class="pro">
+                        <a href="{% url 'profile' stu.user.username %}" style="text-align: center;"><img src="\{{stu.profile_pic}}" style="border-radius: 200px;" width="90%"></a>
+                        <div style="margin-left: 2%;">
+                            <h3 style="margin-bottom: 2px;">{{stu.name}}</h3>
+                            <span>{{stu.core}}<br>{{stu.role}}</span>
+                        </div>
+                        <div class="desc">
+                            <p style="margin: 5%;">{{stu.short_desc}}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="stu-container" style="margin-bottom: 5%;">
+            <div style="margin: 1%;">
+                <h1 style="margin-left: 2%;">ACM Women Chapter</h1>
+                <div class="pro-container">
+                    {% for stu in wchapter %}
+                    {% for _ in '0123456789'|make_list %}
+                    <div class="pro">
+                        <a href="{% url 'profile' stu.user.username %}" style="text-align: center;"><img src="\{{stu.profile_pic}}" style="border-radius: 200px;" width="90%"></a>
+                        <div style="margin-left: 2%;">
+                            <h3 style="margin-bottom: 2px;">{{stu.name}}</h3>
+                            <span>{{stu.core}}<br>{{stu.role}}</span>
+                        </div>
+                        <div class="desc" style="width: 100%;">
+                            <p style="margin: 5%;">{{stu.short_desc}}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "main.html" %}
+
+{% block stylesheet %}
+<style>
+    .pro-container {
+        display: flex;
+        width: 100%; height: calc(100% - 50px);
+        overflow-y: hidden;
+    }
+    .profiles {
+        margin: auto;
+        margin-right: 10%;
+    }
+    .pro-container::-webkit-scrollbar {
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="pro-container">
+    {% for stu in faculty %}
+        <div class="profiles">
+            <a href="{{stu.linked_in}}"><img src="/images/default.png" width="300px"></a>
+            <h4 style="margin-bottom: 2px;">{{stu.name}}</h4>
+            <p style="margin: 0;">{{stu.core}}</p>
+            <p style="margin: 0 0 10% 0;">{{stu.role}}</p>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

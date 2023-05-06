@@ -1,0 +1,56 @@
+{% extends "main.html" %}
+
+{% block stylesheet %}
+<style>
+    .main {
+        width: 50%;
+        height: 50%;
+        margin: auto;
+    }
+    .f {
+        margin: 5%;
+        margin-top: 0;
+    }
+    .f label {
+        margin-left: 2%;
+    }
+    .f input {
+        border-radius: 10px;
+        border: none;
+        background-color: rgba(0, 0, 0, 0.1);
+        height: 30px;
+        padding-left: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="main">
+    <div style="background-color: white; border: 1px solid rgba(0, 0, 0, 0.5);width: 50%; border-radius: 30px;position: absolute;top: 50%;transform: translateY(-50%);">
+        <h1 style="text-align: center;">Login</h1>
+        {% if messages %}
+        <ul class="messages">
+            {% for msg in messages %}
+            <li>
+                {{msg}}
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <form class="f" method="POST" action="">
+            {% csrf_token %}
+            <div style="display: grid;">
+                <label>Username:</label>
+                <input type="text" name="username" placeholder="Enter Username:" />
+
+                <label>Password:</label>
+                <input type="password" name="password" placeholder="Enter password:" />
+            </div>
+            <div style="margin: auto; width: 40%;display: flex; margin-top: 2%; justify-content: space-between;">
+                <input type="submit" value="Login" style="width: 30%;"/>
+                <a href="{% url 'signup' %}">Create an account?</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

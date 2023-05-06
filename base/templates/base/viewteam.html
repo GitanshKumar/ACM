@@ -1,0 +1,49 @@
+{% extends 'main.html' %}
+
+{% block stylesheet %}
+<style>
+    .pro {
+        display: grid;
+        grid-template-columns: 30% 70%;
+        margin-bottom: 5%;
+        width: 95%;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 0 2px 0 rgba(0,0,0,0.5);
+        transition: all 0.5s;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="display: flex; flex-direction: column; width: 80%;margin: auto; padding-top: 5%;">
+    <h1>{{event.name}}</h1>
+    <h1 style="text-align: center;">Team: {{team.team_name}}</h1>
+    <div style="display: grid; grid-template-columns: 1fr 1fr;">
+        <div class="pro">
+            <a href="{% url 'profile' leader.user.username %}" style="text-align: center;"><img src="\{{leader.profile_pic}}" style="border-radius: 200px;" width="90%"></a>
+            <div style="margin-left: 2%;">
+                <h4>LEADER</h4>
+                <h2 style="margin-bottom: 2px;">{{leader.name}}</h2>
+                <span>{{leader.core}}<br>{{leader.admission}}</span>
+            </div>
+            <div class="desc">
+                <p style="margin: 5%;">{{leader.short_desc}}</p>
+            </div>
+        </div>
+        {% for member in members %}
+            <div class="pro">
+                <a href="{% url 'profile' member.user.username %}" style="text-align: center;"><img src="\{{leader.profile_pic}}" style="border-radius: 200px;" width="90%"></a>
+                <div style="margin-left: 2%;">
+                    <h4>MEMBER</h4>
+                    <h2 style="margin-bottom: 2px;">{{member.name}}</h2>
+                    <span>{{member.core}}<br>{{member.admission}}</span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div style="text-align: center;margin-top: auto;">
+        To add participants tell them to join through the code: {{team.team_id}}
+    </div>
+</div>
+{% endblock %}

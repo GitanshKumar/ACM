@@ -1,0 +1,153 @@
+{% extends "main.html" %}
+
+{% block stylesheet %}
+<style>
+    .prof-container {
+        position: absolute;
+        top: 0; bottom: 0; left: 0; right: 0;
+        width: 80%;
+        overflow-y: auto;
+        margin: auto;
+        padding: 1%;
+    }
+    .prof-container a, .prof-container a:link, .prof-container a:visited{
+        color: black;
+    }
+    .inner {
+        display: grid;
+        grid-template-columns: 30% 70%;
+        margin: auto;
+        margin-top: 15%;
+        min-height: 40%;
+        margin-bottom: 1%;
+        background-color: white;
+        border: 2px solid rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+    }
+    .left-pane {
+        border-right: 2px solid rgba(0, 0, 0, 0.2);
+        margin: 5% 0 5% 5%;
+    }
+    .edit-btn {
+        color: black;
+        text-align: center;
+        font-family: 'Inria Sans', sans-serif;
+        float: right;
+        width: 15%;
+        transition: all 0.15s;
+        border-radius: 10px;
+        background-color: white;
+        border: 2px solid rgba(0, 0, 0, 0.5);
+    }
+    .edit-btn:hover {
+        background-color: rgba(210, 233, 227, 0.5);
+    }
+    .edit-btn:active {
+        background-color: rgba(210, 233, 227, 0.8);
+    }
+    .heading {
+        font-size: 18px;
+        font-weight: bold;
+        padding-top: 2%;
+        padding-bottom: 2%;
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+    .tvalues {
+        padding-bottom: 1%;
+        padding-top: 1%;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+    }
+    ::-webkit-scrollbar-track {
+            margin: 50px 0 50px 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="height: calc(100% - 50px); width: 100%; display: flex; position: relative;">
+    <div class="prof-container">
+        <div class="inner">
+            <div class="left-pane">
+                <div style="text-align: center;">
+                    <img src="/{{user.profile_pic}}" width="50%" style="margin-top: -40%; border-radius: 50%;{% if member %} border: 5px solid {% if user.year == '3rd' or user.faculty %} gold {% elif user.year == '2nd' %} silver {% else %} brown {% endif %} {% endif %};">
+                    <h2>{{user.name}}</h2>
+                    {% if user.linked_in %}<a href="{{user.linked_in}}" style="margin-right: 10px;"><img src="/images/icons/linkedin.png" width="25px"></a>{% endif %}
+                    {% if user.github %}<a href="{{user.github}}"><img src="/images/icons/github.png" width="28px"></a>{% endif %}
+                </div>
+                <div>
+                    {% if member %}
+                        <div style="font-weight: bold;">Role </div>
+                        <div>{{user.role}}</div>
+                    {% endif %}
+                    {% if user.core %}
+                        <div style="font-weight: bold;">Branch </div>
+                        <div>{{user.core}}</div>
+                    {% elif is_owner %}
+                    <div><a href="{% url 'edit_profile' %}">Add Branch</a></div>{% endif %}
+                    {% if user.admission %}
+                        <div style="font-weight: bold;">Admission id: </div>
+                        <div>{{user.admission}}</div>
+                    {% elif is_owner %}
+                        <div><a href="{% url 'edit_profile' %}">Add Admisssion no.</a></div>{% endif %}
+                </div>
+            </div>
+            <div style="margin: 5%;">
+                <div>
+                    <span style="font-size: 25px; font-weight: bold;">ABOUT</span>
+                    {% if is_owner %}
+                    <form action="{% url 'edit_profile' %}" style="display: inline;">
+                        <button class="edit-btn" type="submit">Edit Profile</button>
+                    </form>
+                    {% endif %}
+                </div>
+                <p>{{user.desc}}</p>
+            </div>
+        </div>
+        <div style="background-color: white;border: 2px solid rgba(0, 0, 0, 0.5);border-radius: 10px; margin-bottom: 5%;">
+            <section style="margin-left: 5%;">
+                <h2>Your Participation</h2>
+            </section>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; margin: 0 5% 0 5%; text-align: center; margin-bottom: 3%;">
+                <div class="heading">Event Name</div>
+                <div class="heading">Date</div>
+                {% if member %}
+                    <div class="heading">Role</div>
+                    {% if event_info %}
+                        {% for event in event_info %}
+                            <a href="{% url 'event' event.name %}" style="text-decoration: none;">
+                                <div class="tvalues">{{event.name}}</div>
+                            </a>
+                            <div class="tvalues">{{event.event_date.date}}</div>
+                            <div class="tvalues">Tech</div>
+                        {% endfor %}
+                    {% else %}
+                        {% if is_owner %}
+                        <div></div>
+                        <div>You have not coordinated in any events yet</div>
+                        <div></div>
+                        {% endif %}
+                    {% endif %}
+                {% else %}
+                    <div class="heading">Position</div>
+                    {% if event_info %}
+                        {% for event in event_info %}
+                            <a href="{% url 'event' event.name %}" style="text-decoration: none;">
+                                <div class="tvalues">{{event.name}}</div>
+                            </a>
+                            <div class="tvalues">{{event.event_date.date}}</div>
+                            <div class="tvalues">-</div>
+                        {% endfor %}
+                    {% else %}
+                        {% if is_owner %}
+                        <div></div>
+                        <div>You have not participated in any events yet</div>
+                        <div></div>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
