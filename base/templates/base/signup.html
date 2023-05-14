@@ -40,17 +40,17 @@
             {% csrf_token %}
             <div style="display: grid; grid-template-columns: 40% 60%;">
                 <label>Your name:</label>
-                <input type="text" name="name" placeholder="Enter name:" required/>
+                <input type="text" name="name" value="{{name}}" placeholder="Enter name:" required/>
                 <label>Set your username:</label>
                 <div>
                     {% if username %}<h5>User name Exists</h5>{% endif %}
-                    <input type="text" name="username" placeholder="Enter username:" required/>
+                    <input type="text" name="username" value="{{username}}" placeholder="Enter username:" required/>
                 </div>
 
                 <label>Enter College email:</label>
                 <div>
                     {% if email %}<h5>Email Linked to another account</h5>{% endif %}
-                    <input type="text" name="email" placeholder="Enter email:" required/>
+                    <input type="text" name="email" value="{{email}}" placeholder="Enter email:" required/>
                 </div>
 
                 <label>Create Password:</label>

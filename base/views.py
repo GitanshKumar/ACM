@@ -4,12 +4,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from .models import Event, Member, Student, Team
+from django.http import JsonResponse
+from django.db.models import Q
+from .models import Event, Member, Student, Team, Tag
 from .forms import EditMemberForm, EditStudentForm, CaptchaForm
 import re
 
 def home(request):
-    ongoing = Event.objects.filter(ongoing= True).order_by("-event_date")
+    ongoing = Event.objects.filter(ongoing= True).order_by("event_date")
     other = Event.objects.filter(ongoing= False).order_by("-event_date")[:9 - ongoing.count()]
     context = {"other": other, "ongoing": ongoing}
     return render(request, 'base/home.html', context)
@@ -39,7 +41,27 @@ def event(request, pk):
     return render(request, 'base/event.html', context)
 
 def events(request):
-    return render(request, 'base/events.html')
+    events = Event.objects.all().order_by("-event_date")
+    q = request.GET.get("q", "")
+    start = request.GET.get("start") if request.GET.get("start") and request.GET.get("start") != "mm-dd-yyyy" else "1900-01-01"
+    end = request.GET.get("end") if request.GET.get("end") and request.GET.get("end") != "mm-dd-yyyy" else "9999-01-01"
+    shown = int(request.GET.get("events")) if request.GET.get("events") else 5
+    if "clear" in request.GET:
+        q, start, end, shown = "", "1900-01-01", "9999-01-01", 5
+    
+    context = {"tags": sorted(Tag.objects.all().order_by("name"), key= lambda a: a.related_events(), reverse=True),
+               "events": events[:shown],
+               "shown":shown,
+               "total":events.count(),
+               "left":shown < events.count(),
+               "search":q,
+               "start":"mm-dd-yyyy" if start == "1900-01-01" else start,
+               "end": "mm-dd-yyyy" if end == "9999-01-01" else end}
+
+    if "q" in request.GET:
+        context["events"] = events.filter(Q(name__icontains=q) | Q(tag__name__icontains=q), event_date__date__range=(start, end)).order_by("-event_date").distinct()
+    
+    return render(request, 'base/events.html', context)
 
 def aboutus(request):
     fac_team = Member.objects.filter(faculty= True)
@@ -76,27 +98,27 @@ def signup(request):
         form = CaptchaForm(request.POST)
         if not form.is_valid():
             context["captcha"] = True
-        try:
-            User.objects.get(username=username)
-            context["username"] = True
-        except:
-            errors, valid = valid_password(password, re_password)
-            if valid:
-                user = User.objects.create_user(username=username, email=email, password=password)
-                user.save()
-                try:
-                    mem = Student(user=user, name=name, email=email)
-                    mem.save()
-                except:
-                    context["email"] = True
-                    user.delete()
-            else:
-                context["password"] = errors
+        
+        if User.objects.filter(username=username).first():
+            context["username"] = username
+        
+        errors, valid = valid_password(password, re_password)
+        if not valid:
+            context["password"] = errors
+        
+        if Student.objects.filter(email=email).first():
+            context["email"] = email
         
         if not context:
+            user = User.objects.create_user(username=username, email=email, password=password)
+            user.save()
+            mem = Student(user=user, name=name, email=email)
+            mem.save()
             user = authenticate(request, username= username, password=password)
             login(request, user)
             return redirect("edit_profile")
+        
+        context["name"] = name
     
     form = CaptchaForm()
     context["form"] = form
@@ -131,8 +153,8 @@ def profile(request, pk):
         is_mem = False
         user = Student.objects.get(user=User.objects.get(username=pk))
         events_info = user.participated.all()
-    
-    return render(request, 'base/myprofile.html', {"user":user, "is_owner": request.user == user.user, "member": is_mem, "event_info":events_info})
+    context = {"user":user, "is_owner": request.user == user.user, "member": is_mem, "event_info":events_info}
+    return render(request, 'base/myprofile.html', context)
 
 def logoutuser(request):
     logout(request)
@@ -182,7 +204,7 @@ def register(request, pk, cat):
                 event.participants.add(student)
                 event.save()
                 team.save()
-                return redirect("home")
+                return redirect(reverse("viewteam", args=(event.name,)))
             else:
                 context["error"] = "Already Registered"
                 return render(request, "base/register.html", context)
@@ -205,11 +227,29 @@ def register(request, pk, cat):
     return render(request, "base/register.html", context)
 
 def viewteam(request, pk):
+    if not request.user.is_authenticated:
+        messages.error(request, "Signup to create a team")
+        return redirect("home")
+    
     event = Event.objects.get(name=pk)
     team = request.user.student.myteams.filter(event=event).first()
+    if team is None: return redirect("home")
     leader = team.leaders.all().first()
     members = []
     for member in team.members.all():
         if leader != member:
             members.append(member)
     return render(request, "base/viewteam.html", {"leader":leader, "members":members, "team":team, "event":event})
+
+def event_details(request, pk):
+    request.user.member
+    event = Event.objects.get(name=pk)
+    teams, participants = "", ""
+    q = request.GET.get("q", "")
+    if "clear" in request.GET: q = ""
+
+    if event.team_members > 1: teams = Team.objects.filter(Q(team_name__icontains= q) | Q(leaders__name__icontains= q), event=event)
+    else: participants = event.participants.all()
+    
+    context = {"values":participants or teams, "team": teams != "", "event": event, "search":q}
+    return render(request, "base/event_details.html", context)

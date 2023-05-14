@@ -43,18 +43,20 @@
                 {{ form.admission }}
             </div>
             <div class="form-group" style="display: grid;grid-template-columns: 1fr 1fr 1fr 1fr;">
-                <label for="{{ form.linked_in.id_for_label }}">LinkedIn:</label>
+                <label for="{{ form.linked_in.id_for_label }}">Linked In:</label>
                 {{ form.linked_in }}
                 <label style="margin-left: 15px;" for="{{ form.github.id_for_label }}">GitHub:</label>
                 {{ form.github }}
             </div>
+            <div class="form-group" style="display: grid;grid-template-columns: 1fr 1fr 1fr 1fr;">
+                <label for="{{ form.core.id_for_label }}">Core(Branch):</label>
+                {{ form.core }}
+                <label style="margin-left: 15px;" for="{{ form.mobile_no.id_for_label }}">Mobile No(Private): </label>
+                {{ form.mobile_no }}
+            </div>
             <div class="form-group">
                 <label for="{{ form.desc.id_for_label }}">Description:</label>
                 {{ form.desc }}
-            </div>
-            <div class="form-group">
-                <label for="{{ form.desc.id_for_label }}">Core(Branch):</label>
-                {{ form.core }}
             </div>
             <div class="form-group">
                 <label for="{{ form.profile_pic.id_for_label }}">Profile Picture:</label>
@@ -65,5 +67,6 @@
             </div>
         </form>
     </div>
+    <h4 style="text-align: center;">Note: To contact you, we will use your email and Mobile number, please enter correct information.</h4>
 </div>
 {% endblock %}

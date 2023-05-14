@@ -9,8 +9,9 @@ class Member(models.Model):
     user = models.OneToOneField(User, on_delete= models.CASCADE, default="", related_name="member")
     name = models.CharField(max_length= 100)
     email = models.EmailField(max_length= 254, default="", unique=True)
-    admission = models.CharField(max_length=50, default="")
+    admission = models.CharField(max_length=50, default="",blank=True)
     year = models.CharField(max_length=20, choices=[('1st', 'First year'), ('2nd', 'Second year'), ('3rd', 'Third year')], default="1st")
+    mobile_no = models.CharField(max_length=10, default="")
     faculty = models.BooleanField(default=False)
     profile_pic = models.ImageField(upload_to="images/profile_pics", default="images/default.png")
     linked_in = models.CharField(max_length=150, default="", null=True, blank=True)
@@ -31,6 +32,15 @@ class Photo(models.Model):
     def __str__(self) -> str:
         return self.event.name
 
+class Tag(models.Model):
+    name = models.CharField(max_length=100)
+    
+    def related_events(self) -> int:
+        return self.events.count()
+    
+    def __str__(self) -> str:
+        return self.name
+
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete= models.CASCADE, default="", related_name="student")
     name = models.CharField(max_length= 100)
@@ -38,6 +48,7 @@ class Student(models.Model):
     year = models.CharField(max_length=20, choices=[('1st', 'First year'), ('2nd', 'Second year'), ('3rd', 'Third year')], default="1st")
     admission = models.CharField(max_length=50, default="")
     email = models.EmailField(max_length= 254, default="", unique=True)
+    mobile_no = models.CharField(max_length=10, default="")
     profile_pic = models.ImageField(upload_to="images/profile_pics", default="images/default.png")
     linked_in = models.CharField(max_length=150, default="", null=True, blank=True)
     github = models.CharField(max_length=150, default="", null=True, blank=True)
@@ -53,6 +64,8 @@ class Event(models.Model):
     description = models.TextField(null= True, blank= True)
     details = RichTextField(null=True, blank=True)
     location = models.CharField(max_length= 150, null=True, blank=True)
+    image = models.ImageField(upload_to="images/events/")
+    tag = models.ManyToManyField(Tag, blank=True, related_name="events")
     fee = models.CharField(max_length= 5, default= 0)
     ongoing = models.BooleanField(default=False)
     team_members = models.IntegerField(default=1)
@@ -61,8 +74,10 @@ class Event(models.Model):
     created = models.DateTimeField(auto_now_add= True)
     event_date = models.DateTimeField()
     end_date = models.DateTimeField(null=True, blank=True)
-    image = models.ImageField(upload_to="images/events/")
     participants = models.ManyToManyField(Student, blank=True, related_name="participated")
+    first = models.ManyToManyField(Student, blank=True, related_name="first")
+    second = models.ManyToManyField(Student, blank=True, related_name="second")
+    third = models.ManyToManyField(Student, blank=True, related_name="third")
 
     def __str__(self) -> str:
         return self.name

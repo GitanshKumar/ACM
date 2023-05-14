@@ -14,4 +14,5 @@ urlpatterns = [
     path('edit/', views.edit_profile, name="edit_profile"),
     path('register/<str:pk>/<str:cat>', views.register, name="register"),
     path('viewteam/<str:pk>', views.viewteam, name="viewteam"),
+    path('detail/<str:pk>', views.event_details, name="event_detail"),
 ]
