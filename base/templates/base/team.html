@@ -52,7 +52,7 @@
 {% endblock %}
 
 {% block content %}
-<div style="height: calc(100% - 50px); width: 80%; display: flex; position: relative; margin: auto;">
+<div style="height: calc(100% - 50px); max-width: 1200px; display: flex; position: relative; margin: auto;">
     <div class="main-container">
         <div class="stu-container">
             <div style="margin: 1%;">
@@ -62,8 +62,11 @@
                     <div class="pro">
                         <a href="{% url 'profile' stu.user.username %}" style="text-align: center;"><img src="\{{stu.profile_pic}}" style="border-radius: 200px;" width="90%"></a>
                         <div style="margin-left: 2%;">
-                            <h3 style="margin-bottom: 2px;">{{stu.name}}</h3>
-                            <span>{{stu.core}}<br>{{stu.role}}</span>
+                            <h2 style="margin-bottom: 2px;">{{stu.name}}</h2>
+                            <span>{{stu.core}}<br>{{stu.role}}<br>
+                                {% with ''|center:stu.year.0 as range %}
+                                {% for _ in range %}{{ '|' }}{% endfor %}
+                                {% endwith %}</span>
                         </div>
                         <div class="desc">
                             <p style="margin: 5%;">{{stu.short_desc}}</p>
@@ -78,7 +81,6 @@
                 <h1 style="margin-left: 2%;">ACM Women Chapter</h1>
                 <div class="pro-container">
                     {% for stu in wchapter %}
-                    {% for _ in '0123456789'|make_list %}
                     <div class="pro">
                         <a href="{% url 'profile' stu.user.username %}" style="text-align: center;"><img src="\{{stu.profile_pic}}" style="border-radius: 200px;" width="90%"></a>
                         <div style="margin-left: 2%;">
@@ -89,7 +91,6 @@
                             <p style="margin: 5%;">{{stu.short_desc}}</p>
                         </div>
                     </div>
-                    {% endfor %}
                     {% endfor %}
                 </div>
             </div>

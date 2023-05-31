@@ -10,11 +10,11 @@ class EditMemberForm(forms.ModelForm):
     admission = forms.CharField(required=True)
     class Meta:
         model = Member
-        fields = ('year', 'profile_pic', 'linked_in', 'github', 'desc', 'core', 'admission')
+        fields = ('year', 'mobile_no', 'profile_pic', 'linked_in', 'github', 'desc', 'core', 'admission')
 
 class EditStudentForm(forms.ModelForm):
     core = forms.CharField(required=True)
     admission = forms.CharField(required=True)
     class Meta:
         model = Student
-        fields = ('year', 'profile_pic', 'linked_in', 'github', 'desc', 'core', 'admission')
+        fields = ('year', 'mobile_no', 'profile_pic', 'linked_in', 'github', 'desc', 'core', 'admission')

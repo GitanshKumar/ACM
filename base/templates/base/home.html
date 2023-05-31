@@ -4,7 +4,8 @@
 <style>
     .main {
         height: calc(100% - 50px);
-        width: 98%;
+        margin-left: 2%;
+        margin-right: 2%;
         display: grid;
         grid-template-columns: 35% 65%;
     }
@@ -17,10 +18,10 @@
     }
     .event {
         display: block;
-        max-height: 400px;
+        max-height: 98%;
         margin: 2%;
         background-color: white;
-        height: 90%;
+        height: 100%;
         border-radius: 8px;
         box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5);
         transition: all 0.15s;
@@ -35,7 +36,6 @@
         height: 70%;
         transition: all 0.15s;
     }
-    
 </style>
 {% endblock %}
 
@@ -47,7 +47,7 @@
     <div style="height: 100%; overflow-y: auto;">
         <h1>Ongoing and Latest Events</h1>
         <div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr;padding-bottom: 1%; margin: 1%;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr;padding-bottom: 1%; margin: 1%;margin-left: 0;">
             {% for event in ongoing %}
             <a class="event" href="{% url 'event' event.name %}">
                 <div class="image-container">

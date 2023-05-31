@@ -3,7 +3,7 @@
 {% block stylesheet %}
 <style>
     .main {
-        width: 50%;
+        max-width: 1200px;
         margin: auto;
     }
     .f {
@@ -27,8 +27,8 @@
 
 {% block content %}
 <div class="main">
-    <h1 style="margin-top: 10%; text-align: center;">{{event.name}}</h1>
-    <div style="border: 1px solid rgba(0, 0, 0, 0.5);background-color: white; width: 50%; border-radius: 30px;position: absolute;top: 50%;transform: translateY(-50%);">
+    <h1 style="text-align: center;">{{event.name}}</h1>
+    <div style="border: 1px solid rgba(0, 0, 0, 0.5);background-color: white;max-width: 600px; border-radius: 30px;margin: auto;">
         <h4 style="color: red; text-align: center;">{{error}}</h4>
         <h2 style="text-align: center;">Register</h2>
         <form class="f" method="POST" action="">

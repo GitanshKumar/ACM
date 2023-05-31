@@ -1,5 +1,185 @@
 {% extends "main.html" %}
 
+{% block stylesheet %}
+<style>
+    .event {
+        display: grid;
+        margin-bottom: 1%;
+        margin-right: 1%;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 1px 2px 0 rgba(0,0,0,0.5);
+    }
+    .f {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+    .f input {
+        border-radius: 5px;
+        border: 1px solid rgba(0,0,0,0.5);
+        padding: 5px;
+        font-family: 'Inria Sanse', sans-serif;
+    }
+    .more {
+        width: 100%;
+        padding: 1%;
+        border-radius: 10px;
+        color: black;
+        border: none;
+        transition: all 0.15s;
+        font-family: 'Inria Sans', sans-serif;
+        background-color: white;
+    }
+    .more:hover {
+        text-decoration: underline;
+        background-color: rgba(210, 233, 227, 0.6);
+    }
+    .more:active {
+        text-decoration: underline;
+        background-color: rgba(210, 233, 227, 0.8);
+    }
+    .tag:hover {
+        color: rgb(57, 180, 180);
+        text-decoration: underline;
+    }
+    .image {
+        position: absolute;
+        left: 100%;
+        top: 0;
+    }
+    .hov {
+        display: inline;
+        position: relative;
+    }
+    .image div {
+        background-color: rgba(0,0,0,0.5);
+        object-fit: contain;
+        display: none;
+        height: 150px;
+        width: 150px;
+        padding: 2px;
+        z-index: 1;
+        margin-left: 10px;
+        transition: all 0.2s;
+    }
+    .hov:hover .image div {
+        display: block;
+    }
+    .image div:hover {
+        transform: scale(1.5);
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<h1>events</h1>
+<div style="height: calc(100% - 50px); max-width: 1200px; margin: auto;overflow-y: auto;">
+    <div style="margin: 3%;">
+        <form class="f" method="GET">
+            <input type="text" placeholder="Search events..." id="search-bar-events" name="q" value="{{search}}" style="width: 50%;">
+            <label>Start:</label>
+            <input type="date" name="start" value="{{start}}">
+            <label>End:</label>
+            <input type="date" value="{{end}}" name="end">
+            <input type="submit" value="Search" name="s" class="more" style="width: fit-content;">
+            <input type="submit" value="Clear" name="clear" class="more" style="width: fit-content;">
+        </form>
+    </div>
+    <div style="display: grid;grid-template-columns: 20% 80%;">
+        <div style="display: grid;height: fit-content;">
+            <a class="tag" href="{% url 'events' %}?q=">All({{total}})</a>
+            {% for tag in tags %}
+            <a class="tag" href="{% url 'events' %}?q={{tag.name}}">{{tag}}({{tag.related_events}})</a>
+            {% endfor %}
+        </div>
+        {% if events %}
+        <div>
+            <div id="events">
+                {% for event in events %}
+                    <div class="event">
+                        <div style="margin: 2%;">
+                            <a href="{% url 'event' event.name %}" style="color: black;">
+                                <h2 class="hov">
+                                    {{event.name}}
+                                    <div class="image">
+                                        <div>
+                                            <img src="/{{event.image}}" style="object-fit: contain;" alt="event poster" width="100%" height="100%">
+                                        </div>
+                                    </div>
+                                </h2>
+                            </a>
+                            <div>{{event.event_date.date|date:"j M Y"}}</div>
+                            <p>{{event.description}}</p>
+                            <div style="font-size: 14px;">{% for tag in event.tag.all %}{% if not forloop.last %}{{tag}}, {% else %}{{tag}}{% endif %}{% endfor %}</div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% if left %}
+            <div id="load-more-container" style="margin: auto;margin-bottom: 50px;margin-top: 20px;width: 30%;">
+                <input class="more" type="button" id="load-more" onclick="load()" value="Load More Events">
+            </div>
+            {% endif %}
+        </div>
+        {% else %}
+        <div style="text-align: center;">
+            <img src="/images/icons/no result.png" width="20%"/>
+            <p>No results to show</p>
+            <p>Please modify your search</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+    function load(){
+            var container = $("#events");
+            $.ajax({
+            url: "/events/",
+            method: "GET",
+            data: {"loadmore":true, "count":$(".event").length, "q": "{{search}}"},
+            success: function(data) {
+                console.log(data);
+                if (!data[0]) {
+                    $("#load-more-container").remove();
+                };
+                for (var i = 1; i < data.length; i++){
+                    var event = data[i];
+                    var tags = "";
+                    for (var j = 0; j < event[4].length; j++) {
+                        if (j !== event[4].length - 1) {
+                            tags += event[4][j] + ", ";
+                        } else {
+                            tags += event[4][j];
+                        }
+                    }
+                    var innerhtml = `
+                    <div class="event">
+                        <div style="margin: 2%;">
+                            <a href="" style="color: black;">
+                                <h2 class="hov">
+                                    ${event[0]}
+                                    <div class="image">
+                                        <div>
+                                            <img src="${event[1]}" style="object-fit: contain;" alt="event poster" width="100%" height="100%">
+                                        </div>
+                                    </div>
+                                </h2>
+                            </a>
+                            <div>${event[2]}</div>
+                            <p>${event[3]}</p>
+                            <div style="font-size: 14px;">${tags}</div>
+                        </div>
+                    </div>
+                    `;
+                    container.append(innerhtml);
+                }
+            }
+        })
+    }
+</script>
 {% endblock %}

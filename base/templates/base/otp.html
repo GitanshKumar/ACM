@@ -4,6 +4,7 @@
 <style>
     .main {
         width: 50%;
+        height: 50%;
         margin: auto;
     }
     .f {
@@ -25,8 +26,8 @@
 
 {% block content %}
 <div class="main">
-    <div style="background-color: white; border: 1px solid rgba(0, 0, 0, 0.5);width: 50%; border-radius: 10px;position: absolute;top: 50%;transform: translateY(-50%);">
-        <h1 style="text-align: center;">Login</h1>
+    <div style="background-color: white; border: 1px solid rgba(0, 0, 0, 0.5);width: 50%; border-radius: 30px;position: absolute;top: 50%;transform: translateY(-50%);">
+        <h1 style="text-align: center;">Enter OTP</h1>
         {% if messages %}
         <ul class="messages">
             {% for msg in messages %}
@@ -39,16 +40,11 @@
         <form class="f" method="POST" action="">
             {% csrf_token %}
             <div style="display: grid;">
-                <label>Username:</label>
-                <input type="text" name="username" placeholder="Enter Username:" />
-
-                <label>Password:</label>
-                <input type="password" name="password" placeholder="Enter password:" />
+                <label>Enter Otp:</label>
+                <input type="text" name="enteredotp" placeholder="Enter password:" />
             </div>
-            <div style="margin: auto; width: 60%;display: flex; margin-top: 2%; justify-content: space-between;">
-                <input type="submit" value="Login" style="width: 30%;"/>
-                <a href="{% url 'signup' %}" style="margin-top: 3px;">Create an account?</a>
-                <a href="{% url 'reset_pass' 'request' %}" style="margin-top: 3px;">Forgot Password?</a>
+            <div style="margin: auto; width: 40%;display: flex; margin-top: 2%; justify-content: space-between;">
+                <input type="submit" value="Login" style="width: 30%;margin: auto;"/>
             </div>
         </form>
     </div>

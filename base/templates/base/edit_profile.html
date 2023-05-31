@@ -31,39 +31,44 @@
 {% endblock %}
 
 {% block content %}
-<div style="width: 60%; margin: auto;">
-    <div style="padding: 10px; background-color: white; border: 1px solid rgba(0, 0, 0, 0.5);width: 60%; border-radius: 10px;position: absolute;top: 50%;transform: translateY(-50%);">
-        <h1 style="text-align: center;">Edit Profile</h1>
-        <form class="f" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="form-group" style="display: grid;grid-template-columns: 1fr 1fr 1fr 1fr;">
-                <label for="{{ form.year.id_for_label }}">Year:</label>
-                {{ form.year }}
-                <label style="margin-left: 15px;" for="{{ form.year.id_for_label }}">Admission No.:</label>
-                {{ form.admission }}
-            </div>
-            <div class="form-group" style="display: grid;grid-template-columns: 1fr 1fr 1fr 1fr;">
-                <label for="{{ form.linked_in.id_for_label }}">LinkedIn:</label>
-                {{ form.linked_in }}
-                <label style="margin-left: 15px;" for="{{ form.github.id_for_label }}">GitHub:</label>
-                {{ form.github }}
-            </div>
-            <div class="form-group">
-                <label for="{{ form.desc.id_for_label }}">Description:</label>
-                {{ form.desc }}
-            </div>
-            <div class="form-group">
-                <label for="{{ form.desc.id_for_label }}">Core(Branch):</label>
-                {{ form.core }}
-            </div>
-            <div class="form-group">
-                <label for="{{ form.profile_pic.id_for_label }}">Profile Picture:</label>
-                <div class="file">{{ form.profile_pic }}</div>
-            </div>
-            <div style="margin: auto; width: fit-content; margin-top: 1%;">
-                <input type="submit" value="Confirm"/>
-            </div>
-        </form>
+<div style="max-width: 1200px; margin: auto;">
+    <h4 style="text-align: center;">Note: To contact you, we will use your email and Mobile number, please enter correct information.</h4>
+    <div style="max-width: 1000px;margin: auto;">
+        <div style="padding: 10px; background-color: white; border: 1px solid rgba(0, 0, 0, 0.5);margin: 2%; border-radius: 10px;">
+            <h1 style="text-align: center;">Edit Profile</h1>
+            <form class="f" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group" style="display: grid;grid-template-columns: 1fr 1fr 1fr 1fr;">
+                    <label for="{{ form.year.id_for_label }}">Year:</label>
+                    {{ form.year }}
+                    <label style="margin-left: 15px;" for="{{ form.year.id_for_label }}">Admission No.:</label>
+                    {{ form.admission }}
+                </div>
+                <div class="form-group" style="display: grid;grid-template-columns: 1fr 1fr 1fr 1fr;">
+                    <label for="{{ form.linked_in.id_for_label }}">Linked In:</label>
+                    {{ form.linked_in }}
+                    <label style="margin-left: 15px;" for="{{ form.github.id_for_label }}">GitHub:</label>
+                    {{ form.github }}
+                </div>
+                <div class="form-group" style="display: grid;grid-template-columns: 1fr 1fr 1fr 1fr;">
+                    <label for="{{ form.core.id_for_label }}">Core(Branch):</label>
+                    {{ form.core }}
+                    <label style="margin-left: 15px;" for="{{ form.mobile_no.id_for_label }}">Mobile No(Kept Private): </label>
+                    {{ form.mobile_no }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.desc.id_for_label }}">Description:</label>
+                    {{ form.desc }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.profile_pic.id_for_label }}">Profile Picture:</label>
+                    <div class="file">{{ form.profile_pic }}</div>
+                </div>
+                <div style="margin: auto; width: fit-content; margin-top: 1%;">
+                    <input type="submit" value="Confirm"/>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}
