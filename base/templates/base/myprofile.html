@@ -5,7 +5,7 @@
     .prof-container {
         position: absolute;
         top: 0; bottom: 0; left: 0; right: 0;
-        width: 80%;
+        max-width: 1200px;
         overflow-y: auto;
         margin: auto;
         padding: 1%;
@@ -64,7 +64,7 @@
 {% endblock %}
 
 {% block content %}
-<div style="height: calc(100% - 50px); width: 100%; display: flex; position: relative;">
+<div style="height: calc(100% - 50px);display: flex; position: relative;">
     <div class="prof-container">
         <div class="inner">
             <div class="left-pane">

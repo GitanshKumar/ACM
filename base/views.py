@@ -1,3 +1,4 @@
+import csv, uuid, re
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
@@ -5,16 +6,35 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
+from django.core import serializers
+from itertools import chain
 from django.db.models import Q
+from datetime import datetime, timedelta, time
 from .models import Event, Member, Student, Team, Tag
 from .forms import EditMemberForm, EditStudentForm, CaptchaForm
-import re
+from .custom import send_mail
 
 def home(request):
     ongoing = Event.objects.filter(ongoing= True).order_by("event_date")
     other = Event.objects.filter(ongoing= False).order_by("-event_date")[:9 - ongoing.count()]
     context = {"other": other, "ongoing": ongoing}
     return render(request, 'base/home.html', context)
+
+def search(request):
+    q = request.GET.get("search", "")
+    if request.headers.get('x-requested-with'):
+        if q != "":
+            event_results = Event.objects.filter(name__icontains=q).values_list("name")[:5]
+            member = Member.objects.filter(name__startswith= q)[:5]
+            stu = Student.objects.filter(name__startswith= q)[:5]
+            res = list(event_results)
+            for i in stu:
+                res.append([i.name, i.user.username, i.profile_pic.url, "", i.core if i.core else "", ""])
+            for i in member:
+                res.append([i.name, i.user.username, i.profile_pic.url, "MEMBER", i.core, i.role])
+            return JsonResponse(sorted(res, key= lambda a: a[0])[:8], safe=False)
+        else:
+            return JsonResponse("", safe=False)
 
 def event(request, pk):
     sel_event = Event.objects.get(name=pk)
@@ -41,25 +61,36 @@ def event(request, pk):
     return render(request, 'base/event.html', context)
 
 def events(request):
-    events = Event.objects.all().order_by("-event_date")
     q = request.GET.get("q", "")
     start = request.GET.get("start") if request.GET.get("start") and request.GET.get("start") != "mm-dd-yyyy" else "1900-01-01"
     end = request.GET.get("end") if request.GET.get("end") and request.GET.get("end") != "mm-dd-yyyy" else "9999-01-01"
-    shown = int(request.GET.get("events")) if request.GET.get("events") else 5
+    events = Event.objects.all().order_by("-event_date")
+    count = total = events.count()
+    context = {"events": events}
+    shown = 4
+
     if "clear" in request.GET:
-        q, start, end, shown = "", "1900-01-01", "9999-01-01", 5
+        q, start, end = "", "1900-01-01", "9999-01-01"
+
+    if "q" in request.GET:
+        events = events.filter(Q(name__icontains=q) | Q(tag__name__icontains=q), event_date__date__range=(start, end)).order_by("-event_date").distinct()
+        count = events.count()
+    
+    if "loadmore" in request.GET:
+        prev = int(request.GET["count"])
+        shown = prev + 5
+        res = []
+        for i in events[prev:shown]:
+             res.append([i.name, i.image.url, i.event_date.date(), i.description, list(i.tag.all().values_list("name", flat=True))])
+        return JsonResponse([shown < count] + res, safe=False)
     
     context = {"tags": sorted(Tag.objects.all().order_by("name"), key= lambda a: a.related_events(), reverse=True),
                "events": events[:shown],
-               "shown":shown,
-               "total":events.count(),
-               "left":shown < events.count(),
+               "total": total,
+               "left":shown < count,
                "search":q,
                "start":"mm-dd-yyyy" if start == "1900-01-01" else start,
                "end": "mm-dd-yyyy" if end == "9999-01-01" else end}
-
-    if "q" in request.GET:
-        context["events"] = events.filter(Q(name__icontains=q) | Q(tag__name__icontains=q), event_date__date__range=(start, end)).order_by("-event_date").distinct()
     
     return render(request, 'base/events.html', context)
 
@@ -128,7 +159,6 @@ def loginuser(request):
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
-
         try:
             user = User.objects.get(username= username)
         except: 
@@ -248,8 +278,99 @@ def event_details(request, pk):
     q = request.GET.get("q", "")
     if "clear" in request.GET: q = ""
 
-    if event.team_members > 1: teams = Team.objects.filter(Q(team_name__icontains= q) | Q(leaders__name__icontains= q), event=event)
+    if event.team_members > 1: teams = Team.objects.filter(Q(team_name__startswith= q) | Q(leaders__name__startswith= q), event=event)
     else: participants = event.participants.all()
     
     context = {"values":participants or teams, "team": teams != "", "event": event, "search":q}
     return render(request, "base/event_details.html", context)
+
+def reset_password(request, reset_id):
+    if request.method == "POST":
+        if "email" in request.POST:
+            email = request.POST.get("email")
+            user = Member.objects.filter(email=email).first()
+            if not user: user = Student.objects.filter(email=email).first()
+            if not user:
+                messages.error(request, "Email does not exist")
+                return redirect(reverse("reset_pass", args=("request",)))
+            user.unique_url = uuid.uuid4()
+            user.url_timeout = datetime.now()
+            user.save()
+            send_mail(email, "Reset Password request", "<div>You can reset password through this link<br>http://127.0.0.1:8000/reset/" + str(user.unique_url) + "<br>Link will expire in 1 hour.</div>")
+            return render(request, 'base/reset_password.html', {"email_sent":True})
+        else:
+
+            password = request.POST.get("pass")
+            re_password = request.POST.get("cpass")
+            errors, valid = valid_password(password, re_password)
+            if not valid:
+                return render(request, 'base/reset_password.html', {"reset":True, "errors":errors})
+            else:
+                user = Member.objects.filter(unique_url= reset_id).first()
+                if not user: user = Student.objects.filter(unique_url= reset_id).first()
+                user.user.set_password(password)
+                user.unique_url = ""
+                user.url_timeout = None
+                user.user.save()
+                messages.error(request, "Successfully updated password")
+                return redirect("login")
+    
+    if reset_id != "request":
+        user = Member.objects.filter(unique_url= reset_id).first()
+        if not user: user = Student.objects.filter(unique_url= reset_id).first()
+        if not user: return redirect("home")
+        time_diff = (datetime.now() - datetime.combine(datetime.today(), user.url_timeout)).total_seconds() / 3600
+        if time_diff > 1:
+                user.unique_url = ""
+                user.url_timeout = None
+                user.save()
+                messages.error(request, "Link expired, request another now")
+                return redirect(reverse("reset_pass", args=("request",)))
+        return render(request, 'base/reset_password.html', {"reset":True})
+    
+    return render(request, 'base/reset_password.html', {"req":True})
+
+
+# import random
+# import string
+
+# def generate_random_password():
+#     length = 8
+#     while True:
+#         password = []
+#         password.append(random.choice(string.ascii_uppercase))  # At least 1 uppercase
+#         password.append(random.choice(string.ascii_lowercase))  # At least 1 lowercase
+#         password.append(random.choice(string.digits))  # At least 1 digit
+#         password.append(random.choice("!@#$&*"))  # At least 1 special character
+
+#         remaining_length = length - len(password)
+#         password += random.choices(
+#             string.ascii_letters + string.digits + string.punctuation,
+#             k=remaining_length
+#         )
+
+#         random.shuffle(password)
+#         password = ''.join(password)
+
+#         if (
+#             any(c.isupper() for c in password) and
+#             any(c.islower() for c in password) and
+#             any(c.isdigit() for c in password) and
+#             any(c in string.punctuation for c in password)
+#         ):
+#             return password
+
+# def temp():
+#     with open("temo\ACM Members - 1st year.csv", "r") as f:
+#         a = csv.DictReader(f)
+#         with open("temo/1st.csv", "a") as f1:
+#             for i in a:
+#                 pwd = generate_random_password()
+#                 name = "".join(i["Name"].split()).lower()
+                
+#                 user = User.objects.create(username=name, email=i["email id"], password= pwd)
+#                 user.save()
+#                 mem = Member(user=user, name=i["Name"], email=i["email id"], admission=i["Admission no."], year="1st", mobile_no=i["mobile number"], core="CS")
+#                 mem.save()
+
+#                 f1.write()

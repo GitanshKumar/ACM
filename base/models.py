@@ -8,7 +8,7 @@ from ckeditor.fields import RichTextField
 class Member(models.Model):
     user = models.OneToOneField(User, on_delete= models.CASCADE, default="", related_name="member")
     name = models.CharField(max_length= 100)
-    email = models.EmailField(max_length= 254, default="", unique=True)
+    email = models.EmailField(max_length= 254, default="")
     admission = models.CharField(max_length=50, default="",blank=True)
     year = models.CharField(max_length=20, choices=[('1st', 'First year'), ('2nd', 'Second year'), ('3rd', 'Third year')], default="1st")
     mobile_no = models.CharField(max_length=10, default="")
@@ -21,6 +21,8 @@ class Member(models.Model):
     role = models.CharField(max_length= 100, null=True, blank=True)
     short_desc = models.TextField(default="Hello, I love being in ACM's core team", blank=True)
     desc = models.TextField(default="Hello, I love being in ACM's core team", blank=True)
+    unique_url = models.CharField(max_length=255, blank=True)
+    url_timeout = models.TimeField(auto_now= False, auto_now_add=False, null=True, blank=False)
 
     def __str__(self) -> str:
         return self.name
@@ -55,6 +57,8 @@ class Student(models.Model):
     core = models.CharField(max_length= 50, null=True, blank=True)
     desc = models.TextField(default="Hello, I promise to be awesome!!", blank=True)
     teams = models.ManyToManyField('Team', blank=True, related_name="member")
+    unique_url = models.CharField(max_length=255, blank=True)
+    url_timeout = models.TimeField(auto_now= False, auto_now_add=False, null=True, blank=False)
 
     def __str__(self) -> str:
         return self.user.username

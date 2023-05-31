@@ -4,7 +4,7 @@
 <style>
     .event-container {
         display: grid;
-        width: 80%;
+        max-width: 1200px;
         margin: auto;
         height: calc(100% - 50px);
         grid-template-columns: 40% 60%;
@@ -16,6 +16,7 @@
         position: absolute;
         flex-direction: column;
         margin: auto;
+        margin-left: 10px;
         left:0; right:0;
         top:0; bottom:0;
         border-radius: 8px;
@@ -66,9 +67,57 @@
     {% if photos %}
     .images-container {
         height: 45%;
+        margin-left: 3%;
+        margin-right: 3%;
         position: relative;
     }
     {% endif %}
+    .slider {
+        position: relative;
+        transform-style: preserve-3d;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        margin: auto;
+        margin-top: 2%;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        text-align: center;
+    }
+    .slide {
+        width: 100%;
+        height: 100%;
+        left: 0;
+        right: 0;
+        position: absolute;
+        transition: all 0.5s;
+    }
+    .btn {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        padding: 10px;
+        border: none;
+        border-radius: 50%;
+        z-index: 10px;
+        cursor: pointer;
+        background-color: #fff;
+        font-size: 18px;
+        border: 1px solid rgba(0, 0, 0, 0.4);
+    }
+    .btn:hover {
+        transform: scale(1.1);
+    }
+    .btn-prev {
+        top: 45%;
+        left: 2%;
+    }
+    .btn-next {
+        top: 45%;
+        right: 2%;
+    }
 </style>
 {% endblock %}
 
@@ -113,7 +162,7 @@
                 {% elif event.team_members == 1 %}
                 <form method="POST">
                     {% csrf_token %}
-                    <input onclick="alert('Registered Successfully')" type="submit" name="register" value="Quick Register" class="register"/>
+                    <input type="submit" name="register" value="Quick Register" class="register"/>
                 </form>
                 {% else %}
                 <a href="{% url 'register' event.name 'join' %}" style="text-decoration: none;">
@@ -129,11 +178,17 @@
     <div style="overflow-y: auto;">
         {% if photos %}
         <div class="images-container">
-            <div style="position: absolute; margin-top: 10%; width: 100%; text-align: center;">
+            <label class="slider">
                 {% for photo in event.photos.all %}
-                    <div><img src="/{{photo.image}}" /></div>
+                    <div class="slide">
+                        <div style="width: 300px;height: 300px;margin: auto;margin-top: 5px;margin-bottom: 5px;">
+                            <img style="object-fit: contain; filter: drop-shadow(0 0 5px gray);" src="/{{photo.image}}" width="100%" height="100%"/>
+                        </div>
+                    </div>
                 {% endfor %}
-            </div>
+            </label>
+            <button class="btn btn-next">></button>
+            <button class="btn btn-prev"><</button>
         </div>
         {% endif %}
         <div class="details">
@@ -143,3 +198,54 @@
 </div>
 
 {% endblock %} 
+
+{% block script %}
+<script>
+    const slides = document.querySelectorAll(".slide");
+    let maxSlide = slides.length - 1;
+    let curSlide = Math.floor(maxSlide / 2);
+    let timeId;
+
+    function arrange() {
+        slides.forEach((slide, i) => {
+            var pos = i - curSlide;
+            slide.setAttribute("style", `transform:translateX(${pos * 40}%) scale(${1 - 0.3 * Math.abs(pos)});z-index:${10 - Math.abs(pos)};`);
+        });
+    }
+    
+    function startLoop(auto) {
+        clearTimeout(timeId);
+        if (auto === 1) {
+            if (curSlide === maxSlide) {
+                curSlide = 0;
+            } else {
+                curSlide++;
+            }
+        }
+        arrange();
+        timeId = setTimeout(function() {startLoop(1)}, 5000);
+    }
+    
+    const nextslide = document.querySelector(".btn-next");
+    nextslide.addEventListener("click", function () {
+        if (curSlide === maxSlide) {
+            curSlide = 0;
+        } else {
+            curSlide++;
+        }
+        startLoop(0);
+    });
+    
+    const prevslide = document.querySelector(".btn-prev");
+    prevslide.addEventListener("click", function () {
+        if (curSlide === 0) {
+            curSlide = maxSlide;
+        } else {
+            curSlide--;
+        }
+        startLoop(0);
+    });
+
+    startLoop(0);
+</script>
+{% endblock %}
