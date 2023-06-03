@@ -8,6 +8,7 @@
     }
     .f {
         margin: 5%;
+        margin-bottom: 10px;
         margin-top: 0;
         display: grid;
     }
@@ -28,8 +29,8 @@
 {% block content %}
 <div class="main">
     <h1 style="text-align: center;">{{event.name}}</h1>
-    <div style="border: 1px solid rgba(0, 0, 0, 0.5);background-color: white;max-width: 600px; border-radius: 30px;margin: auto;">
-        <h4 style="color: red; text-align: center;">{{error}}</h4>
+    <div style="border: 1px solid rgba(0, 0, 0, 0.5);background-color: white;max-width: 600px; border-radius: 10px;margin: auto;">
+        {%if error%}<h4 style="color: red; text-align: center;">{{error}}</h4>{% endif %}
         <h2 style="text-align: center;">Register</h2>
         <form class="f" method="POST" action="">
             {% csrf_token %}
@@ -41,10 +42,10 @@
                 <input type="text" name="team_name" placeholder="Enter Team Name:"/>
             {% endif %}
             <label>Your email (updates will be sent on this)</label>
-            <input type="text" name="email" placeholder="Enter email:" value="{{user.email}}"/>
+            <input type="text" name="email" placeholder="Enter email:" value="{{user.email}}" style="cursor: no-drop;" readonly/>
             
             <label>Your Admission</label>
-            <input type="text" name="admission" placeholder="Enter Admission id:" value="{{user.admission}}"/>
+            <input type="text" name="admission" placeholder="Enter Admission id:" value="{{user.admission}}" style="cursor: no-drop;" readonly/>
             
             <div style="text-align: center; margin-top: 1%;">
                 <input style="padding-left: auto;" type="submit" value="Confirm" />

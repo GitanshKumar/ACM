@@ -21,26 +21,30 @@
         top:0; bottom:0;
         border-radius: 8px;
         background-color: white;
-        border: 3px solid rgba(255, 255, 255, 0.3);
-        box-shadow: 0 2px 2px 0px rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(0, 0, 0, 0.2);
     }
-    .image-container {
+    .poster-container {
         text-align: center;
         margin: auto;
         height: 60%;
         transition: all 0.15s;
     }
-    .image-container img {
+    .poster-container img {
         border-radius: 10px;
-        box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
+        object-fit: contain;
+        filter: drop-shadow(0 0 5px gray);
     }
     .details p, .details h3 {
         margin-top: 0px;
         padding: 10px;
-        box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.5);
         border-radius: 8px;
+        border: 1px solid rgba(0, 0, 0, 0.2);
         margin: 2%;
         background-color: white;
+    }
+    .details h3 {
+        width: fit-content;
+        margin: auto;
     }
     .register {
         margin: auto;
@@ -48,21 +52,19 @@
         width: 50%;
         padding: 1%;
         border-radius: 10px;
-        color: black;
-        border: 2px solid rgba(0, 0, 0, 0.5);
+        color: rgb(49, 89, 79);
+        background-color: rgb(210, 233, 227);
+        border: 1px solid rgba(0, 0, 0, 0.2);
         transition: all 0.15s;
         font-family: 'Inria Sans', sans-serif;
         font-size: 18px;
         font-weight: bold;
-        background-color: white;
     }
     .register:hover {
-        text-decoration: underline;
-        background-color: rgba(210, 233, 227, 0.6);
+        background-color: rgba(210, 233, 227, 0.8);
     }
     .register:active {
-        text-decoration: underline;
-        background-color: rgba(210, 233, 227, 0.8);
+        background-color: rgba(210, 233, 227, 0.6);
     }
     {% if photos %}
     .images-container {
@@ -128,8 +130,8 @@
             <h2 style="margin-bottom: 0 ;">
                 {{event.name}}
             </h2>
-            <div class="image-container">
-                <img style="object-fit: contain;" src="/{{event.image}}" width="100%" height="100%"/>
+            <div class="poster-container">
+                <img src="/{{event.image}}" width="100%" height="100%"/>
             </div>
             <div style="font-weight: bold;text-align: left; font-size: 18px; margin: auto;">
                 <div style="display: flex;">

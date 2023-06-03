@@ -22,8 +22,27 @@ def home(request):
 
 def search(request):
     q = request.GET.get("search", "")
+    shown = 2
     if request.headers.get('x-requested-with'):
-        if q != "":
+        if "loadmore" in request.GET:
+            prev = int(request.GET["count"])
+            q = request.GET["q"]
+            shown = prev + 2
+            event_results = Event.objects.filter(name__icontains=q)
+            member = Member.objects.filter(name__startswith= q)
+            stu = Student.objects.filter(name__startswith= q)
+            res = []
+            for i in event_results:
+                res.append(["event", i.name, i.image.url, i.event_date.date(), i.description, list(i.tag.all().values_list("name", flat=True))])
+            for i in stu:
+                res.append(["student", i.name, i.user.username, i.profile_pic.url, i.core if i.core else "", i.year, "", i.desc])
+            for i in member:
+                res.append(["member", i.name, i.user.username, i.profile_pic.url, i.core, i.year, i.role, i.desc])
+            
+            left = shown < event_results.count() + member.count() + stu.count()
+            return JsonResponse([left] + sorted(res, key= lambda a: a[1])[prev:shown], safe=False)
+        
+        elif q != "":
             event_results = Event.objects.filter(name__icontains=q).values_list("name")[:5]
             member = Member.objects.filter(name__startswith= q)[:5]
             stu = Student.objects.filter(name__startswith= q)[:5]
@@ -35,6 +54,14 @@ def search(request):
             return JsonResponse(sorted(res, key= lambda a: a[0])[:8], safe=False)
         else:
             return JsonResponse("", safe=False)
+    
+    event_results = Event.objects.filter(name__icontains=q)
+    member = Member.objects.filter(name__startswith= q)
+    stu = Student.objects.filter(name__startswith= q)
+    combined_results = sorted(chain(event_results, member, stu),key=lambda x: x.name.lower())
+    
+    left = shown < len(combined_results)
+    return render(request, "base/search.html", {"results":combined_results[:shown], "left":left})
 
 def event(request, pk):
     sel_event = Event.objects.get(name=pk)

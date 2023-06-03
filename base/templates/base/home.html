@@ -3,7 +3,6 @@
 {% block stylesheet %}
 <style>
     .main {
-        height: calc(100% - 50px);
         margin-left: 2%;
         margin-right: 2%;
         display: grid;
@@ -17,13 +16,12 @@
         text-decoration: underline;
     }
     .event {
-        display: block;
-        max-height: 98%;
+        max-height: 96%;
         margin: 2%;
         background-color: white;
         height: 100%;
         border-radius: 8px;
-        box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(0,0,0,0.2);
         transition: all 0.15s;
     }
     .event:hover {
@@ -32,9 +30,21 @@
     .image-container {
         text-align: center;
         margin: auto;
-        padding: 2%;
+        padding: 10px;
         height: 70%;
         transition: all 0.15s;
+    }
+    .new {
+        position: absolute;
+        z-index: 1;
+        width: 50px;
+        text-align: center;
+        font-weight: bold;
+        color: rgb(43, 95, 55);
+        left: -8px;
+        border-radius: 5px;
+        transform: rotate(-45deg);
+        background-color: rgb(112, 185, 130);
     }
 </style>
 {% endblock %}
@@ -44,14 +54,15 @@
     <div>
         
     </div>
-    <div style="height: 100%; overflow-y: auto;">
+    <div>
         <h1>Ongoing and Latest Events</h1>
         <div>
         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr;padding-bottom: 1%; margin: 1%;margin-left: 0;">
             {% for event in ongoing %}
-            <a class="event" href="{% url 'event' event.name %}">
+            <a class="event" style="position: relative;" href="{% url 'event' event.name %}">
+                <div class="new">NEW</div>
                 <div class="image-container">
-                    <img style="object-fit: contain;" src="/{{event.image}}" width="100%" height="100%"/>
+                    <img style="object-fit: contain;filter: drop-shadow(0 0 2px gray);" src="/{{event.image}}" width="100%" height="100%"/>
                 </div>
                 <div style="margin: 2%;margin-left: 5%;">
                     <h3 style="margin: 0;">{{event.name}}</h3>
@@ -65,7 +76,7 @@
             {% for event in other %}
             <a class="event" href="{% url 'event' event.name %}">
                 <div class="image-container">
-                    <img style="object-fit: contain;" src="/{{event.image}}" width="100%" height="100%"/>
+                    <img style="object-fit: contain;filter: drop-shadow(0 0 2px gray);" src="/{{event.image}}" width="100%" height="100%"/>
                 </div>
                 <div style="margin: 2%;margin-left: 5%;">
                     <h3 style="margin: 0;">{{event.name}}</h3>

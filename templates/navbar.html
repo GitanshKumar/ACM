@@ -3,8 +3,9 @@
         width: 100%;
         background-color: rgb(210, 233, 227);
         height: 50px;
+        z-index: 2;
+        position: relative;
         box-shadow: 0 2px 20px 0px rgba(0, 0, 0, 0.5);
-        z-index: 1;
     }
     .logo {
         font-family: 'Inria Sans', sans-serif;
@@ -48,6 +49,7 @@
         border: 1px solid rgba(0, 0, 0, 0.5);
         border-radius: 5px 0 0 5px;
         padding: 10px;
+        height: 40px;
         width: 90%;
         float: left;
     }
@@ -57,12 +59,13 @@
         border-left: none;
         padding: 10px;
         border: 1px solid grey;
+        height: 40px;
         border-left: none;
         border-radius: 0 5px 5px 0;
         background-color: white;
     }
     #search-form button:hover {
-        background-color: rgba(0, 0, 0, 0.2);
+        background-color: rgba(0, 0, 0, 0.1);
     }
     #results-container {
         z-index: 1;
@@ -95,10 +98,10 @@
     }
     .nav:visited, .nav:link {
         text-decoration: none;
-        color: black;
+        color: rgb(49, 89, 79);
     }
     .nav:hover {
-        color: rgb(16, 79, 100);
+        color: rgb(17, 40, 34);
     }
     .social {
         margin: auto;
@@ -113,13 +116,14 @@
         border-radius: 10px 10px 0 0;
         transition: all 0.15s;
     }
-    .social img {
-        width: 75%;
-        transform: scale(0.8);
-        transition: transform 0.2s;
+    .social i {
+        font-size: 20px;
+        margin: 5px;
+        width: 50px;
+        transition: all 0.15s;
     }
-    .social img:hover {
-        transform: scale(1);
+    .social i:hover {
+        transform: scale(1.2);
     }
     .hidden-social {
         max-width: 250px;
@@ -185,7 +189,7 @@
     }
 </style>
 
-<div class="navbar">
+<div class="navbar" id="navbar">
     <a class="home" href="{% url 'home' %}">
         <button class="logo">
             <span>acm</span>
@@ -193,9 +197,9 @@
         <span>ABES-EC</span>
     </a>
     <div class="search">
-        <form id="search-form" method="GET">
-            <input id="search-bar" type="text" name="q" placeholder="Search people or events..." value="{{request.GET.search}}">
-            <button type="submit"><i class="fa fa-search"></i></button>
+        <form id="search-form" method="GET" action="/search/" onsubmit="return validateSearch('search-form', 'search-bar')">
+            <input id="search-bar" type="text" name="search" placeholder="Search people or events..." value="{{request.GET.search}}">
+            <button type="submit"><i class="fa fa-search" style="color:rgb(49, 89, 79); font-size: 16px;"></i></button>
         </form>
         <div id="results-container" style="border-radius: 0 0 10px 10px; overflow: hidden; border: 1px solid rgba(0, 0, 0, 0.2);"></div>
     </div>
@@ -221,18 +225,19 @@
     <a class="nav" href="{% url 'events' %}">Events</a>
     <a class="nav" href="{% url 'aboutus' %}">About Us</a>
 </div>
-<div style="position: absolute;bottom: 0; width: 100%; z-index: 1;">
+<div style="position: fixed;bottom: 0; width: 100%; z-index: 1;">
     <div class="hidden-social">
         <div class="social">
-            <a href="https://www.linkedin.com/in/acm-abes-ec-6967b71b6/"><img src="/images/icons/linkedin.png"></a>
-            <a href="https://www.facebook.com/abesec.acm/"><img src="/images/icons/facebook.png"></a>
-            <a href="https://instagram.com/acm_abesec?igshid=YmMyMTA2M2Y="><img src="/images/icons/instagram.png"></a>
-            <a href="https://www.youtube.com/@acmabesec3967"><img src="/images/icons/youtube.png"></a>
+            <a href="https://www.linkedin.com/in/acm-abes-ec-6967b71b6/"><div><i class="fa fa-linkedin"></i></div></a>
+            <a href="https://www.facebook.com/abesec.acm/"><i class="fa fa-facebook"></i></a>
+            <a href="https://instagram.com/acm_abesec?igshid=YmMyMTA2M2Y="><i class="fa fa-instagram"></i></a>
+            <a href="https://www.youtube.com/@acmabesec3967"><i class="fa fa-youtube-play"></i></a>
         </div>
     </div>
 </div>
 
 <script>
+    
     var searchBar = document.getElementById("search-bar");
     searchBar.addEventListener("input", (event)  =>
         $.ajax({

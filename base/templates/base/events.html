@@ -20,24 +20,25 @@
         border-radius: 5px;
         border: 1px solid rgba(0,0,0,0.5);
         padding: 5px;
+        width: 100px;
         font-family: 'Inria Sanse', sans-serif;
     }
     .more {
         width: 100%;
         padding: 1%;
         border-radius: 10px;
-        color: black;
+        color: rgb(49, 89, 79);
+        background-color: rgb(210, 233, 227);
+        border: 1px solid rgba(0, 0, 0, 0.2);
         border: none;
         transition: all 0.15s;
         font-family: 'Inria Sans', sans-serif;
         background-color: white;
     }
     .more:hover {
-        text-decoration: underline;
         background-color: rgba(210, 233, 227, 0.6);
     }
     .more:active {
-        text-decoration: underline;
         background-color: rgba(210, 233, 227, 0.8);
     }
     .tag:hover {
@@ -76,14 +77,14 @@
 {% block content %}
 <div style="height: calc(100% - 50px); max-width: 1200px; margin: auto;overflow-y: auto;">
     <div style="margin: 3%;">
-        <form class="f" method="GET">
+        <form id="event-search-form" class="f" method="GET" onsubmit="return validateSearch('event-search-form', 'search-bar-events')">
             <input type="text" placeholder="Search events..." id="search-bar-events" name="q" value="{{search}}" style="width: 50%;">
             <label>Start:</label>
             <input type="date" name="start" value="{{start}}">
             <label>End:</label>
             <input type="date" value="{{end}}" name="end">
-            <input type="submit" value="Search" name="s" class="more" style="width: fit-content;">
-            <input type="submit" value="Clear" name="clear" class="more" style="width: fit-content;">
+            <input type="submit" value="Search" name="s" class="more" style="width: 60px;color: rgb(49, 89, 79);background-color: rgb(210, 233, 227);border: 1px solid rgba(0, 0, 0, 0.2);">
+            <input type="submit" value="Clear" name="clear" class="more" style="width: 60px;color: rgb(49, 89, 79);background-color: rgb(210, 233, 227);border: 1px solid rgba(0, 0, 0, 0.2);">
         </form>
     </div>
     <div style="display: grid;grid-template-columns: 20% 80%;">
@@ -143,7 +144,6 @@
             method: "GET",
             data: {"loadmore":true, "count":$(".event").length, "q": "{{search}}"},
             success: function(data) {
-                console.log(data);
                 if (!data[0]) {
                     $("#load-more-container").remove();
                 };
