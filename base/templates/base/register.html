@@ -3,8 +3,11 @@
 {% block stylesheet %}
 <style>
     .main {
-        max-width: 1200px;
-        margin: auto;
+        width: 100%;
+        min-width: 1200px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
     }
     .f {
         margin: 5%;
@@ -47,8 +50,8 @@
             <label>Your Admission</label>
             <input type="text" name="admission" placeholder="Enter Admission id:" value="{{user.admission}}" style="cursor: no-drop;" readonly/>
             
-            <div style="text-align: center; margin-top: 1%;">
-                <input style="padding-left: auto;" type="submit" value="Confirm" />
+            <div style="width: 30%;margin: auto; margin-top: 10px;">
+                <button style="width: 100%;" type="submit">Confirm</button>
             </div>
         </form>
     </div>

@@ -50,22 +50,30 @@
         border-radius: 5px 0 0 5px;
         padding: 10px;
         height: 40px;
-        width: 90%;
+        width: 87%;
         float: left;
+        border-right: none;
     }
-    #search-form button {
-        float: left;
-        width: 10%;
-        border-left: none;
-        padding: 10px;
-        border: 1px solid grey;
+    .clear {
         height: 40px;
-        border-left: none;
-        border-radius: 0 5px 5px 0;
         background-color: white;
+        border: 1px solid rgba(0, 0, 0, 0.5);
+        border-left: none;
+        border-right: none;
+        border-radius: 0;
+        width: 5%;
+        float: left;
     }
-    #search-form button:hover {
-        background-color: rgba(0, 0, 0, 0.1);
+    .search-icon {
+        height: 40px;
+        background-color: white;
+        border: 1px solid rgba(0, 0, 0, 0.5);
+        width: 8%;
+        border-radius: 0 8px 8px 0;
+        text-align: center;
+    }
+    .clear:hover {
+        background-color: white;
     }
     #results-container {
         z-index: 1;
@@ -73,7 +81,7 @@
         flex-direction: column;
         position: relative;
         top: 100%;
-        width: 90%;
+        width: 87%;
         background-color: white;
     }
     #results-container a {
@@ -199,7 +207,8 @@
     <div class="search">
         <form id="search-form" method="GET" action="/search/" onsubmit="return validateSearch('search-form', 'search-bar')">
             <input id="search-bar" type="text" name="search" placeholder="Search people or events..." value="{{request.GET.search}}">
-            <button type="submit"><i class="fa fa-search" style="color:rgb(49, 89, 79); font-size: 16px;"></i></button>
+            <button class="clear" onclick="clearinput('search-bar')" type="button"><i class="fa fa-times" style="font-size: 12px;"></i></button>
+            <button class="search-icon" type="submit"><i class="fa fa-search" style="font-size: 16px;"></i></button>
         </form>
         <div id="results-container" style="border-radius: 0 0 10px 10px; overflow: hidden; border: 1px solid rgba(0, 0, 0, 0.2);"></div>
     </div>
@@ -237,7 +246,10 @@
 </div>
 
 <script>
-    
+    function clearinput(id){
+        document.getElementById(id).value = '';
+        console.log("yes");
+    };
     var searchBar = document.getElementById("search-bar");
     searchBar.addEventListener("input", (event)  =>
         $.ajax({

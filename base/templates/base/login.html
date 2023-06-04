@@ -3,8 +3,11 @@
 {% block stylesheet %}
 <style>
     .main {
-        width: 50%;
-        margin: auto;
+        width: 100%;
+        min-width: 1200px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
     }
     .f {
         margin: 5%;
@@ -25,7 +28,7 @@
 
 {% block content %}
 <div class="main">
-    <div style="background-color: white; border: 1px solid rgba(0, 0, 0, 0.5);width: 50%; border-radius: 10px;position: absolute;top: 50%;transform: translateY(-50%);">
+    <div style="background-color: white; border: 1px solid rgba(0, 0, 0, 0.5);width: 50%; border-radius: 10px;margin: auto;">
         <h1 style="text-align: center;">Login</h1>
         {% if messages %}
         <ul class="messages">
@@ -46,7 +49,7 @@
                 <input type="password" name="password" placeholder="Enter password:" />
             </div>
             <div style="margin: auto; width: 60%;display: flex; margin-top: 2%; justify-content: space-between;">
-                <input type="submit" value="Login" style="width: 30%;"/>
+                <button type="submit" class="login-submit" style="width: 30%;">Login</button>
                 <a href="{% url 'signup' %}" style="margin-top: 3px;">Create an account?</a>
                 <a href="{% url 'reset_pass' 'request' %}" style="margin-top: 3px;">Forgot Password?</a>
             </div>

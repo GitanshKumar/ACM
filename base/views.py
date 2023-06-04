@@ -94,7 +94,7 @@ def events(request):
     events = Event.objects.all().order_by("-event_date")
     count = total = events.count()
     context = {"events": events}
-    shown = 4
+    shown = 10
 
     if "clear" in request.GET:
         q, start, end = "", "1900-01-01", "9999-01-01"
@@ -226,15 +226,18 @@ def edit_profile(request):
         except:
             user = request.user.student
             form = EditStudentForm(request.POST, request.FILES, instance=user)
+        
         if form.is_valid():
             form.save()
             return redirect(reverse("profile", args=(user.user,)))
     else:
         try:
             form = EditMemberForm(instance=request.user.member)
+            mem = True
         except:
             form = EditStudentForm(instance=request.user.student)
-    return render(request, 'base/edit_profile.html', {'form': form})
+            mem = False
+    return render(request, 'base/edit_profile.html', {'form': form, "member": mem})
 
 def register(request, pk, cat):
     if not request.user.is_authenticated:

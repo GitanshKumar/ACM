@@ -3,9 +3,11 @@
 {% block stylesheet %}
 <style>
     .main {
-        width: 50%;
-        height: 50%;
-        margin: auto;
+        width: 100%;
+        min-width: 1200px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
     }
     .f {
         margin: 5%;
@@ -28,13 +30,19 @@
         margin: 0;
         color: red;
     }
+    .signup-submit {
+        width: 30%;
+    }
+    .signup-submit:hover {
+        background-color: rgba(89, 191, 164,0.5);
+    }
     
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="main">
-    <div style="background-color: white; border: 1px solid rgba(0, 0, 0, 0.5);width: 50%; border-radius: 10px;position: absolute;top: 50%;transform: translateY(-50%);">
+    <div style="background-color: white; border: 1px solid rgba(0, 0, 0, 0.5);width: 50%; border-radius: 10px;margin: auto;">
         <h1 style="text-align: center;">Create Account</h1>
         <form class="f" method="POST" action="">
             {% csrf_token %}
@@ -76,7 +84,7 @@
                 </div>
             </div>
             <div style="display: flex; margin: auto; width: 40%; margin-top: 2%;justify-content: space-between;">
-                <input type="submit" value="Sign up" style="width: 30%;"/>
+                <button class="signup-submit" type="submit">Sign up</button>
                 <a href="{% url 'login' %}">Already have an account?</a>
             </div>
         </form>

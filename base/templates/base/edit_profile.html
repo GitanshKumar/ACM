@@ -27,6 +27,9 @@
     .file input {
         background-color: transparent;
     }
+    .confirm {
+        width: 100%;
+    }
 </style>
 {% endblock %}
 
@@ -57,18 +60,49 @@
                     {{ form.mobile_no }}
                 </div>
                 <div class="form-group">
-                    <label for="{{ form.desc.id_for_label }}">Description:</label>
+                    <label for="{{ form.desc.id_for_label }}">Description:<p id="char-count" style="font-size: 12px;margin-top: 0;"></p></label>
                     {{ form.desc }}
                 </div>
+                {% if member %}
+                <div class="form-group">
+                    <label for="{{ form.desc.id_for_label }}">Short Description:<p id="char-count-short" style="font-size: 12px;margin-top: 0;"></p></label>
+                    {{ form.short_desc }}
+                </div>
+                {% endif %}
                 <div class="form-group">
                     <label for="{{ form.profile_pic.id_for_label }}">Profile Picture:</label>
                     <div class="file">{{ form.profile_pic }}</div>
                 </div>
-                <div style="margin: auto; width: fit-content; margin-top: 1%;">
-                    <input type="submit" value="Confirm"/>
+                <div style="width: 20%; margin: auto;">
+                    <button class="confirm" type="submit">Confirm</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $(document).ready(function() {
+        var area = document.getElementById("id_desc");
+        var count = document.getElementById("char-count");
+        
+        count.innerHTML = `${area.value.length} / 500`;
+        
+        area.addEventListener('keyup', function() {
+            count.innerHTML = `${area.value.length} / 500`;
+        });
+        {% if member %}
+        var area2 = document.getElementById("id_short_desc");
+        var count2 = document.getElementById("char-count-short");
+        
+        count2.innerHTML = `${area2.value.length} / 120`;
+        
+        area2.addEventListener('keyup', function() {
+            count2.innerHTML = `${area2.value.length} / 120`;
+        });
+        {% endif %}
+    });
+</script>
 {% endblock %}

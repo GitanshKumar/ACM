@@ -50,21 +50,10 @@
         margin: auto;
         margin-top: 5%;
         width: 50%;
-        padding: 1%;
-        border-radius: 10px;
-        color: rgb(49, 89, 79);
-        background-color: rgb(210, 233, 227);
-        border: 1px solid rgba(0, 0, 0, 0.2);
         transition: all 0.15s;
         font-family: 'Inria Sans', sans-serif;
         font-size: 18px;
         font-weight: bold;
-    }
-    .register:hover {
-        background-color: rgba(210, 233, 227, 0.8);
-    }
-    .register:active {
-        background-color: rgba(210, 233, 227, 0.6);
     }
     {% if photos %}
     .images-container {
@@ -149,29 +138,29 @@
             <div style="margin-top: auto; margin-bottom: 5%;">
                 {% if member %}
                     <a href="{% url 'event_detail' event.name %}" style="text-decoration: none;">
-                        <h3 class="register">See event details</h3>
+                        <button class="register">See event details</button>
                     </a>
                 {% elif not event.ongoing %}
                     <h3 class="register">Registrations Closed</h3>
                 {% elif registered %}
                     {% if event.team_members > 1 %}
                         <a href="{% url 'viewteam' event.name %}" style="text-decoration: none;">
-                            <h3 class="register">View Team</h3>
+                            <button class="register">View Team</button>
                         </a>
                     {% else %}
-                        <h3 class="register">Registered</h3>
+                        <button class="register">Registered</button>
                     {% endif %}
                 {% elif event.team_members == 1 %}
                 <form method="POST">
                     {% csrf_token %}
-                    <input type="submit" name="register" value="Quick Register" class="register"/>
+                    <button type="submit" name="register" class="register">Quick Register</button>
                 </form>
                 {% else %}
                 <a href="{% url 'register' event.name 'join' %}" style="text-decoration: none;">
-                    <span class="register">Join Team</span>
+                    <button class="register" style="width: 30%;">Join Team</button>
                 </a>
                 <a href="{% url 'register' event.name 'create' %}" style="text-decoration: none;">
-                    <span class="register">Create Team</span>
+                    <button class="register" style="margin-top: 0;width: 30%;">Create Team</button>
                 </a>
                 {% endif %}
             </div>

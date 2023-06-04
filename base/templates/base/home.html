@@ -33,18 +33,21 @@
         padding: 10px;
         height: 70%;
         transition: all 0.15s;
+        border-bottom: 1px solid rgba(0,0,0,0.2);
     }
     .new {
         position: absolute;
         z-index: 1;
-        width: 50px;
+        width: 75px;
         text-align: center;
         font-weight: bold;
         color: rgb(43, 95, 55);
-        left: -8px;
+        left: -15px;
+        top: 10px;
         border-radius: 5px;
-        transform: rotate(-45deg);
+        transform: rotate(-40deg);
         background-color: rgb(112, 185, 130);
+        border: 2px dashed rgb(43, 95, 55);
     }
 </style>
 {% endblock %}
@@ -67,8 +70,7 @@
                 <div style="margin: 2%;margin-left: 5%;">
                     <h3 style="margin: 0;">{{event.name}}</h3>
                     <div style="margin-top: 5px;">
-                        Date: {{event.event_date}}<br>
-                        Status: {% if event.ongoing %} <b>Registrations Open</b> {% else %} Registrations Closed {% endif %}
+                        Date: {{event.event_date}}
                     </div>
                 </div>
             </a>
@@ -81,8 +83,7 @@
                 <div style="margin: 2%;margin-left: 5%;">
                     <h3 style="margin: 0;">{{event.name}}</h3>
                     <div style="margin-top: 5px;">
-                        Date: {{event.event_date}}<br>
-                        Status: {% if event.ongoing %} <b>Registrations Open</b> {% else %} Registrations Closed {% endif %}
+                        Date: {{event.event_date}}
                     </div>
                 </div>
             </a>
