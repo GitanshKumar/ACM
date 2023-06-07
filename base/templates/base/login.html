@@ -6,7 +6,6 @@
 <style>
     .main {
         width: 100%;
-        min-width: 1200px;
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
@@ -41,12 +40,41 @@
         font-weight: bold;
         margin: auto;
     }
+    .login-container {
+        background-color: white;
+        border: 1px solid rgba(0, 0, 0, 0.5);
+        width: 50%;
+        border-radius: 10px;
+        margin: auto;
+    }
+    @media screen and (max-width:767px) {
+        .login-container {
+            width: 95%;
+        }
+    }
+    @media screen and (max-width:500px) {
+        .login-container h1 {
+            font-size: 24px;
+        }
+        .login-container {
+            font-size: 14px;
+        }
+        .login-container input {
+            height: 20px;
+            font-size: 10px;
+        }
+        .login-submit {
+            width: 100%;
+            font-size: 12px;
+            height: 25px;
+        }
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="main">
-    <div style="background-color: white; border: 1px solid rgba(0, 0, 0, 0.5);width: 30%;padding: 0 2% 0 2%; border-radius: 10px;margin: auto;">
+    <div class="login-container">
         <h1 style="text-align: center;margin-top: 30px;">Login</h1>
         {% if messages %}
         <ul class="messages">

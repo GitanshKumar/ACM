@@ -112,6 +112,7 @@ def events(request):
         prev = int(request.GET["count"])
         shown = prev + 5
         res = []
+        print(shown, q, prev)
         for i in events[prev:shown]:
              res.append([i.name, i.image.url, i.event_date.date(), i.description, list(i.tag.all().values_list("name", flat=True))])
         return JsonResponse([shown < count] + res, safe=False)

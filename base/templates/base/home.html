@@ -14,10 +14,10 @@
         <div>
             {% for article in news %}
                 <div class="news">
-                    <div style="height: 125px;border-bottom: 1px solid rgba(0,0,0,0.2);">
-                        <img style="object-fit: cover;" src="{{article.picture.url}}" width="100%" height="100%"/>
+                    <div class="news-image-container">
+                        <img src="{{article.picture.url}}"/>
                     </div>
-                    <div style="margin: 2%;margin-left: 15px;">
+                    <div class="news-body">
                         <h2 style="margin: 0;">{{article.headline}}</h2>
                         <div>
                             Date: {{article.created.date}}
@@ -30,16 +30,16 @@
     </div>
     <div>
         <h1>Ongoing and Latest Events</h1>
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr;padding-bottom: 1%;">
+        <div class="home-event-container">
             {% for event in ongoing %}
-            <a class="event" style="position: relative;" href="{% url 'event' event.name %}">
+            <a class="event" href="{% url 'event' event.name %}">
                 <div class="new">NEW</div>
                 <div class="image-container">
-                    <img style="object-fit: contain;filter: drop-shadow(0 0 2px gray);" src="{{event.image.url}}" width="100%" height="100%"/>
+                    <img src="{{event.image.url}}"/>
                 </div>
-                <div style="margin: 2%;margin-left: 5%;">
+                <div class="event-body">
                     <h3 style="margin: 0;">{{event.name}}</h3>
-                    <div style="margin-top: 5px;">
+                    <div>
                         Date: {{event.event_date}}
                     </div>
                 </div>
@@ -48,9 +48,9 @@
             {% for event in other %}
             <a class="event" href="{% url 'event' event.name %}">
                 <div class="image-container">
-                    <img style="object-fit: contain;filter: drop-shadow(0 0 2px gray);" src="{{event.image.url}}" width="100%" height="100%"/>
+                    <img src="{{event.image.url}}"/>
                 </div>
-                <div style="margin: 2%;margin-left: 5%;">
+                <div class="event-body">
                     <h3 style="margin: 0;">{{event.name}}</h3>
                     <div style="margin-top: 5px;">
                         Date: {{event.event_date}}

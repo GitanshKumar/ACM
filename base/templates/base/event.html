@@ -9,7 +9,7 @@
 
 {% block content %}
 <div class="event-container">
-    <div style="position: relative;">
+    <div class="poster-plane">
         <div class="event">
             <h2 style="margin-bottom: 0 ;">
                 {{event.name}}
@@ -65,16 +65,16 @@
                 </form>
                 {% else %}
                 <a href="{% url 'register' event.name 'join' %}" style="text-decoration: none;">
-                    <button class="register" style="width: 30%;">Join Team</button>
+                    <button class="register team">Join Team</button>
                 </a>
                 <a href="{% url 'register' event.name 'create' %}" style="text-decoration: none;">
-                    <button class="register" style="margin-top: 0;width: 30%;">Create Team</button>
+                    <button class="register team">Create Team</button>
                 </a>
                 {% endif %}
             </div>
         </div>
     </div>
-    <div style="overflow-y: auto;">
+    <div class="right-plane">
         {% if photos %}
         <div class="images-container">
             <label class="slider">

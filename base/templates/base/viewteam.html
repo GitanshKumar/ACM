@@ -2,48 +2,118 @@
 
 {% block stylesheet %}
 <style>
+    .team-container {
+        width: 100%;
+        position: absolute;
+        transform: translateY(-60%);
+        top: 50%;
+    }
+    .inner-container {
+        width: 80%;
+        margin: auto;
+    }
+    .team-container h2 {
+        margin-top: 5px;
+    }
+    .team-container h4 {
+        margin-bottom: 0;
+    }
     .pro {
         display: grid;
         grid-template-columns: 30% 70%;
-        margin-bottom: 5%;
         width: 95%;
         background-color: white;
         border-radius: 8px;
         border: 1px solid rgba(0,0,0,0.2);
         transition: all 0.5s;
     }
+    .members-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .helper {
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+    }
+    .pro img {
+        vertical-align: middle;
+    }
+    .pro-info {
+        margin-left: 2%;
+        padding-bottom: 20px;
+    }
+    @media screen and (max-width:958px) {
+        .inner-container{
+            width: 95%;
+        }
+    }
+    @media screen and (max-width:767px) {
+        .members-container {
+            grid-template-columns: 1fr;
+        }
+        .pro {
+            margin: auto;
+        }
+        .pro-info {
+            padding-bottom: 10px;
+        }
+        .team-container h1 {
+            font-size: 24px;
+            text-align: center;
+        }
+        .team-container h2 {
+            font-size: 20px;
+            margin-top: 5px;
+        }
+        .team-container h4 {
+            margin-top: 10px;
+        }
+        .pro span {
+            font-size: 14px;
+        }
+        .pro img {
+            width: 90%;
+            height: 90%;
+            margin: auto;
+        }
+        .team-id {
+            padding-top: 10px;
+            font-size: 14px;
+        }
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-<div style="display: flex; flex-direction: column; max-width: 1200px;margin: auto; padding-top: 5%;">
-    <h1>{{event.name}}</h1>
-    <h1 style="text-align: center;">Team: {{team.team_name}}</h1>
-    <div style="display: grid; grid-template-columns: 1fr 1fr;">
-        <div class="pro">
-            <a href="{% url 'profile' leader.user.username %}" style="text-align: center;"><img src="{{leader.profile_pic.url}}" style="border-radius: 200px;" width="90%"></a>
-            <div style="margin-left: 2%;">
-                <h4>LEADER</h4>
-                <h2 style="margin-bottom: 2px;">{{leader.name}}</h2>
-                <span>{{leader.core}}<br>{{leader.admission}}</span>
-            </div>
-            <div class="desc">
-                <p style="margin: 5%;">{{leader.short_desc}}</p>
-            </div>
-        </div>
-        {% for member in members %}
+<div class="team-container">
+    <div class="inner-container">
+        <h1>{{event.name}}</h1>
+        <h1 style="text-align: center;">Team: {{team.team_name}}</h1>
+        <div class="members-container">
             <div class="pro">
-                <a href="{% url 'profile' member.user.username %}" style="text-align: center;"><img src="{{member.profile_pic.url}}" style="border-radius: 200px;" width="90%"></a>
-                <div style="margin-left: 2%;">
-                    <h4>MEMBER</h4>
-                    <h2 style="margin-bottom: 2px;">{{member.name}}</h2>
-                    <span>{{member.core}}<br>{{member.admission}}</span>
+                <a href="/media/images/default.png" style="text-align: center;"><span class="helper"></span><img src="{{leader.profile_pic.url}}" style="border-radius: 50%;object-fit: cover;" width="100%" height="100%"></a>
+                <div class="pro-info">
+                    <h4 style="color: rgba(0,0,0,0.5);">LEADER</h4>
+                    <h2 style="margin-bottom: 2px;">{{leader.name}}</h2>
+                    <span>{{leader.core}}<br>{{leader.admission}}</span>
                 </div>
             </div>
-        {% endfor %}
-    </div>
-    <div style="text-align: center;margin-top: auto;">
-        To add participants tell them to join through the code: {{team.team_id}}
+            {% for member in members %}
+                <div class="pro">
+                    <a href="{% url 'profile' member.user.username %}" style="text-align: center;"><img src="{{member.profile_pic.url}}" style="border-radius: 200px;" width="90%"></a>
+                    <div style="margin-left: 2%;">
+                        <h4>MEMBER</h4>
+                        <h2 style="margin-bottom: 2px;">{{member.name}}</h2>
+                        <span>{{member.core}}<br>{{member.admission}}</span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="team-id" style="text-align: center;margin-top: auto;">
+            To add participants tell them to join through the code: {{team.team_id}}
+        </div>
     </div>
 </div>
 {% endblock %}

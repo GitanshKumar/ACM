@@ -1,0 +1,53 @@
+body, html {
+    margin: 0;
+    height: 100%;
+    background-color: #f6f8fa;
+    font-family: 'Inria Sans', sans-serif;
+    width: 100%;
+}
+a {
+color: black;
+text-decoration: none;
+}
+::-webkit-scrollbar {
+width: 8px;
+}
+::-webkit-scrollbar-track {
+margin: 15px 0 15px 0;
+}
+::-webkit-scrollbar-track {
+background: rgba(255, 255, 255, 0.5); 
+border: 1px solid black;
+border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+background: rgba(0,0,0,0.8);
+border-radius: 10px;
+}
+.messages {
+width: fit-content;
+margin: auto;
+color: rgb(136, 24, 24);
+}
+input {
+outline-color: rgb(89, 191, 164);
+}
+button {
+border-radius: 10px;
+color: rgb(49, 89, 79);
+background-color: rgb(210, 233, 227);
+border: 1px solid rgba(0, 0, 0, 0.2);
+cursor: pointer;
+padding: 5px;
+transition: all 0.1s;
+}
+button:hover {
+background-color: rgba(89, 191, 164,0.5);
+border-color: rgba(0, 0, 0, 0.5);
+}
+
+@media screen and (max-width:767px) {
+    body, html {
+        width: 100%;
+    }   
+}

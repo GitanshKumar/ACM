@@ -1,0 +1,50 @@
+.main {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.f {
+    margin: 5%;
+    margin-bottom: 10px;
+    margin-top: 0;
+    display: grid;
+}
+.f label {
+    margin-left: 2%;
+}
+.f input {
+    border-radius: 10px;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.1);
+    height: 30px;
+    padding-left: 10px;
+    margin-bottom: 5px;
+}
+.register-container {
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    background-color: white;
+    max-width: 600px;
+    border-radius: 10px;
+    margin: auto;
+}
+
+@media screen and (max-width:767px){
+    .register-container {
+        width: 80%;
+    }
+    .f label{
+        font-size: 14px;
+    }
+    .f input {
+        font-size: 12px;
+        height: 20px;
+        margin-top: 5px;
+    }
+    .main h1 {
+        font-size: 24px;
+    }
+    .register-container h2 {
+        font-size: 18px;
+    }
+}

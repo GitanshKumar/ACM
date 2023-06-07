@@ -6,10 +6,13 @@
 <style>
     .aboutus-container {
         display: grid;
-        max-width: 1200px;
+        width: 80%;
         margin: auto;
         grid-template-columns: 20% 80%;
         height: calc(100% - 50px);
+    }
+    .aboutus-container h1 {
+        margin-top: 0;
     }
     .links {
         font-size: 18px;
@@ -40,13 +43,53 @@
         border-radius: 50%;
         width: 30%;
     }
+    .left-pane h1{
+        font-size: 40px;
+    }
+    @media screen and (max-width:767px) {
+        .aboutus-container h1 {
+            font-size: 24px;
+            margin-top: 0;
+        }
+        .left-pane h1{
+            font-size: 28px;
+        }
+        .aboutus-container div {
+            font-size: 14px;
+        }
+        .pro-container {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+    @media screen and (max-width:500px) {
+        .aboutus-container {
+            width: 95%;
+            grid-template-columns: 25% 75%;
+        }
+        .aboutus-container h1 {
+            font-size: 18px;
+            margin-left: 5px;
+        }
+        .left-pane h1{
+            font-size: 20px;
+        }
+        .aboutus-container div {
+            font-size: 12px;
+        }
+        .pro-container h4 {
+            margin-bottom: 0;
+        }
+        .pro-container p {
+            font-size: 10px;
+        }
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="aboutus-container">
-    <div>
-        <h1 style="font-size: 40px; margin-top: 5%;">About Us</h1>
+    <div class="left-pane">
+        <h1 style="margin-top: 5%;">About Us</h1>
         <div class="links">
             <a href="#acm">ACM</a>
             <a href="#facteam">Faculty Team</a>
@@ -74,7 +117,7 @@
                     <h1>Faculty Team</h1>
                     <div class="pro-container">
                         {% for fac in faculty %}
-                            <div>
+                            <div class="profile">
                                 <a href="{% url 'profile' fac.user.username %}"><img src="{{fac.profile_pic.url}}" style="border: 3px solid gold;"></a>
                                 <h4 style="margin-bottom: 2px;">{{fac.name}}</h4>
                                 <p style="margin: 0;">{{fac.core}}</p>
@@ -93,7 +136,7 @@
                         {% for stu in student %}
                             <div>
                                 <a href="{% url 'profile' stu.user.username %}"><img src="{{stu.profile_pic.url}}" style="border: 3px solid {% if stu.year == '3rd' %} gold {% elif stu.year == '2nd' %} silver {% else %} brown {% endif %};"></a>
-                                <h3 style="margin: 5px;">{{stu.name}}</h3>
+                                <h4 style="margin: 2px;">{{stu.name}}</h4>
                                 <p style="margin-top: 0;">
                                     {{stu.role}}<br>
                                     {{stu.core}}
