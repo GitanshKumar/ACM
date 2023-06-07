@@ -1,72 +1,24 @@
 {% extends "main.html" %}
 {% load filter %}
 
+{% block title %}Explore - ACM ABES{% endblock %}
+
+{% load static %}
 {% block stylesheet %}
-<style>
-    .result {
-        display: grid;
-        margin-bottom: 1%;
-        margin-right: 1%;
-        background-color: white;
-        border-radius: 10px;
-        border: 1px solid rgba(0,0,0,0.3);
-    }
-    .image {
-        position: absolute;
-        left: 100%;
-        top: 0;
-    }
-    .hov {
-        display: inline;
-        position: relative;
-    }
-    .image div {
-        background-color: rgba(0,0,0,0.5);
-        object-fit: contain;
-        display: none;
-        height: 150px;
-        width: 150px;
-        padding: 2px;
-        z-index: 1;
-        margin-left: 10px;
-        transition: all 0.2s;
-    }
-    .hov:hover .image div {
-        display: block;
-    }
-    .image div:hover {
-        transform: scale(1.5);
-    }
-    .more {
-        width: 100%;
-        padding: 1%;
-        border-radius: 5px;
-        border: none;
-        transition: all 0.15s;
-        font-family: 'Inria Sans', sans-serif;
-        color: rgb(49, 89, 79);
-        background-color: rgb(210, 233, 227);
-        border: 1px solid rgba(0, 0, 0, 0.2);
-    }
-    .more:hover {
-        background-color: rgba(210, 233, 227, 0.6);
-    }
-    .more:active {
-        background-color: rgba(210, 233, 227, 0.8);
-    }
-</style>    
+<link rel="stylesheet" href="{% static 'base/css/search.css' %}">
 {% endblock %}
 
 {% block content %}
 <div style="min-width: 1200px;">
     {% if not results %}
     <div style="position: absolute; text-align: center;transform: translateY(-50%);top: 50%;">
-        <img src="/images/icons/no result.png" width="20%"/>
+        <img src="media/icons/no result.png" width="20%"/>
         <p>No results to show</p>
         <p>Please modify your search</p>
     </div>
     {% else %}
     <div class="search-results" style="width: 80%; margin: auto; padding-top: 20px;padding-bottom: 20px;">
+        <div id="count">Showing {{shown}} out of {{total}} results for {{request.GET.search}}</div>
         {% for res in results %}
             {% if res|modelName == 'Event' %}
                 <div class="result">
@@ -76,7 +28,7 @@
                                 {{res.name}}
                                 <div class="image">
                                     <div>
-                                        <img src="/{{res.image}}" style="object-fit: contain;" alt="event poster" width="100%" height="100%">
+                                        <img src="{{res.image.url}}" style="object-fit: contain;" alt="event poster" width="100%" height="100%">
                                     </div>
                                 </div>
                             </h2>
@@ -91,7 +43,7 @@
                     <div style="margin: 2%;">
                         <div style="display: flex;">
                             <a href="{% url 'profile' res.user.username %}" style="color: black;">
-                                <img src="/{{res.profile_pic}}" width="100xpx" style="border-radius: 50%; border: 1px solid rgba(0,0,0,0.2);">
+                                <img src="{{res.profile_pic.url}}" width="100xpx" style="border-radius: 50%; border: 1px solid rgba(0,0,0,0.2);">
                             </a>
                             <div style="padding-left: 15px;padding-right: 15px; border-right: 1px solid rgba(0,0,0,0.2);">
                                 <h2 style="margin: 0;">{{res.name}}</h2>
@@ -107,7 +59,7 @@
         {% endfor %}
     </div>
     {% if left %}
-    <div id="load-more-container" style="margin: auto;margin-bottom: 50px;margin-top: 20px;width: 30%;">
+    <div id="load-more-container">
         <input class="more" type="button" id="load-more" onclick="load()" value="Load More Events">
     </div>
     {% endif %}
@@ -116,73 +68,5 @@
 {% endblock %}
 
 {% block script %}
-<script>
-    function load(){
-            var container = $(".search-results");
-            $.ajax({
-            url: "/search/",
-            method: "GET",
-            data: {"loadmore":true, "count":$(".result").length, "q": "{{request.GET.search}}"},
-            success: function(data) {
-                if (!data[0]){
-                    $("#load-more-container").remove();
-                }
-                for (var i = 1; i < data.length; i++){
-                    var res = data[i];
-                    if (res[0] == "event"){
-                        var tags = "";
-                        for (var j = 0; j < res[5].length; j++) {
-                            if (j !== res[5].length - 1) {
-                                tags += res[5][j] + ", ";
-                            } else {
-                                tags += res[5][j];
-                            }
-                        };
-                        var innerhtml = `
-                        <div class="result">
-                            <div style="margin: 2%;">
-                                <a href="/event/${res[1]}/" style="color: black;">
-                                    <h2 class="hov">
-                                        ${res[1]}
-                                        <div class="image">
-                                            <div>
-                                                <img src="${res[2]}" style="object-fit: contain;" alt="event poster" width="100%" height="100%">
-                                            </div>
-                                        </div>
-                                    </h2>
-                                </a>
-                                <div>${res[3]}</div>
-                                <p>${res[4]}</p>
-                                <div style="font-size: 14px;">${tags}</div>
-                            </div>
-                        </div>
-                        `;
-                        container.append(innerhtml);
-                    }
-                    else {
-                        var innerhtml = `
-                        <div class="result">
-                            <div style="margin: 2%;">
-                                <div style="display: flex;">
-                                    <a href="/profile/${res[2]}" style="color: black;">
-                                        <img src="${res[3]}" width="100xpx" style="border-radius: 50%; border: 1px solid rgba(0,0,0,0.2);">
-                                    </a>
-                                    <div style="padding-left: 15px;padding-right: 15px; border-right: 1px solid rgba(0,0,0,0.2);">
-                                        <h2 style="margin: 0;">${res[1]}</h2>
-                                        <div style="margin-bottom: 5px;">${res[4]} ${res[5]} year</div>
-                                    </div>
-                                    <div style="padding-left: 15px;">
-                                        <p style="margin-top: 0;">${res[7]}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        `
-                        container.append(innerhtml);
-                    }
-                }
-            }
-        })
-    }
-</script>
+<script src="{% static 'base/js/search.js' %}"></script>
 {% endblock %}

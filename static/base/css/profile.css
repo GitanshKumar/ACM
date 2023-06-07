@@ -1,0 +1,57 @@
+.prof-container {
+    position: absolute;
+    top: 0; bottom: 0; left: 0; right: 0;
+    max-width: 1200px;
+    overflow-y: auto;
+    margin: auto;
+    padding: 1%;
+}
+.prof-container a, .prof-container a:link, .prof-container a:visited{
+    color: black;
+}
+.inner {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    margin: auto;
+    margin-top: 12%;
+    min-height: 40%;
+    margin-bottom: 1%;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+.left-pane {
+    border-right: 2px solid rgba(0, 0, 0, 0.2);
+    margin: 5% 0 5% 5%;
+}
+.edit-btn {
+    text-align: center;
+    font-size: 20px;
+    cursor: pointer;
+    font-family: 'Inria Sans', sans-serif;
+    font-weight: bold;
+    float: right;
+    transition: all 0.15s;
+    padding: 2px 5px 2px 5px;
+}
+.edit-btn:hover {
+    background-color: rgba(210, 233, 227, 0.8);
+}
+.edit-btn:active {
+    background-color: rgba(210, 233, 227, 0.6);
+}
+.heading {
+    font-size: 18px;
+    font-weight: bold;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+.tvalues {
+    margin-top: 5px;
+    height: 30px;
+    border-bottom: 1px solid black;
+}
+::-webkit-scrollbar-track {
+        margin: 50px 0 50px 0;
+}

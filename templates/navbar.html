@@ -1,239 +1,43 @@
-<style>
-    .navbar{
-        width: 100%;
-        background-color: rgb(210, 233, 227);
-        height: 50px;
-        z-index: 2;
-        position: relative;
-        box-shadow: 0 2px 20px 0px rgba(0, 0, 0, 0.5);
-    }
-    .logo {
-        font-family: 'Inria Sans', sans-serif;
-        font-weight: bold;
-        background-color: rgb(16, 79, 100);
-        color: white;
-        border: 0px;
-        border-radius: 40%;
-        width: 36px;
-        height: 36px;
-        margin-left: 1%;
-        padding-right: 4px;
-        padding-left: 4px;
-        padding-bottom: 2px;
-        transform: rotate(-45deg);
-        margin-top: 6px;
-    }
-    .logo span {
-        display: inline-block;
-        transform: rotate(45deg);
-    }
-    .home, .home:link, .home:visited{
-        color: black;
-        text-decoration: none;
-        font-weight: bold;
-        background-color: transparent;
-        border: 0px;
-    }
-    .search {
-        box-sizing: border-box;
-        position: absolute;
-        margin: 5px;
-        margin-left: 10px;
-        display: inline-block;
-        min-width: 200px;
-        width: 35%;
-        min-width: 370px;
-    }
-    #search-bar {
-        box-sizing: border-box;
-        border: 1px solid rgba(0, 0, 0, 0.5);
-        border-radius: 5px 0 0 5px;
-        padding: 10px;
-        height: 40px;
-        width: 87%;
-        float: left;
-        border-right: none;
-    }
-    .clear {
-        height: 40px;
-        background-color: white;
-        border: 1px solid rgba(0, 0, 0, 0.5);
-        border-left: none;
-        border-right: none;
-        border-radius: 0;
-        width: 5%;
-        float: left;
-    }
-    .search-icon {
-        height: 40px;
-        background-color: white;
-        border: 1px solid rgba(0, 0, 0, 0.5);
-        width: 8%;
-        border-radius: 0 8px 8px 0;
-        text-align: center;
-    }
-    .clear:hover {
-        background-color: white;
-    }
-    #results-container {
-        z-index: 1;
-        display: flex;
-        flex-direction: column;
-        position: relative;
-        top: 100%;
-        width: 87%;
-        background-color: white;
-    }
-    #results-container a {
-        padding: 5px;
-        padding-left: 10px;
-        display: flex;
-    }
-    #results-container a img {
-        border-radius: 50%;
-        margin-right: 5px;
-    }
-    #results-container a:hover {
-        background-color: rgba(0, 0, 0, 0.05);
-    }
-    .nav {
-        float: right;
-        margin-right: 5%;
-        margin-top: 12.5px;
-        font-weight: bold;
-        font-size: 18px;
-        transition: color 0.15s;
-    }
-    .nav:visited, .nav:link {
-        text-decoration: none;
-        color: rgb(49, 89, 79);
-    }
-    .nav:hover {
-        color: rgb(17, 40, 34);
-    }
-    .social {
-        margin: auto;
-        padding: 5px 5px 0 5px;
-        position: relative;
-        opacity: 0;
-        display: flex;
-        justify-content: space-between;
-        text-align: center;
-        background-color: white;
-        border: 1px solid rgba(0, 0, 0, 0.5);
-        border-radius: 10px 10px 0 0;
-        transition: all 0.15s;
-    }
-    .social i {
-        font-size: 20px;
-        margin: 5px;
-        width: 50px;
-        transition: all 0.15s;
-    }
-    .social i:hover {
-        transform: scale(1.2);
-    }
-    .hidden-social {
-        max-width: 250px;
-        margin: auto;
-    }
-    .hidden-social:hover .social {
-        opacity: 1;
-    }
-    .dropdown {
-        cursor: pointer;
-        float: right;
-        margin-right: 5%;
-        margin-top: 12.5px;
-        font-weight: bold;
-        font-size: 18px;
-        transition: color 0.15s;
-        z-index: 1;
-    }
-    .dropdown-content {
-        height: 0;
-        overflow: hidden;
-        position: absolute;
-        right: 1%;
-        transition: opacity 0.3s, display 0s;
-    }
-    .dropdown:hover .dropdown-content {
-        height: fit-content;
-    }
-    .dropdown-content div {
-        opacity: 0;
-        margin-top: 20px;
-        transition: all 0.15s;
-    }
-    .dropdown:hover .dropdown-content div {
-        opacity: 1;
-        margin-top: 15px;
-    }
-    .dropdown a, .dropdown a:link, .dropdown:visited {
-        text-decoration: none;
-        color: white;
-        margin: 5% 0 0 10%;
-    }
-    .dropdown a:hover {
-        text-decoration: underline;
-    }
-    .line1, .line2, .line3{
-        height: 3px;
-        margin: 3px 0 0 0;
-        width: 25px;
-        border-radius: 5px;
-        border: 1px solid black;
-        transition: all 0.3s;
-    }
-    .line2 {
-        width: 12px;
-    }
-    .line3 {
-        width: 18px;
-    }
-    .dropdown:hover .line1, .dropdown:hover .line2, .dropdown:hover .line3{
-        width: 25px;
-        background-color: rgba(0, 0, 0, 0.75);
-    }
-</style>
-
 <div class="navbar" id="navbar">
-    <a class="home" href="{% url 'home' %}">
-        <button class="logo">
-            <span>acm</span>
-        </button>
-        <span>ABES-EC</span>
-    </a>
-    <div class="search">
-        <form id="search-form" method="GET" action="/search/" onsubmit="return validateSearch('search-form', 'search-bar')">
-            <input id="search-bar" type="text" name="search" placeholder="Search people or events..." value="{{request.GET.search}}">
-            <button class="clear" onclick="clearinput('search-bar')" type="button"><i class="fa fa-times" style="font-size: 12px;"></i></button>
-            <button class="search-icon" type="submit"><i class="fa fa-search" style="font-size: 16px;"></i></button>
-        </form>
-        <div id="results-container" style="border-radius: 0 0 10px 10px; overflow: hidden; border: 1px solid rgba(0, 0, 0, 0.2);"></div>
-    </div>
-    <div class="dropdown" style="font-weight: normal;">
-        <div class="hov">
-            <div class="line1"></div>
-            <div class="line2"></div>
-            <div class="line3"></div>
+    <div style="width: 80%;margin: auto;min-width: 1200px;height: 100%;">
+        <div style="display: inline-block;height: 100%;margin-top: 5px;">
+            <a class="home" href="{% url 'home' %}">
+                <img src="/media/icons/ACM logo.png" width="40px">
+            </a>
+            <div style="display: inline-block;height: 100%;vertical-align: middle;font-weight: bold;">ABES-EC</div>
         </div>
-        <div class="dropdown-content">
-            <div style="display: grid; background-color: rgba(0, 0, 0, 0.5); width: 100px; border-radius: 0 0 10px 10px;">
-                {% if request.user.is_authenticated %}
-                <a href="{% url 'profile' request.user.username %}">{{request.user.username}}</a>
-                <a href="{% url 'logout' %}" style="margin-bottom: 5%;">Logout</a>
-                {% else %}
-                <a href="{% url 'signup' %}">Sign Up</a>
-                <a href="{% url 'login' %}">Login</a>
-                {% endif %}
+        <div class="search">
+            <form id="search-form" method="GET" action="/search" onsubmit="return validateSearch('search-form', 'search-bar')">
+                <input id="search-bar" type="text" name="search" placeholder="Search people or events..." value="{{request.GET.search}}">
+                <button class="clear" onclick="clearinput('search-bar')" type="button"><i class="fa fa-times" style="font-size: 12px;"></i></button>
+                <button class="search-icon" type="submit"><i class="fa fa-search" style="font-size: 16px;"></i></button>
+            </form>
+            <div id="results-container"></div>
+        </div>
+        <div class="dropdown" style="font-weight: normal;">
+            <div class="hov">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+            <div class="dropdown-content">
+                <div style="display: grid; background-color: rgba(0, 0, 0, 0.5); width: 100px; border-radius: 0 0 10px 10px;">
+                    {% if request.user.is_authenticated %}
+                    <a href="{% url 'profile' request.user.username %}">{{request.user.username}}</a>
+                    <a href="{% url 'logout' %}" style="margin-bottom: 5%;">Logout</a>
+                    {% else %}
+                    <a href="{% url 'signup' %}">Sign Up</a>
+                    <a href="{% url 'login' %}">Login</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
+        <a class="nav" href="{% url 'team' %}">Team</a>
+        <a class="nav" href="{% url 'events' %}">Events</a>
+        <a class="nav" href="{% url 'aboutus' %}">About Us</a>
     </div>
-    <a class="nav" href="{% url 'team' %}">Team</a>
-    <a class="nav" href="{% url 'events' %}">Events</a>
-    <a class="nav" href="{% url 'aboutus' %}">About Us</a>
 </div>
+
 <div style="position: fixed;bottom: 0; width: 100%; z-index: 1;">
     <div class="hidden-social">
         <div class="social">
@@ -244,62 +48,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    function clearinput(id){
-        document.getElementById(id).value = '';
-        console.log("yes");
-    };
-    var searchBar = document.getElementById("search-bar");
-    searchBar.addEventListener("input", (event)  =>
-        $.ajax({
-            url: "/search/",
-            method: "GET",
-            data: {
-                search: document.getElementById("search-bar").value
-            },
-            success: function(data) {
-                var resultsContainer = $('#results-container');
-                resultsContainer.empty();
-                if (data.length == 0){
-                    var a = document.createElement("a");
-                    a.innerHTML = "No results"
-                    resultsContainer.append(a)
-                }
-                else {
-                    for (var i = 0; i < data.length; i++) {
-                        var res = document.createElement("a");
-                        if (data[i].length == 1) {
-                            res.setAttribute("href", "/event/" + data[i][0] + "/")
-                            res.innerHTML = "<div>" + data[i][0] + "<strong style='font-size:12px; margin-left:5px;'>"  + "|EVENT|" + "</strong></div>"
-                        }
-                        else {
-                            var img = document.createElement("img");
-                            img.setAttribute("src", data[i][2]);
-                            img.setAttribute("width", "25px");
-                            var div = document.createElement("div");
-                            if (data[i][3] == "MEMBER"){
-                                div.innerHTML = data[i][0] + "<strong style='font-size:12px; margin-left:5px;'>| "  + data[i][4] + " | " + data[i][3] + " | " + data[i][5] +  " |</strong>"
-                            }
-                            else {
-                                div.innerHTML = data[i][0] + "<strong style='font-size:12px; margin-left:5px;'>"  + data[i][4] + "</strong>"
-                            }
-                            res.setAttribute("href", "/profile/" + data[i][1])
-                            res.setAttribute("style", "overflow: hidden;")
-                            res.append(img);
-                            res.append(div);
-                        }
-                        resultsContainer.append(res);
-                    }
-                }
-            },
-            error: function(error){
-                console.log(`Error ${error}`)
-            }
-        }));
-    searchBar.addEventListener('blur', function(event) {
-        if (!document.activeElement.isSameNode(searchBar)) {
-            setTimeout(function() {$('#results-container').empty();}, 300);
-        }
-    });
-</script>

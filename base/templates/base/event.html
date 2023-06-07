@@ -1,115 +1,10 @@
 {% extends "main.html" %}
 
+{% block title %}{{event.name}}{% endblock %}
+
+{% load static %}
 {% block stylesheet %}
-<style>
-    .event-container {
-        display: grid;
-        max-width: 1200px;
-        margin: auto;
-        height: calc(100% - 50px);
-        grid-template-columns: 40% 60%;
-    }
-    .event {
-        text-align: center;
-        height: 95%;
-        display: flex;
-        position: absolute;
-        flex-direction: column;
-        margin: auto;
-        margin-left: 10px;
-        left:0; right:0;
-        top:0; bottom:0;
-        border-radius: 8px;
-        background-color: white;
-        border: 1px solid rgba(0, 0, 0, 0.2);
-    }
-    .poster-container {
-        text-align: center;
-        margin: auto;
-        height: 60%;
-        transition: all 0.15s;
-    }
-    .poster-container img {
-        border-radius: 10px;
-        object-fit: contain;
-        filter: drop-shadow(0 0 5px gray);
-    }
-    .details p, .details h3 {
-        margin-top: 0px;
-        padding: 10px;
-        border-radius: 8px;
-        border: 1px solid rgba(0, 0, 0, 0.2);
-        margin: 2%;
-        background-color: white;
-    }
-    .details h3 {
-        width: fit-content;
-        margin: auto;
-    }
-    .register {
-        margin: auto;
-        margin-top: 5%;
-        width: 50%;
-        transition: all 0.15s;
-        font-family: 'Inria Sans', sans-serif;
-        font-size: 18px;
-        font-weight: bold;
-    }
-    {% if photos %}
-    .images-container {
-        height: 45%;
-        margin-left: 3%;
-        margin-right: 3%;
-        position: relative;
-    }
-    {% endif %}
-    .slider {
-        position: relative;
-        transform-style: preserve-3d;
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        align-items: center;
-        margin: auto;
-        margin-top: 2%;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        text-align: center;
-    }
-    .slide {
-        width: 100%;
-        height: 100%;
-        left: 0;
-        right: 0;
-        position: absolute;
-        transition: all 0.5s;
-    }
-    .btn {
-        position: absolute;
-        width: 40px;
-        height: 40px;
-        padding: 10px;
-        border: none;
-        border-radius: 50%;
-        z-index: 10px;
-        cursor: pointer;
-        background-color: #fff;
-        font-size: 18px;
-        border: 1px solid rgba(0, 0, 0, 0.4);
-    }
-    .btn:hover {
-        transform: scale(1.1);
-    }
-    .btn-prev {
-        top: 45%;
-        left: 2%;
-    }
-    .btn-next {
-        top: 45%;
-        right: 2%;
-    }
-</style>
+<link rel="stylesheet" href="{% static 'base/css/event.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -120,18 +15,31 @@
                 {{event.name}}
             </h2>
             <div class="poster-container">
-                <img src="/{{event.image}}" width="100%" height="100%"/>
+                <img src="{{event.image.url}}" width="100%" height="100%"/>
             </div>
             <div style="font-weight: bold;text-align: left; font-size: 18px; margin: auto;">
                 <div style="display: flex;">
-                    <div>Date:<br>Time:<br>Location:<br>
+                    <div>Date:<br>Time:<br>Location:<br>{% if event.ongoing %}Fee: <br>{% endif %}
                         {% if event.coordinator.all %}
                             Coordinators:
                         {% endif %}
                     </div>
                     <div style="font-weight: normal; margin-left: 5px;">
                         {{event.event_date.date}}<br>{{event.event_date.time}}<br>{{event.location}}<br>
-                        {% for coo in event.coordinator.all %} {{coo.name}}<br> {% endfor %}
+                        {% if event.ongoing %}
+                            {% if event.fee == '0' %}
+                                <div style="color: rgb(49, 89, 79);">FREE ENTRY</div>
+                            {% else %}
+                                {{event.fee}}
+                            {% endif %}
+                        {% endif %}
+                        {% for coo in event.coordinator.all %}
+                            <div style="width: 25px;height: 25px;">
+                                <a href="{% url 'profile' coo.user %}" style="width: fit-content;">
+                                    <img style="border-radius: 50%;" src="{{coo.profile_pic.url}}" width="100%">
+                                </a>
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
@@ -173,7 +81,7 @@
                 {% for photo in event.photos.all %}
                     <div class="slide">
                         <div style="width: 300px;height: 300px;margin: auto;margin-top: 5px;margin-bottom: 5px;">
-                            <img style="object-fit: contain; filter: drop-shadow(0 0 5px gray);" src="/{{photo.image}}" width="100%" height="100%"/>
+                            <img style="object-fit: contain; filter: drop-shadow(0 0 5px gray);" src="{{photo.image.url}}" width="100%" height="100%"/>
                         </div>
                     </div>
                 {% endfor %}
@@ -183,6 +91,8 @@
         </div>
         {% endif %}
         <div class="details">
+            <h3>Description</h3>
+            <p>{{event.description}}</p>
             {{event.details|safe}}
         </div>
     </div>
@@ -191,52 +101,5 @@
 {% endblock %} 
 
 {% block script %}
-<script>
-    const slides = document.querySelectorAll(".slide");
-    let maxSlide = slides.length - 1;
-    let curSlide = Math.floor(maxSlide / 2);
-    let timeId;
-
-    function arrange() {
-        slides.forEach((slide, i) => {
-            var pos = i - curSlide;
-            slide.setAttribute("style", `transform:translateX(${pos * 40}%) scale(${1 - 0.3 * Math.abs(pos)});z-index:${10 - Math.abs(pos)};`);
-        });
-    }
-    
-    function startLoop(auto) {
-        clearTimeout(timeId);
-        if (auto === 1) {
-            if (curSlide === maxSlide) {
-                curSlide = 0;
-            } else {
-                curSlide++;
-            }
-        }
-        arrange();
-        timeId = setTimeout(function() {startLoop(1)}, 5000);
-    }
-    
-    const nextslide = document.querySelector(".btn-next");
-    nextslide.addEventListener("click", function () {
-        if (curSlide === maxSlide) {
-            curSlide = 0;
-        } else {
-            curSlide++;
-        }
-        startLoop(0);
-    });
-    
-    const prevslide = document.querySelector(".btn-prev");
-    prevslide.addEventListener("click", function () {
-        if (curSlide === 0) {
-            curSlide = maxSlide;
-        } else {
-            curSlide--;
-        }
-        startLoop(0);
-    });
-
-    startLoop(0);
-</script>
+<script src="{% static 'base/js/event.js' %}" defer></script>
 {% endblock %}

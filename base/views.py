@@ -10,24 +10,25 @@ from django.core import serializers
 from itertools import chain
 from django.db.models import Q
 from datetime import datetime, timedelta, time
-from .models import Event, Member, Student, Team, Tag
+from .models import Event, Member, Student, Team, Tag, News
 from .forms import EditMemberForm, EditStudentForm, CaptchaForm
 from .custom import send_mail
 
 def home(request):
     ongoing = Event.objects.filter(ongoing= True).order_by("event_date")
     other = Event.objects.filter(ongoing= False).order_by("-event_date")[:9 - ongoing.count()]
-    context = {"other": other, "ongoing": ongoing}
+    news = News.objects.all()[:5]
+    context = {"other": other, "ongoing": ongoing, "news":news}
     return render(request, 'base/home.html', context)
 
 def search(request):
     q = request.GET.get("search", "")
-    shown = 2
+    shown = 8
     if request.headers.get('x-requested-with'):
         if "loadmore" in request.GET:
             prev = int(request.GET["count"])
             q = request.GET["q"]
-            shown = prev + 2
+            shown = prev + 5
             event_results = Event.objects.filter(name__icontains=q)
             member = Member.objects.filter(name__startswith= q)
             stu = Student.objects.filter(name__startswith= q)
@@ -39,8 +40,12 @@ def search(request):
             for i in member:
                 res.append(["member", i.name, i.user.username, i.profile_pic.url, i.core, i.year, i.role, i.desc])
             
-            left = shown < event_results.count() + member.count() + stu.count()
-            return JsonResponse([left] + sorted(res, key= lambda a: a[1])[prev:shown], safe=False)
+            count = event_results.count() + member.count() + stu.count()
+            left = True
+            if shown > count:
+                left = False
+                shown = count
+            return JsonResponse([left, shown, count] + sorted(res, key= lambda a: a[1])[prev:shown], safe=False)
         
         elif q != "":
             event_results = Event.objects.filter(name__icontains=q).values_list("name")[:5]
@@ -61,7 +66,7 @@ def search(request):
     combined_results = sorted(chain(event_results, member, stu),key=lambda x: x.name.lower())
     
     left = shown < len(combined_results)
-    return render(request, "base/search.html", {"results":combined_results[:shown], "left":left})
+    return render(request, "base/search.html", {"results":combined_results[:shown], "left":left, "shown": shown, "total":len(combined_results)})
 
 def event(request, pk):
     sel_event = Event.objects.get(name=pk)
@@ -326,7 +331,7 @@ def reset_password(request, reset_id):
             user.unique_url = uuid.uuid4()
             user.url_timeout = datetime.now()
             user.save()
-            send_mail(email, "Reset Password request", "<div>You can reset password through this link<br>http://127.0.0.1:8000/reset/" + str(user.unique_url) + "<br>Link will expire in 1 hour.</div>")
+            send_mail(email, "Reset Password request", "<div>You can reset password through this link " + request.build_absolute_uri(reverse("reset_pass", args=(user.unique_url,))) + "<br>Link will expire in 1 hour.</div>")
             return render(request, 'base/reset_password.html', {"email_sent":True})
         else:
 
@@ -351,11 +356,11 @@ def reset_password(request, reset_id):
         if not user: return redirect("home")
         time_diff = (datetime.now() - datetime.combine(datetime.today(), user.url_timeout)).total_seconds() / 3600
         if time_diff > 1:
-                user.unique_url = ""
-                user.url_timeout = None
-                user.save()
-                messages.error(request, "Link expired, request another now")
-                return redirect(reverse("reset_pass", args=("request",)))
+            user.unique_url = ""
+            user.url_timeout = None
+            user.save()
+            messages.error(request, "Link expired, request another now")
+            return redirect(reverse("reset_pass", args=("request",)))
         return render(request, 'base/reset_password.html', {"reset":True})
     
     return render(request, 'base/reset_password.html', {"req":True})

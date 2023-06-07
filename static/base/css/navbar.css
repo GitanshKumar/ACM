@@ -1,0 +1,169 @@
+.navbar{
+    background-color: rgb(210, 233, 227);
+    height: 50px;
+    z-index: 2;
+    position: relative;
+    box-shadow: 0 2px 20px 0px rgba(0, 0, 0, 0.5);
+}
+.search {
+    position: absolute;
+    margin: 5px;
+    margin-left: 10px;
+    display: inline-block;
+    width: 35%;
+    min-width: 370px;
+}
+#search-bar {
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 5px 0 0 5px;
+    padding: 10px;
+    height: 40px;
+    width: 92%;
+    float: left;
+    border-right: none;
+}
+.clear {
+    height: 40px;
+    position: absolute;
+    background-color: transparent;
+    border: none;
+    right: 8%;
+    border-radius: 0;
+    width: 5%;
+}
+.clear:hover {
+    background-color: transparent;
+}
+.search-icon {
+    height: 40px;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    width: 8%;
+    border-radius: 0 8px 8px 0;
+    text-align: center;
+}
+#results-container {
+    z-index: 1;
+    flex-direction: column;
+    padding: 10px 0 10px 0;
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    display: none;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    width: 87%;
+    bottom: -5px;
+    background-color: white;
+}
+#results-container a {
+    padding: 5px;
+    padding-left: 10px;
+    display: flex;
+}
+#results-container a img {
+    border-radius: 50%;
+    margin-right: 5px;
+}
+#results-container a:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+.nav {
+    float: right;
+    margin-right: 5%;
+    margin-top: 12.5px;
+    font-weight: bold;
+    font-size: 18px;
+    transition: color 0.15s;
+}
+.nav:visited, .nav:link {
+    text-decoration: none;
+    color: rgb(49, 89, 79);
+}
+.nav:hover {
+    color: rgb(17, 40, 34);
+}
+.social {
+    margin: auto;
+    padding: 5px 5px 0 5px;
+    position: relative;
+    opacity: 0;
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 10px 10px 0 0;
+    transition: all 0.15s;
+}
+.social i {
+    font-size: 20px;
+    margin: 5px;
+    width: 50px;
+    transition: all 0.15s;
+}
+.social i:hover {
+    transform: scale(1.2);
+}
+.hidden-social {
+    max-width: 250px;
+    margin: auto;
+}
+.hidden-social:hover .social {
+    opacity: 1;
+}
+.dropdown {
+    cursor: pointer;
+    float: right;
+    margin-top: 12.5px;
+    font-weight: bold;
+    font-size: 18px;
+    transition: color 0.15s;
+    z-index: 1;
+    position: relative;
+}
+.dropdown-content {
+    height: 0;
+    overflow: hidden;
+    position: absolute;
+    right: 1%;
+    transition: opacity 0.3s, display 0s;
+}
+.dropdown:hover .dropdown-content {
+    height: fit-content;
+}
+.dropdown-content div {
+    opacity: 0;
+    margin-top: 20px;
+    transition: all 0.15s;
+}
+.dropdown:hover .dropdown-content div {
+    opacity: 1;
+    margin-top: 15px;
+}
+.dropdown a, .dropdown a:link, .dropdown:visited {
+    text-decoration: none;
+    color: white;
+    margin: 5% 0 0 10%;
+}
+.dropdown a:hover {
+    text-decoration: underline;
+}
+.line1, .line2, .line3{
+    height: 3px;
+    margin: 3px 0 0 0;
+    width: 25px;
+    border-radius: 5px;
+    border: 1px solid black;
+    transition: all 0.3s;
+}
+.line2 {
+    width: 12px;
+}
+.line3 {
+    width: 18px;
+}
+.dropdown:hover .line1, .dropdown:hover .line2, .dropdown:hover .line3{
+    width: 25px;
+    background-color: rgba(0, 0, 0, 0.75);
+}

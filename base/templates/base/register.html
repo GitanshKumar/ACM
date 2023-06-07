@@ -1,5 +1,7 @@
 {% extends "main.html" %}
 
+{% block title %}Register - {{event.name}}{% endblock %}
+
 {% block stylesheet %}
 <style>
     .main {
@@ -34,7 +36,7 @@
     <h1 style="text-align: center;">{{event.name}}</h1>
     <div style="border: 1px solid rgba(0, 0, 0, 0.5);background-color: white;max-width: 600px; border-radius: 10px;margin: auto;">
         {%if error%}<h4 style="color: red; text-align: center;">{{error}}</h4>{% endif %}
-        <h2 style="text-align: center;">Register</h2>
+        <h2 style="text-align: center;">{% if join %}Join Team{% else %}Create Team{% endif %}</h2>
         <form class="f" method="POST" action="">
             {% csrf_token %}
             {% if join %}

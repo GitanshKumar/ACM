@@ -1,0 +1,54 @@
+.main {
+    width: 80%;
+    min-width: 1200px;
+    display: grid;
+    margin: auto;
+    grid-template-columns: 35% 65%;
+}
+.main a:link, .main a:visited {
+    color: black;
+    text-decoration: none;
+}
+.event {
+    margin: 3%;
+    margin-top: 0;
+    margin-left: 0;
+    background-color: white;
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.2);
+    transition: all 0.15s;
+}
+.event:hover {
+    transform: scale(1.04);
+}
+.news {
+    margin: 2%;
+    margin-left: 0;
+    background-color: white;
+    height: fit-content;
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.2);
+    transition: all 0.15s;
+}
+.image-container {
+    text-align: center;
+    margin: auto;
+    padding: 10px;
+    height: 70%;
+    transition: all 0.15s;
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+.new {
+    position: absolute;
+    z-index: 1;
+    width: 75px;
+    text-align: center;
+    font-weight: bold;
+    color: rgb(43, 95, 55);
+    left: -15px;
+    top: 10px;
+    border-radius: 5px;
+    transform: rotate(-40deg);
+    background-color: rgb(112, 185, 130);
+    border: 2px dashed rgb(43, 95, 55);
+}
