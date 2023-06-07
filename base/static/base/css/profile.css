@@ -111,6 +111,6 @@
     }
     .tvalues {
         font-size: 12px;
-        height: fit-content;
+        height: 100%;
     }
 }

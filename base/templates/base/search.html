@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-<div style="min-width: 1200px;">
+<div>
     {% if not results %}
     <div style="position: absolute; text-align: center;transform: translateY(-50%);top: 50%;">
         <img src="media/icons/no result.png" width="20%"/>
@@ -17,7 +17,7 @@
         <p>Please modify your search</p>
     </div>
     {% else %}
-    <div class="search-results" style="width: 80%; margin: auto; padding-top: 20px;padding-bottom: 20px;">
+    <div class="search-results">
         <div id="count">Showing {{shown}} out of {{total}} results for {{request.GET.search}}</div>
         {% for res in results %}
             {% if res|modelName == 'Event' %}
@@ -34,22 +34,22 @@
                             </h2>
                         </a>
                         <div>{{res.event_date.date|date:"j M Y"}}</div>
-                        <p>{{res.description}}</p>
-                        <div style="font-size: 14px;">{% for tag in res.tag.all %}{% if not forloop.last %}{{tag}}, {% else %}{{tag}}{% endif %}{% endfor %}</div>
+                        <p class="event-desc">{{res.description}}</p>
+                        <div>{% for tag in res.tag.all %}{% if not forloop.last %}{{tag}}, {% else %}{{tag}}{% endif %}{% endfor %}</div>
                     </div>
                 </div>
             {% else %}
                 <div class="result">
                     <div style="margin: 2%;">
                         <div style="display: flex;">
-                            <a href="{% url 'profile' res.user.username %}" style="color: black;">
-                                <img src="{{res.profile_pic.url}}" width="100xpx" style="border-radius: 50%; border: 1px solid rgba(0,0,0,0.2);">
+                            <a class="profile-image" href="{% url 'profile' res.user.username %}" style="color: black;">
+                                <img src="{{res.profile_pic.url}}" width="100px" style="border-radius: 50%; border: 1px solid rgba(0,0,0,0.2);">
                             </a>
-                            <div style="padding-left: 15px;padding-right: 15px; border-right: 1px solid rgba(0,0,0,0.2);">
+                            <div class="profile-info">
                                 <h2 style="margin: 0;">{{res.name}}</h2>
                                 <div style="margin-bottom: 5px;">{{res.core}} {{res.year}} year</div>
                             </div>
-                            <div style="padding-left: 15px;">
+                            <div class="profile-desc">
                                 <p style="margin-top: 0;">{{res.desc}}</p>
                             </div>
                         </div>

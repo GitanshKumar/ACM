@@ -1,3 +1,9 @@
+.search-results {
+    width: 80%;
+    margin: auto;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
 .result {
     display: grid;
     margin-bottom: 1%;
@@ -59,4 +65,60 @@
     width: fit-content;
     margin: auto;
     margin-bottom: 10px;
+}
+.profile-info {
+    padding-left: 15px;
+    padding-right: 15px;
+    border-right: 1px solid rgba(0,0,0,0.2);
+}
+.profile-desc {
+    padding-left: 15px;
+}
+
+@media screen and (max-width:500px) {
+    .search-results {
+        width: 95%;
+        font-size: 12px;
+    }
+    .image {
+        left: 0;
+        top: 20px;
+        z-index: 2;
+    }
+    .image div {
+        width: 100px;
+        height: 100px;
+    }
+    .event-desc {
+        display: -webkit-box;
+        max-width: calc(100%);
+        margin-top: 5px;
+        -webkit-line-clamp: 5;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .profile-image img {
+        width: 75px;
+    }
+    .profile-info {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+    .profile-info h2 {
+        font-size: 14px;
+    }
+    .profile-desc {
+        padding-left: 5px;
+    }
+    .profile-desc p {
+        display: -webkit-box;
+        max-width: calc(100%);
+        margin-top: 5px;
+        -webkit-line-clamp: 5;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    #load-more-container {
+        width: 90%;
+    }
 }

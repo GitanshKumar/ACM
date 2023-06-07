@@ -4,9 +4,14 @@
 
 {% block stylesheet %}
 <style>
+    .outer-container {
+        width: 60%;
+        margin: auto;
+    }
     .form-group {
+        width: 100%;
         display: grid;
-        grid-template-columns: 25% 75%;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
     }
     .form-group a, .form-group:visited {
         text-decoration: none;
@@ -32,33 +37,68 @@
     .confirm {
         width: 100%;
     }
+    .confirm-btn {
+        width: 30%;
+        margin: auto;
+    }
+    @media screen and (max-width:958px) {
+        .outer-container {
+            width: 95%;
+        }
+    }
+    @media screen and (max-width:500px) {
+        .outer-container {
+            width: 95%;
+            font-size: 12px;
+        }
+        .outer-container h1 {
+            font-size: 20px;
+        }
+        h4 {
+            font-size: 14px;
+            margin: 10px;
+        }
+        .form-group {
+            grid-template-columns: 1fr 1fr;
+        }
+        .f input, .f textarea, .f select {
+            min-height: 25px;
+            font-size: 12px;
+        }
+        .f textarea {
+            margin-left: -40px;
+        }
+        .confirm-btn {
+            width: 100%;
+        }
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-<div style="max-width: 1200px; margin: auto;">
+<div style="width: 100%;">
     <h4 style="text-align: center;">Note: To contact you, we will use your email and Mobile number, please enter correct information.</h4>
-    <div style="max-width: 1000px;margin: auto;">
-        <div style="padding: 10px; background-color: white; border: 1px solid rgba(0, 0, 0, 0.5);margin: 2%; border-radius: 10px;">
+    <div class="outer-container">
+        <div style="padding: 10px; padding-top: 0; background-color: white; border: 1px solid rgba(0, 0, 0, 0.5); border-radius: 10px;">
             <h1 style="text-align: center;">Edit Profile</h1>
             <form class="f" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                <div class="form-group" style="display: grid;grid-template-columns: 1fr 1fr 1fr 1fr;">
+                <div class="form-group">
                     <label for="{{ form.year.id_for_label }}">Year:</label>
                     {{ form.year }}
-                    <label style="margin-left: 15px;" for="{{ form.year.id_for_label }}">Admission No.:</label>
+                    <label for="{{ form.year.id_for_label }}">Admission No.:</label>
                     {{ form.admission }}
                 </div>
-                <div class="form-group" style="display: grid;grid-template-columns: 1fr 1fr 1fr 1fr;">
+                <div class="form-group">
                     <label for="{{ form.linked_in.id_for_label }}">Linked In:</label>
                     {{ form.linked_in }}
-                    <label style="margin-left: 15px;" for="{{ form.github.id_for_label }}">GitHub:</label>
+                    <label for="{{ form.github.id_for_label }}">GitHub:</label>
                     {{ form.github }}
                 </div>
-                <div class="form-group" style="display: grid;grid-template-columns: 1fr 1fr 1fr 1fr;">
+                <div class="form-group">
                     <label for="{{ form.core.id_for_label }}">Core(Branch):</label>
                     {{ form.core }}
-                    <label style="margin-left: 15px;" for="{{ form.mobile_no.id_for_label }}">Mobile No(Kept Private): </label>
+                    <label for="{{ form.mobile_no.id_for_label }}">Mobile No(Kept Private): </label>
                     {{ form.mobile_no }}
                 </div>
                 <div class="form-group">
@@ -75,7 +115,7 @@
                     <label for="{{ form.profile_pic.id_for_label }}">Profile Picture:</label>
                     <div class="file">{{ form.profile_pic }}</div>
                 </div>
-                <div style="width: 20%; margin: auto;">
+                <div class="confirm-btn">
                     <button class="confirm" type="submit">Confirm</button>
                 </div>
             </form>
