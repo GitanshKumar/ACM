@@ -112,5 +112,7 @@
     .tvalues {
         font-size: 12px;
         height: 100%;
+        margin-top: 2px;
+        padding-bottom: 0;
     }
 }
