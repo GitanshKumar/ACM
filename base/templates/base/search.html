@@ -1,7 +1,72 @@
 {% extends "main.html" %}
+{% load filter %}
 
+{% block title %}Explore - ACM ABES{% endblock %}
+
+{% load static %}
 {% block stylesheet %}
+<link rel="stylesheet" href="{% static 'base/css/search.css' %}">
 {% endblock %}
 
 {% block content %}
+<div style="min-width: 1200px;">
+    {% if not results %}
+    <div style="position: absolute; text-align: center;transform: translateY(-50%);top: 50%;">
+        <img src="media/icons/no result.png" width="20%"/>
+        <p>No results to show</p>
+        <p>Please modify your search</p>
+    </div>
+    {% else %}
+    <div class="search-results" style="width: 80%; margin: auto; padding-top: 20px;padding-bottom: 20px;">
+        <div id="count">Showing {{shown}} out of {{total}} results for {{request.GET.search}}</div>
+        {% for res in results %}
+            {% if res|modelName == 'Event' %}
+                <div class="result">
+                    <div style="margin: 2%;">
+                        <a href="{% url 'event' res.name %}" style="color: black;">
+                            <h2 class="hov">
+                                {{res.name}}
+                                <div class="image">
+                                    <div>
+                                        <img src="{{res.image.url}}" style="object-fit: contain;" alt="event poster" width="100%" height="100%">
+                                    </div>
+                                </div>
+                            </h2>
+                        </a>
+                        <div>{{res.event_date.date|date:"j M Y"}}</div>
+                        <p>{{res.description}}</p>
+                        <div style="font-size: 14px;">{% for tag in res.tag.all %}{% if not forloop.last %}{{tag}}, {% else %}{{tag}}{% endif %}{% endfor %}</div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="result">
+                    <div style="margin: 2%;">
+                        <div style="display: flex;">
+                            <a href="{% url 'profile' res.user.username %}" style="color: black;">
+                                <img src="{{res.profile_pic.url}}" width="100xpx" style="border-radius: 50%; border: 1px solid rgba(0,0,0,0.2);">
+                            </a>
+                            <div style="padding-left: 15px;padding-right: 15px; border-right: 1px solid rgba(0,0,0,0.2);">
+                                <h2 style="margin: 0;">{{res.name}}</h2>
+                                <div style="margin-bottom: 5px;">{{res.core}} {{res.year}} year</div>
+                            </div>
+                            <div style="padding-left: 15px;">
+                                <p style="margin-top: 0;">{{res.desc}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% if left %}
+    <div id="load-more-container">
+        <input class="more" type="button" id="load-more" onclick="load()" value="Load More Events">
+    </div>
+    {% endif %}
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'base/js/search.js' %}"></script>
 {% endblock %}

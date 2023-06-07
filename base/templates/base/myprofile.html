@@ -1,66 +1,10 @@
 {% extends "main.html" %}
 
+{% block title %}{{user.user}} - ACM ABES{% endblock %}
+
+{% load static %}
 {% block stylesheet %}
-<style>
-    .prof-container {
-        position: absolute;
-        top: 0; bottom: 0; left: 0; right: 0;
-        max-width: 1200px;
-        overflow-y: auto;
-        margin: auto;
-        padding: 1%;
-    }
-    .prof-container a, .prof-container a:link, .prof-container a:visited{
-        color: black;
-    }
-    .inner {
-        display: grid;
-        grid-template-columns: 30% 70%;
-        margin: auto;
-        margin-top: 15%;
-        min-height: 40%;
-        margin-bottom: 1%;
-        background-color: white;
-        border: 2px solid rgba(0, 0, 0, 0.5);
-        border-radius: 10px;
-    }
-    .left-pane {
-        border-right: 2px solid rgba(0, 0, 0, 0.2);
-        margin: 5% 0 5% 5%;
-    }
-    .edit-btn {
-        color: black;
-        text-align: center;
-        font-family: 'Inria Sans', sans-serif;
-        float: right;
-        width: 15%;
-        transition: all 0.15s;
-        border-radius: 10px;
-        background-color: white;
-        border: 2px solid rgba(0, 0, 0, 0.5);
-    }
-    .edit-btn:hover {
-        background-color: rgba(210, 233, 227, 0.5);
-    }
-    .edit-btn:active {
-        background-color: rgba(210, 233, 227, 0.8);
-    }
-    .heading {
-        font-size: 18px;
-        font-weight: bold;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        background-color: rgba(0, 0, 0, 0.2);
-    }
-    .tvalues {
-        margin-top: 5px;
-        height: 30px;
-        border-bottom: 1px solid black;
-    }
-    ::-webkit-scrollbar-track {
-            margin: 50px 0 50px 0;
-    }
-</style>
+<link rel="stylesheet" href="{% static 'base/css/profile.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -69,10 +13,10 @@
         <div class="inner">
             <div class="left-pane">
                 <div style="text-align: center;">
-                    <img src="/{{user.profile_pic}}" width="50%" style="margin-top: -40%; border-radius: 50%;{% if member %} border: 5px solid {% if user.year == '3rd' or user.faculty %} gold {% elif user.year == '2nd' %} silver {% else %} brown {% endif %} {% endif %};">
-                    <h2>{{user.name}}</h2>
-                    {% if user.linked_in %}<a href="https://{{user.linked_in}}" style="margin-right: 10px;"><img src="/images/icons/linkedin.png" width="25px"></a>{% endif %}
-                    {% if user.github %}<a href="https://{{user.github}}"><img src="/images/icons/github.png" width="28px"></a>{% endif %}
+                    <img src="{{user.profile_pic.url}}" width="50%" style="object-fit: cover; margin-top: -40%; border-radius: 50%;{% if member %} border: 5px solid {% if user.year == '3rd' or user.faculty %} gold {% elif user.year == '2nd' %} silver {% else %} brown {% endif %} {% else %} border: 1px solid rgba(0,0,0,0.2) {% endif %};">
+                    <div style="margin-top: 20px;margin-bottom: 20px;"><b style="font-size: 26px;">{{user.name}} </b>{{user.user}}</div>
+                    {% if user.linked_in %}<a href="https://{{user.linked_in}}" style="margin-right: 10px;"><i class="fa fa-linkedin" style="font-size: 20px;"></i></a>{% endif %}
+                    {% if user.github %}<a href="https://{{user.github}}"><i class="fa fa-github" style="font-size: 20px;"></i></a>{% endif %}
                 </div>
                 <div>
                     {% if member %}
@@ -88,7 +32,8 @@
                         <div style="font-weight: bold;">Admission id: </div>
                         <div>{{user.admission}}</div>
                     {% elif is_owner %}
-                        <div><a href="{% url 'edit_profile' %}">Add Admisssion no.</a></div>{% endif %}
+                        <div><a href="{% url 'edit_profile' %}">Add Admisssion no.</a></div>
+                    {% endif %}
                 </div>
             </div>
             <div style="margin: 5%;">
@@ -96,14 +41,14 @@
                     <span style="font-size: 25px; font-weight: bold;">ABOUT</span>
                     {% if is_owner %}
                     <form action="{% url 'edit_profile' %}" style="display: inline;">
-                        <button class="edit-btn" type="submit">Edit Profile</button>
+                        <button class="edit-btn" type="submit"><i class='fa fa-edit'></i></button>
                     </form>
                     {% endif %}
                 </div>
                 <p>{{user.desc}}</p>
             </div>
         </div>
-        <div style="background-color: white;border: 2px solid rgba(0, 0, 0, 0.5);border-radius: 10px; margin-bottom: 5%;">
+        <div style="background-color: white;border: 1px solid rgba(0, 0, 0, 0.2);border-radius: 10px; margin-bottom: 5%;">
             <section style="margin-left: 5%;">
                 <h2>Your Participation</h2>
             </section>

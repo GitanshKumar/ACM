@@ -3,9 +3,11 @@
 {% block stylesheet %}
 <style>
     .main {
-        width: 50%;
-        height: 50%;
-        margin: auto;
+        width: 100%;
+        min-width: 1200px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
     }
     .f {
         margin: 5%;
@@ -13,7 +15,7 @@
         margin-top: 0;
     }
     .f label {
-        margin-left: 2%;
+        color: rgba(0, 0, 0, 0.75);
     }
     .f input {
         border-radius: 10px;
@@ -24,37 +26,55 @@
         padding-left: 10px;
         margin-bottom: 5px;
     }
+    #id_captcha_1 {
+        width: 100px;
+        position: relative;
+        top: -15px;
+    }
     .f h5 {
         margin: 0;
         color: red;
     }
-    
+    .signup-submit {
+        width: 50%;
+        height: 30px;
+        font-weight: bold;
+        margin: auto;
+    }
+    .field-icon {
+        float: right;
+        right: 15px;
+        bottom: 15px;
+        position: absolute;
+        z-index: 2;
+        border-radius: 5px;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="main">
-    <div style="background-color: white; border: 1px solid rgba(0, 0, 0, 0.5);width: 50%; border-radius: 10px;position: absolute;top: 50%;transform: translateY(-50%);">
+    <div style="background-color: white; border: 1px solid rgba(0, 0, 0, 0.5);width: 50%; border-radius: 10px;margin: auto;">
         <h1 style="text-align: center;">Create Account</h1>
         <form class="f" method="POST" action="">
             {% csrf_token %}
             <div style="display: grid; grid-template-columns: 40% 60%;">
-                <label>Your name:</label>
+                <label>Your name</label>
                 <input type="text" name="name" value="{{name}}" placeholder="Enter name:" required/>
-                <label>Set your username:</label>
+                <label>Set your username</label>
                 <div>
                     {% if username %}<h5>User name Exists</h5>{% endif %}
                     <input type="text" name="username" value="{{username}}" placeholder="Enter username:" required/>
                 </div>
 
-                <label>Enter College email:</label>
+                <label>Enter Email</label>
                 <div>
                     {% if email %}<h5>Email Linked to another account</h5>{% endif %}
                     <input type="text" name="email" value="{{email}}" placeholder="Enter email:" required/>
                 </div>
 
-                <label>Create Password:</label>
-                <div>
+                <label>Create Password</label>
+                <div style="position: relative;">
                     {% if password %}
                     <ul class="messages" style="margin: 0; padding-left: 10px;">
                         {% for error in password %}
@@ -64,20 +84,26 @@
                         {% endfor %}
                     </ul>
                     {% endif %}
-                    <input type="password" name="password" placeholder="Enter password:" required/>
+                    <input id="pass1" type="password" name="password" placeholder="Enter password:" required/>
+                    <span class="fa fa-eye field-icon" id="p1" onclick="togglepass('pass1', 'p1')"></span>
                 </div>
-                <label>Re-enter Password:</label>
-                <input type="password" name="re-password" placeholder="Re-enter password:" required/>
+                <label>Re-enter Password</label>
+                <div style="position: relative;">
+                    <input id="pass2" type="password" name="re-password" placeholder="Re-enter password:" required>
+                    <span class="fa fa-eye field-icon" id="p2" onclick="togglepass('pass2', 'p2')"></span>
+                </div>
                 
-                <label>Enter Captcha: </label>
+                <label>Enter Captcha</label>
                 <div>
                     {% if captcha %}<h5>Wrong Captcha</h5>{% endif %}
                     {{form.captcha}}
                 </div>
             </div>
-            <div style="display: flex; margin: auto; width: 40%; margin-top: 2%;justify-content: space-between;">
-                <input type="submit" value="Sign up" style="width: 30%;"/>
-                <a href="{% url 'login' %}">Already have an account?</a>
+            <div style="display: grid; margin: auto; margin-top: 2%;">
+                <button class="signup-submit" type="submit">Sign up</button>
+                <div style="text-align: right;margin-top: 15px;">
+                    <a href="{% url 'login' %}" style="color: rgb(26, 121, 202);font-weight: bold;">Already have an account?</a>
+                </div>
             </div>
         </form>
     </div>

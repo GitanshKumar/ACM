@@ -1,63 +1,46 @@
 {% extends "main.html" %}
 
+{% block title %}Welcome to ACM ABES{% endblock %}
+
+{% load static %}
 {% block stylesheet %}
-<style>
-    .main {
-        height: calc(100% - 50px);
-        margin-left: 2%;
-        margin-right: 2%;
-        display: grid;
-        grid-template-columns: 35% 65%;
-    }
-    .main a:link, .main a:visited {
-        color: black;
-        text-decoration: none;
-    }
-    .main a:hover {
-        text-decoration: underline;
-    }
-    .event {
-        display: block;
-        max-height: 98%;
-        margin: 2%;
-        background-color: white;
-        height: 100%;
-        border-radius: 8px;
-        box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5);
-        transition: all 0.15s;
-    }
-    .event:hover {
-        transform: scale(1.04);
-    }
-    .image-container {
-        text-align: center;
-        margin: auto;
-        padding: 2%;
-        height: 70%;
-        transition: all 0.15s;
-    }
-</style>
+<link rel="stylesheet" href="{% static 'base/css/home.css' %}">
 {% endblock %}
 
 {% block content %}
 <div class="main">
-    <div>
-        
-    </div>
-    <div style="height: 100%; overflow-y: auto;">
-        <h1>Ongoing and Latest Events</h1>
+    <div class="news-container">
+        <h1>Latest News</h1>
         <div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr;padding-bottom: 1%; margin: 1%;margin-left: 0;">
+            {% for article in news %}
+                <div class="news">
+                    <div style="height: 125px;border-bottom: 1px solid rgba(0,0,0,0.2);">
+                        <img style="object-fit: cover;" src="{{article.picture.url}}" width="100%" height="100%"/>
+                    </div>
+                    <div style="margin: 2%;margin-left: 15px;">
+                        <h2 style="margin: 0;">{{article.headline}}</h2>
+                        <div>
+                            Date: {{article.created.date}}
+                        </div>
+                        <p>{{article.desc}}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div>
+        <h1>Ongoing and Latest Events</h1>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr;padding-bottom: 1%;">
             {% for event in ongoing %}
-            <a class="event" href="{% url 'event' event.name %}">
+            <a class="event" style="position: relative;" href="{% url 'event' event.name %}">
+                <div class="new">NEW</div>
                 <div class="image-container">
-                    <img style="object-fit: contain;" src="/{{event.image}}" width="100%" height="100%"/>
+                    <img style="object-fit: contain;filter: drop-shadow(0 0 2px gray);" src="{{event.image.url}}" width="100%" height="100%"/>
                 </div>
                 <div style="margin: 2%;margin-left: 5%;">
                     <h3 style="margin: 0;">{{event.name}}</h3>
                     <div style="margin-top: 5px;">
-                        Date: {{event.event_date}}<br>
-                        Status: {% if event.ongoing %} <b>Registrations Open</b> {% else %} Registrations Closed {% endif %}
+                        Date: {{event.event_date}}
                     </div>
                 </div>
             </a>
@@ -65,18 +48,16 @@
             {% for event in other %}
             <a class="event" href="{% url 'event' event.name %}">
                 <div class="image-container">
-                    <img style="object-fit: contain;" src="/{{event.image}}" width="100%" height="100%"/>
+                    <img style="object-fit: contain;filter: drop-shadow(0 0 2px gray);" src="{{event.image.url}}" width="100%" height="100%"/>
                 </div>
                 <div style="margin: 2%;margin-left: 5%;">
                     <h3 style="margin: 0;">{{event.name}}</h3>
                     <div style="margin-top: 5px;">
-                        Date: {{event.event_date}}<br>
-                        Status: {% if event.ongoing %} <b>Registrations Open</b> {% else %} Registrations Closed {% endif %}
+                        Date: {{event.event_date}}
                     </div>
                 </div>
             </a>
             {% endfor %}
-        </div>
         </div>
     </div>
 </div>

@@ -1,59 +1,32 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Welcome to ACM ABES</title>
+    <title>{% block title %}{% endblock %}</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inria+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="shortcut icon" href="#" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        body, html {
-                margin: 0;
-                height: 100%;
-                background-color: #f6f8fa;
-                font-family: 'Inria Sans', sans-serif;
-                min-width: 1150px;
-            }
-        a {
-            color: black;
-            text-decoration: none;
-        }
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            margin: 15px 0 15px 0;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.5); 
-            border: 1px solid black;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(0,0,0,0.8);
-            border-radius: 10px;
-        }
-        .messages {
-            width: fit-content;
-            margin: auto;
-            color: rgb(136, 24, 24);
-        }
-    </style>
+    
+    <link rel="stylesheet" href="{% static 'base/css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'base/css/navbar.css' %}">
     {% block stylesheet %}{% endblock %}
+    
+    <script src="{% static 'base/js/main.js' %}"></script>
+    <script src="{% static 'base/js/navbar.js' %}" defer></script>
+    {% block script %}{% endblock %}
 </head>
 <body>
     {% include 'navbar.html' %}
-
-    {% block content %}
-
-    {% endblock %}
-    {% block script %}
     
+    {% block content %}
     {% endblock %}
+    
 </body>
 </html>

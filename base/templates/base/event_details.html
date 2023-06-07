@@ -1,5 +1,7 @@
 {% extends 'main.html' %}
 
+{% block title %}Event Details{% endblock %}
+
 {% block stylesheet %}
 <style>
     .f {
@@ -23,6 +25,11 @@
         padding-bottom: 5px;
         background-color: rgba(0, 0, 0, 0.2);
     }
+    .f button {
+        width: 10%;
+        border-radius: 5px;
+        margin-left: 5px
+    }
     .tvalues {
         margin-top: 5px;
         height: 30px;
@@ -32,15 +39,15 @@
 {% endblock %}
 
 {% block content %}
-<div style="height: calc(100% - 50px); max-width: 1200px; margin: auto; overflow-y: auto;">
+<div style="height: calc(100% - 50px); width: 80%; margin: auto; overflow-y: auto;">
     <div style="margin: 3%;">
         <form class="f" method="GET">
             <input type="text" placeholder="Search teams or participants..." name="q" value="{{search}}" style="width: 80%;">
-            <input type="submit" value="Search" name="search" class="more" style="width: fit-content;">
-            <input type="submit" value="Clear" name="clear" class="more" style="width: fit-content;">
+            <button type="submit" name="search" class="more">Search</button>
+            <button type="submit" name="clear" class="more">Clear</button>
         </form>
     </div>
-    <div style="background-color: white;border: 1px solid rgba(0, 0, 0, 0.5);border-radius: 10px; margin-bottom: 5%;">
+    <div style="background-color: white;border: 1px solid rgba(0, 0, 0, 0.2);border-radius: 10px; margin-bottom: 5%;">
         <div style="margin-left: 5%;">
             <h2>Participation</h2>
             <div style="margin-bottom: 10px;">

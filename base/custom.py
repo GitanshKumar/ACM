@@ -23,8 +23,3 @@ def send_mail(to, sub, body):
         except:
             print("failed to send to", to)
             raise
-
-
-a = datetime.now()
-b = timedelta(hours=2)
-print(a - b)

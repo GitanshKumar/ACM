@@ -1,32 +1,53 @@
 {% extends "main.html" %}
 
+{% block title %}Login{% endblock %}
+
 {% block stylesheet %}
 <style>
     .main {
-        width: 50%;
-        margin: auto;
+        width: 100%;
+        min-width: 1200px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
     }
     .f {
         margin: 5%;
         margin-top: 0;
     }
     .f label {
-        margin-left: 2%;
+        margin-bottom: 5px;
+        color: rgba(0, 0, 0, 0.75);
     }
     .f input {
         border-radius: 10px;
         border: none;
         background-color: rgba(0, 0, 0, 0.1);
         height: 30px;
+        margin-bottom: 5px;
         padding-left: 10px;
+    }
+    .field-icon {
+        float: right;
+        right: 10px;
+        bottom: 10px;
+        position: absolute;
+        z-index: 2;
+        border-radius: 5px;
+    }
+    .login-submit {
+        width: 100%;
+        height: 30px;
+        font-weight: bold;
+        margin: auto;
     }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="main">
-    <div style="background-color: white; border: 1px solid rgba(0, 0, 0, 0.5);width: 50%; border-radius: 10px;position: absolute;top: 50%;transform: translateY(-50%);">
-        <h1 style="text-align: center;">Login</h1>
+    <div style="background-color: white; border: 1px solid rgba(0, 0, 0, 0.5);width: 30%;padding: 0 2% 0 2%; border-radius: 10px;margin: auto;">
+        <h1 style="text-align: center;margin-top: 30px;">Login</h1>
         {% if messages %}
         <ul class="messages">
             {% for msg in messages %}
@@ -38,19 +59,38 @@
         {% endif %}
         <form class="f" method="POST" action="">
             {% csrf_token %}
-            <div style="display: grid;">
-                <label>Username:</label>
+            <div style="display: grid;position: relative;">
+                <label>Username</label>
                 <input type="text" name="username" placeholder="Enter Username:" />
 
-                <label>Password:</label>
-                <input type="password" name="password" placeholder="Enter password:" />
+                <label>Password</label>
+                <input id="pass1" type="password" name="password" placeholder="Enter password:" required/>
+                <span class="fa fa-eye field-icon" id="p1" onclick="togglepass('pass1', 'p1')"></span>
             </div>
-            <div style="margin: auto; width: 60%;display: flex; margin-top: 2%; justify-content: space-between;">
-                <input type="submit" value="Login" style="width: 30%;"/>
-                <a href="{% url 'signup' %}" style="margin-top: 3px;">Create an account?</a>
-                <a href="{% url 'reset_pass' 'request' %}" style="margin-top: 3px;">Forgot Password?</a>
+            <div style="margin: auto; width: 100%;display: grid; margin-top: 2%;">
+                <button type="submit" class="login-submit">Login</button>
+                <div style="margin-top: 15px;">
+                    <a href="{% url 'signup' %}" style="float: left;color: rgb(26, 121, 202);font-weight: bold;">Create an account?</a>
+                    <a href="{% url 'reset_pass' 'request' %}" style="float: right;color: rgb(26, 121, 202);font-weight: bold;">Forgot Password?</a>
+                </div>
             </div>
         </form>
     </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    function togglepass(id1, id2) {
+        var passfield = document.getElementById(id1);
+        if (passfield.type == "password") {
+            passfield.type = "text"
+            document.getElementById(id2).className = "fa fa-eye-slash field-icon";
+        }
+        else {
+            passfield.type = "password"
+            document.getElementById(id2).className = "fa fa-eye field-icon";
+        };
+    };
+</script>
 {% endblock %}
