@@ -1,12 +1,30 @@
+import uuid, shutil, os
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-import uuid
+from PIL import Image
+from io import BytesIO
+from django.core.files import File
 from ckeditor.fields import RichTextField
+from django.core.exceptions import ObjectDoesNotExist
 
 # Create your models here.
 
-def nameProfileImage(instance, filename):
+def compressImage(image):
+    im = Image.open(image)
+    im = im.convert('RGB')
+    im_io = BytesIO()
+    im.save(im_io, 'JPEG', quality=50)
+    new_image = File(im_io, name=image.name)
+    return new_image
+
+def nameAndOverwriteMemberImage(instance, filename):
+    try:
+        this = Member.objects.get(id=instance.id)
+        if this.profile_pic.path and os.path.isfile(this.profile_pic.path):
+            os.remove(this.profile_pic.path)
+    except ObjectDoesNotExist:
+        pass
     return 'images/profile_pics/' + instance.user.username + str(instance.id) + ".jpg"
 
 class Member(models.Model):
@@ -17,7 +35,7 @@ class Member(models.Model):
     year = models.CharField(max_length=20, choices=[('1st', 'First year'), ('2nd', 'Second year'), ('3rd', 'Third year')], default="1st")
     mobile_no = models.CharField(max_length=10, default="")
     faculty = models.BooleanField(default=False)
-    profile_pic = models.ImageField(upload_to=nameProfileImage, default="images/profile_pics/default.png")
+    profile_pic = models.ImageField(upload_to=nameAndOverwriteMemberImage, default="images/profile_pics/default.png")
     linked_in = models.CharField(max_length=150, default="", null=True, blank=True)
     github = models.CharField(max_length=150, default="", null=True, blank=True)
     w_chapter = models.BooleanField(default=False)
@@ -28,18 +46,34 @@ class Member(models.Model):
     unique_url = models.CharField(max_length=255, blank=True)
     url_timeout = models.TimeField(auto_now= False, auto_now_add=False, null=True, blank=False)
 
+    def save(self, *args, **kwargs):
+        new_image = compressImage(self.profile_pic)
+        self.image = new_image
+        super(Member, self).save(*args, **kwargs)
+
     def __str__(self) -> str:
         return self.name
 
 def nameNewsImage(instance, filename):
+    try:
+        this = News.objects.get(id=instance.id)
+        if this.image.path and os.path.isfile(this.image.path):
+            os.remove(this.image.path)
+    except ObjectDoesNotExist:
+        pass
     return 'images/news/' + instance.headline + ".jpg"
 
 class News(models.Model):
     headline = models.CharField(max_length=80)
-    picture = models.ImageField(upload_to=nameNewsImage, blank=True)
+    image = models.ImageField(upload_to=nameNewsImage, blank=True)
     desc = models.TextField(max_length=300)
     created = models.DateTimeField(auto_now=True)
-
+    
+    def save(self, *args, **kwargs):
+        new_image = compressImage(self.image)
+        self.image = new_image
+        super(News, self).save(*args, **kwargs)
+    
     def __str__(self) -> str:
         return self.headline
 
@@ -59,12 +93,23 @@ class Byte(models.Model):
         return super(User, self).save(*args, **kwargs)
 
 def nameEventPhotos(instance, filename):
+    try:
+        this = Photo.objects.get(id=instance.id)
+        if this.image.path  and os.path.isfile(this.image.path):
+            os.remove(this.image.path)
+    except ObjectDoesNotExist:
+        pass
     return 'images/events/' + instance.event.name + "/" + filename
 
 class Photo(models.Model):
     image = models.ImageField(upload_to=nameEventPhotos)
     event = models.ForeignKey('Event', on_delete= models.CASCADE, related_name="photos")
 
+    def save(self, *args, **kwargs):
+        new_image = compressImage(self.image)
+        self.image = new_image
+        super(Photo, self).save(*args, **kwargs)
+    
     def __str__(self) -> str:
         return self.event.name
 
@@ -77,6 +122,15 @@ class Tag(models.Model):
     def __str__(self) -> str:
         return self.name
 
+def nameAndOverwriteStudentImage(instance, filename):
+    try:
+        this = Student.objects.get(id=instance.id)
+        if this.profile_pic.path  and os.path.isfile(this.profile_pic.path):
+            os.remove(this.profile_pic.path)
+    except ObjectDoesNotExist:
+        pass
+    return 'images/profile_pics/' + instance.user.username + str(instance.id) + ".jpg"
+
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete= models.CASCADE, default="", related_name="student")
     name = models.CharField(max_length= 100)
@@ -85,7 +139,7 @@ class Student(models.Model):
     admission = models.CharField(max_length=50, default="")
     email = models.EmailField(max_length= 254, default="", unique=True)
     mobile_no = models.CharField(max_length=10, default="")
-    profile_pic = models.ImageField(upload_to=nameProfileImage, default="images/profile_pics/default.png")
+    profile_pic = models.ImageField(upload_to=nameAndOverwriteStudentImage, default="images/profile_pics/default.png")
     linked_in = models.CharField(max_length=150, default="", null=True, blank=True)
     github = models.CharField(max_length=150, default="", null=True, blank=True)
     core = models.CharField(max_length= 50, null=True, blank=True)
@@ -94,11 +148,22 @@ class Student(models.Model):
     unique_url = models.CharField(max_length=255, blank=True)
     url_timeout = models.TimeField(auto_now= False, auto_now_add=False, null=True, blank=True)
 
+    def save(self, *args, **kwargs):
+        new_image = compressImage(self.profile_pic)
+        self.image = new_image
+        super(Student, self).save(*args, **kwargs)
+    
     def __str__(self) -> str:
         return self.user.username
 
 def nameEventImage(instance, filename):
-    return 'images/events/' + instance.name + "/" + instance.name + "_poster.jpg"
+    try:
+        this = Event.objects.get(id=instance.id)
+        if this.image.path and os.path.isfile(this.image.path):
+            os.remove(this.image.path)
+    except ObjectDoesNotExist:
+        pass
+    return 'images/events/' + instance.name[:30] + "/" + instance.name[:30] + "_poster.jpg"
 
 class Event(models.Model):
     name = models.CharField(max_length= 150)
@@ -125,6 +190,11 @@ class Event(models.Model):
     
     def incharge(self):
         return ",".join([str(c) for c in self.coordinator.all()])
+    
+    def save(self, *args, **kwargs):
+        new_image = compressImage(self.image)
+        self.image = new_image
+        super(Event, self).save(*args, **kwargs)
 
 
 class Team(models.Model):

@@ -50,4 +50,7 @@ border-color: rgba(0, 0, 0, 0.5);
     body, html {
         width: 100%;
     }   
+    ::-webkit-scrollbar {
+        width: 3px;
+    }
 }

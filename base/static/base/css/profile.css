@@ -1,12 +1,12 @@
 .outer-container {
-    height: calc(100% - 50px);
-    display: flex;
+    width: 80%;
     position: relative;
+    height: 100%;
+    margin: auto;
 }
 .prof-container {
     position: absolute;
     top: 0; bottom: 0; left: 0; right: 0;
-    max-width: 1200px;
     overflow-y: auto;
     margin: auto;
     padding: 1%;
@@ -31,6 +31,8 @@
 }
 .left-pane img {
     object-fit: cover;
+    width: 25vmin;
+    height: 25vmin;
     min-width: 100px;
     margin-top: -40%;
     border-radius: 50%;
@@ -77,10 +79,17 @@
 ::-webkit-scrollbar-track {
         margin: 50px 0 50px 0;
 }
+@media screen and (max-width:958px) {
+    .left-pane img {
+        width: 20vmin;
+        height: 20vmin;
+    }
+}
 
 @media screen and (max-width:500px) {
     .outer-container {
         font-size: 14px;
+        width: 95%;
     }
     .inner {
         grid-template-columns: 1fr;
@@ -91,7 +100,8 @@
         border-right: none;
     }
     .left-pane img {
-        width: 40%;
+        width: 40vw;
+        height: 40vw;
         margin-top: -30%;
     }
     .left-pane div {

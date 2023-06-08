@@ -93,7 +93,7 @@
         display: -webkit-box;
         max-width: calc(100%);
         margin-top: 2px;
-        -webkit-line-clamp: 6;
+        -webkit-line-clamp: 4;
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
@@ -113,6 +113,7 @@
     .news-body {
         margin: 5px;
         font-size: 10px;
+        padding-bottom: 2px;
     }
     .news-image-container {
         height: 50px;
@@ -140,10 +141,7 @@
         width: 50px;
         left: -5px;
     }
-}
-
-@media screen and (max-width: 370px){
     .news-body p {
-        -webkit-line-clamp: 5;
+        -webkit-line-clamp: 6;
     }
 }
