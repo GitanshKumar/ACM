@@ -5,9 +5,9 @@ function load(){
     method: "GET",
     data: {"loadmore":true, "count":$(".result").length, "q": document.getElementById("search-bar").value},
     success: function(data) {
-        if (!data[0]){
-            $("#load-more-container").remove();
-        }
+        var load = document.getElementById("load-more-container");
+        $("#outer-container").append(`<div id='spinner' style="width:fit-content;margin:auto;padding-bottom:50px;font-size:16px"><i class='fa fa-spinner fa-spin'></i></div>`);
+        load.style.display = "none";
         document.getElementById("count").innerText = `Showing ${data[1]} out of ${data[2]} results for ${document.getElementById("search-bar").value}`
         for (var i = 3; i < data.length; i++){
             var res = data[i];
@@ -23,7 +23,7 @@ function load(){
                 var innerhtml = `
                 <div class="result">
                     <div style="margin: 2%;">
-                        <a href="/event/${res[1]}/" style="color: black;">
+                        <a href="/event/${res[1]}" style="color: black;">
                             <h2 class="hov">
                                 ${res[1]}
                                 <div class="image">
@@ -63,6 +63,11 @@ function load(){
                 container.append(innerhtml);
             }
         }
+        document.getElementById("spinner").remove();
+
+        if (data[0]) {
+            load.style.display = "block";
+        };
     }
 })
 }

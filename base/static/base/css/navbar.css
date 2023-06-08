@@ -8,7 +8,8 @@
     height: 50px;
     z-index: 2;
     position: relative;
-    box-shadow: 0 2px 20px 0px rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0px 15px 20px white;
 }
 .navbar {
     width: 80%;
@@ -162,8 +163,7 @@
     opacity: 1;
     margin-top: 15px;
 }
-.dropdown a, .dropdown a:link, .dropdown:visited {
-    text-decoration: none;
+.dropdown a {
     color: white;
     margin: 5% 0 0 10%;
 }
@@ -230,6 +230,9 @@
         background-color: rgb(52, 52, 52);
         font-weight: normal;
     }
+    .dropdown a {
+        margin-left: 0;
+    }
     .nav {
         display: none;
     }
@@ -271,5 +274,8 @@
     .search {
         margin-left: 2.5%;
         width: 85%;
+    }
+    .nav-container {
+        box-shadow: 0 0px 10px 10px white;
     }
 }

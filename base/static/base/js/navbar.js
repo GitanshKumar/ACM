@@ -39,17 +39,6 @@ function search() {
                                 <div>${data[i][0]}<strong>${temp}</strong></div>
                             </a>
                             `;
-                        // var div = document.createElement("div");
-                        // if (data[i][3] == "MEMBER"){
-                        //     div.innerHTML = data[i][0] + "<strong style='font-size:12px; margin-left:5px;'>| "  + data[i][4] + " | " + data[i][3] + " | " + data[i][5] +  " |</strong>"
-                        // }
-                        // else {
-                        //     div.innerHTML = data[i][0] + "<strong style='font-size:12px; margin-left:5px;'>"  + data[i][4] + "</strong>"
-                        // }
-                        // res.setAttribute("href", "/profile/" + data[i][1])
-                        // res.setAttribute("style", "overflow: hidden;")
-                        // res.append(img);
-                        // res.append(div);
                     }
                     resultsContainer.append(res);
                 }
@@ -60,12 +49,19 @@ function search() {
         }
     });
 }
+function addSpinner() {
+    if (!document.getElementById("spinner")){
+        $("#results-container").append(`<div id='spinner' style="width:fit-content;margin:auto;"><i class='fa fa-spinner fa-spin'></i></div>`)
+    }
+}
+
 var searchBar = document.getElementById("search-bar");
 var result = document.getElementById("results-container");
 searchBar.addEventListener("focus", () => {
     result.style.display = 'block';
     search();
 })
+
 searchBar.addEventListener("blur", (event) => {
     const isClickInsideResult = result.contains(event.relatedTarget);
     if (!isClickInsideResult) {
@@ -74,6 +70,7 @@ searchBar.addEventListener("blur", (event) => {
 })
 
 searchBar.addEventListener("input", () => {
+    addSpinner();
     clearTimeout(searchwait);
     searchwait = setTimeout(search, 300);
     }

@@ -24,9 +24,13 @@
                             <h2 style="margin-bottom: 2px;">{{stu.name}}</h2>
                             <span>{{stu.core}}<br>
                                 {{stu.role}}<br>
+                                {% if stu.year != 'other' %}
                                 {% with ''|center:stu.year.0 as range %}
                                 {% for _ in range %}{{ '|' }}{% endfor %}
                                 {% endwith %}
+                                {% else %}
+                                {{stu.year}}
+                                {% endif %}
                             </span>
                         </div>
                         <div class="desc">
@@ -37,18 +41,30 @@
                 </div>
             </div>
         </div>
-        <div class="stu-container" style="margin-bottom: 5%;">
+        <div class="stu-container">
             <div style="margin: 1%;">
                 <h1 style="margin-left: 2%;">ACM Women Chapter</h1>
                 <div class="pro-container">
                     {% for stu in wchapter %}
                     <div class="pro">
-                        <a href="{% url 'profile' stu.user.username %}" style="text-align: center;"><img src="{{stu.profile_pic.url}}" style="border-radius: 200px;" width="90%"></a>
+                        <a href="{% url 'profile' stu.user.username %}" style="text-align: center;height: 100%;">
+                            <span class="helper"></span>
+                            <img src="{{stu.profile_pic.url}}" style="border: 3px solid {% if stu.year == '3rd' %} gold {% elif stu.year == '2nd' %} silver {% else %} brown {% endif %};">
+                        </a>
                         <div style="margin-left: 2%;">
                             <h3 style="margin-bottom: 2px;">{{stu.name}}</h3>
-                            <span>{{stu.core}}<br>{{stu.role}}</span>
+                            <span>{{stu.core}}<br>
+                                {{stu.role}}<br>
+                                {% if stu.year != 'other' %}
+                                {% with ''|center:stu.year.0 as range %}
+                                {% for _ in range %}{{ '|' }}{% endfor %}
+                                {% endwith %}
+                                {% else %}
+                                {{stu.year}}
+                                {% endif %}
+                            </span>
                         </div>
-                        <div class="desc" style="width: 100%;">
+                        <div class="desc">
                             <p style="margin: 5%;">{{stu.short_desc}}</p>
                         </div>
                     </div>

@@ -116,6 +116,13 @@
     width: 30%;
     min-width: 120px;
 }
+.event-images-container {
+    width: 80%;
+    height: 95%;
+    margin: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
 
 @media screen and (max-width:500px) {
     .event-container {
@@ -129,6 +136,9 @@
     }
     .right-plane {
         overflow: visible;
+    }
+    .details {
+        padding-bottom: 10px;
     }
     .details h3 {
         font-size: 18px;

@@ -26,7 +26,7 @@
         </form>
     </div>
     <div class="search-result-container">
-        <div style="display: grid;height: fit-content;">
+        <div class="tags-container">
             <a class="tag" href="{% url 'events' %}?q=">All({{total}})</a>
             {% for tag in tags %}
             <a class="tag" href="{% url 'events' %}?q={{tag.name}}">{{tag}} ({{tag.related_events}})</a>

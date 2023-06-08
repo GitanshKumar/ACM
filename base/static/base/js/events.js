@@ -5,10 +5,9 @@ function load(){
     method: "GET",
     data: {"loadmore":true, "count":$(".event").length, "q": document.getElementById("search-bar-events").value},
     success: function(data) {
-        console.log(data)
-        if (!data[0]) {
-            $("#load-more-container").remove();
-        };
+        var load = document.getElementById("load-more-container");
+        $(".outer-container").append(`<div id='spinner' style="width:fit-content;margin:auto;margin-bottom:30px;font-size:16px"><i class='fa fa-spinner fa-spin'></i></div>`);
+        load.style.display = "none";
         for (var i = 1; i < data.length; i++){
             var event = data[i];
             var tags = "";
@@ -40,6 +39,12 @@ function load(){
             `;
             container.append(innerhtml);
         }
+        
+        document.getElementById("spinner").remove();
+
+        if (data[0]) {
+            load.style.display = "block";
+        };
     }
 })
 };

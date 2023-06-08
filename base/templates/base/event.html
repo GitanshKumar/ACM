@@ -36,7 +36,7 @@
                         {% for coo in event.coordinator.all %}
                             <div style="width: 25px;height: 25px;">
                                 <a href="{% url 'profile' coo.user %}" style="width: fit-content;">
-                                    <img style="border-radius: 50%;" src="{{coo.profile_pic.url}}" width="100%">
+                                    <img style="border-radius: 50%;aspect-ratio: 1;" src="{{coo.profile_pic.url}}" width="100%">
                                 </a>
                             </div>
                         {% endfor %}
@@ -80,7 +80,7 @@
             <label class="slider">
                 {% for photo in event.photos.all %}
                     <div class="slide">
-                        <div style="width: 300px;height: 300px;margin: auto;margin-top: 5px;margin-bottom: 5px;">
+                        <div class="event-images-container">
                             <img style="object-fit: contain; filter: drop-shadow(0 0 5px gray);" src="{{photo.image.url}}" width="100%" height="100%"/>
                         </div>
                     </div>

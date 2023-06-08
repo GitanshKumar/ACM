@@ -4,6 +4,17 @@
     margin: auto;
     overflow-y: auto;
 }
+.tags-container {
+    display: grid;
+    height: fit-content;
+}
+.tag {
+    margin-bottom: 5px;
+}
+.tag:hover {
+    color: rgb(57, 180, 180);
+    text-decoration: underline;
+}
 .event {
     display: grid;
     margin-bottom: 1%;
@@ -53,10 +64,6 @@
 }
 .more:hover {
     background-color: rgba(210, 233, 227, 0.6);
-}
-.tag:hover {
-    color: rgb(57, 180, 180);
-    text-decoration: underline;
 }
 .image {
     position: absolute;
@@ -124,6 +131,13 @@
     .outer-container {
         font-size: 14px;
     }
+    .search-result-container {
+        grid-template-columns: 1fr;
+    }
+    .tags-container {
+        grid-template-columns: 1fr 1fr;
+        margin-bottom: 5px;
+    }
     .f {
         display: grid;
     }
@@ -151,11 +165,9 @@
     .date-container {
         margin-top: 5px;
     }
-    .search-result-container {
-        grid-template-columns: 30% 70%;
-    }
     .tag {
         font-size: 12px;
+        margin-bottom: 2px;
     }
     .event {
         padding-left: 5px;
