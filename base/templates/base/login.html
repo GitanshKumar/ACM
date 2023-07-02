@@ -6,7 +6,6 @@
 <style>
     .main {
         width: 100%;
-        min-width: 1200px;
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
@@ -41,12 +40,41 @@
         font-weight: bold;
         margin: auto;
     }
+    .login-container {
+        background-color: white;
+        border: 1px solid rgba(0, 0, 0, 0.5);
+        width: 50%;
+        border-radius: 10px;
+        margin: auto;
+    }
+    @media screen and (max-width:767px) {
+        .login-container {
+            width: 95%;
+        }
+    }
+    @media screen and (max-width:500px) {
+        .login-container h1 {
+            font-size: 24px;
+        }
+        .login-container {
+            font-size: 14px;
+        }
+        .login-container input {
+            height: 20px;
+            font-size: 10px;
+        }
+        .login-submit {
+            width: 100%;
+            font-size: 12px;
+            height: 25px;
+        }
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="main">
-    <div style="background-color: white; border: 1px solid rgba(0, 0, 0, 0.5);width: 30%;padding: 0 2% 0 2%; border-radius: 10px;margin: auto;">
+    <div class="login-container">
         <h1 style="text-align: center;margin-top: 30px;">Login</h1>
         {% if messages %}
         <ul class="messages">
@@ -67,7 +95,7 @@
                 <input id="pass1" type="password" name="password" placeholder="Enter password:" required/>
                 <span class="fa fa-eye field-icon" id="p1" onclick="togglepass('pass1', 'p1')"></span>
             </div>
-            <div style="margin: auto; width: 100%;display: grid; margin-top: 2%;">
+            <div style="width: 100%;display: grid; margin-top: 2%;">
                 <button type="submit" class="login-submit">Login</button>
                 <div style="margin-top: 15px;">
                     <a href="{% url 'signup' %}" style="float: left;color: rgb(26, 121, 202);font-weight: bold;">Create an account?</a>

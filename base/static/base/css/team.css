@@ -1,0 +1,111 @@
+.main-container {
+    width: 80%;
+    height: 100%;
+    margin: auto;
+    overflow-y: auto;
+}
+::-webkit-scrollbar-track {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.stu-container {
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    margin: auto;
+    margin-top: 2%;
+    border-radius: 8px;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+.pro-container {
+    padding: 0 10px 0 10px;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    column-gap: 2%;
+}
+.pro {
+    display: grid;
+    grid-template-columns: 50% 50% 0%;
+    margin-bottom: 5%;
+    width: 95%;
+    height: 150px;
+    overflow: hidden;
+    transition: all 0.5s;
+}
+.pro img {
+    border-radius: 50%;
+    vertical-align: middle;
+    width: 85%;
+    aspect-ratio: 1;
+    object-fit: cover;
+}
+.helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+.desc {
+    opacity: 0;
+    margin-top: 15px;
+    height: 120px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    transition: opacity 0.5s;
+}
+.pro a {
+    margin-left: 40%;
+    transition: all 0.5s;
+}
+.pro:hover {
+    grid-template-columns: 20% 30% 50%;
+}
+.pro:hover a {
+    margin-left: 0;
+}
+.pro:hover .desc{
+    opacity: 1;
+}
+
+@media screen and (max-width:958px) {
+    .pro a {
+        margin-left: 15%;
+    }
+}
+
+@media screen and (max-width:500px) {
+    .main-container {
+        width: 95%;
+        font-size: 14px;
+    }
+    .stu-container h1 {
+        font-size: 20px;
+    }
+    .stu-container h2 {
+        font-size: 18px;
+    }
+    .pro-container {
+        grid-template-columns: 1fr;
+    }
+    .pro {
+        grid-template-columns: 40% 60% 0%;
+        height: 120px;
+    }
+    .pro img {
+        width: 80%;
+    }
+    .pro:hover {
+        grid-template-columns: 0% 50% 50%;
+    }
+    .pro:hover .pro img{
+        height: 0;
+        opacity: 0;
+    }
+    .pro a {
+        margin-left: 12%;
+    }
+    .desc {
+        margin-top: 10px;
+        height: 100px;
+    }
+}

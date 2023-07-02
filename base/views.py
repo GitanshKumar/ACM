@@ -16,7 +16,7 @@ from .custom import send_mail
 
 def home(request):
     ongoing = Event.objects.filter(ongoing= True).order_by("event_date")
-    other = Event.objects.filter(ongoing= False).order_by("-event_date")[:9 - ongoing.count()]
+    other = Event.objects.filter(ongoing= False).order_by("-event_date")[:8 - ongoing.count()]
     news = News.objects.all()[:5]
     context = {"other": other, "ongoing": ongoing, "news":news}
     return render(request, 'base/home.html', context)
@@ -366,46 +366,3 @@ def reset_password(request, reset_id):
     return render(request, 'base/reset_password.html', {"req":True})
 
 
-# import random
-# import string
-
-# def generate_random_password():
-#     length = 8
-#     while True:
-#         password = []
-#         password.append(random.choice(string.ascii_uppercase))  # At least 1 uppercase
-#         password.append(random.choice(string.ascii_lowercase))  # At least 1 lowercase
-#         password.append(random.choice(string.digits))  # At least 1 digit
-#         password.append(random.choice("!@#$&*"))  # At least 1 special character
-
-#         remaining_length = length - len(password)
-#         password += random.choices(
-#             string.ascii_letters + string.digits + string.punctuation,
-#             k=remaining_length
-#         )
-
-#         random.shuffle(password)
-#         password = ''.join(password)
-
-#         if (
-#             any(c.isupper() for c in password) and
-#             any(c.islower() for c in password) and
-#             any(c.isdigit() for c in password) and
-#             any(c in string.punctuation for c in password)
-#         ):
-#             return password
-
-# def temp():
-#     with open("temo\ACM Members - 1st year.csv", "r") as f:
-#         a = csv.DictReader(f)
-#         with open("temo/1st.csv", "a") as f1:
-#             for i in a:
-#                 pwd = generate_random_password()
-#                 name = "".join(i["Name"].split()).lower()
-                
-#                 user = User.objects.create(username=name, email=i["email id"], password= pwd)
-#                 user.save()
-#                 mem = Member(user=user, name=i["Name"], email=i["email id"], admission=i["Admission no."], year="1st", mobile_no=i["mobile number"], core="CS")
-#                 mem.save()
-
-#                 f1.write()

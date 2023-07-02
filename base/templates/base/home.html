@@ -8,56 +8,86 @@
 {% endblock %}
 
 {% block content %}
-<div class="main">
-    <div class="news-container">
-        <h1>Latest News</h1>
-        <div>
-            {% for article in news %}
-                <div class="news">
-                    <div style="height: 125px;border-bottom: 1px solid rgba(0,0,0,0.2);">
-                        <img style="object-fit: cover;" src="{{article.picture.url}}" width="100%" height="100%"/>
-                    </div>
-                    <div style="margin: 2%;margin-left: 15px;">
-                        <h2 style="margin: 0;">{{article.headline}}</h2>
-                        <div>
-                            Date: {{article.created.date}}
-                        </div>
-                        <p>{{article.desc}}</p>
-                    </div>
-                </div>
-            {% endfor %}
+<div>
+    <div class="welcome-container">
+        <div class="cover-container">
+            <img src="/media/images/Cover.jpg">
+            <div class="welcome">
+                <h1>Welcome to ABES Engineering college's ACM chapter</h1>
+            </div>
         </div>
     </div>
-    <div>
-        <h1>Ongoing and Latest Events</h1>
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr;padding-bottom: 1%;">
-            {% for event in ongoing %}
-            <a class="event" style="position: relative;" href="{% url 'event' event.name %}">
-                <div class="new">NEW</div>
-                <div class="image-container">
-                    <img style="object-fit: contain;filter: drop-shadow(0 0 2px gray);" src="{{event.image.url}}" width="100%" height="100%"/>
-                </div>
-                <div style="margin: 2%;margin-left: 5%;">
-                    <h3 style="margin: 0;">{{event.name}}</h3>
-                    <div style="margin-top: 5px;">
-                        Date: {{event.event_date}}
+    <div class="main">
+        <div style="width: 100%;position: relative;">
+            <h1>Latest News</h1>
+            <div class="horizontal-scroll" style="overflow-x: auto;">
+                <div class="news-container">
+                {% for article in news %}
+                    <div class="news">
+                        <div class="news-image-container">
+                            <img src="{{article.image.url}}"/>
+                        </div>
+                        <div class="news-body">
+                            <h2 style="margin: 0;">{{article.headline}}</h2>
+                            <div>
+                                Date: {{article.created.date}}
+                            </div>
+                            <p>{{article.desc}}</p>
+                        </div>
                     </div>
+                {% endfor %}
                 </div>
-            </a>
-            {% endfor %}
-            {% for event in other %}
-            <a class="event" href="{% url 'event' event.name %}">
-                <div class="image-container">
-                    <img style="object-fit: contain;filter: drop-shadow(0 0 2px gray);" src="{{event.image.url}}" width="100%" height="100%"/>
-                </div>
-                <div style="margin: 2%;margin-left: 5%;">
-                    <h3 style="margin: 0;">{{event.name}}</h3>
-                    <div style="margin-top: 5px;">
-                        Date: {{event.event_date}}
+            </div>
+        </div>
+        <div class="right-pane">
+            <h1>Ongoing and Latest Events</h1>
+            <div class="home-event-container">
+                {% for event in ongoing %}
+                <siv class="event" >
+                    <div class="new">
+                        NEW
                     </div>
-                </div>
-            </a>
-            {% endfor %}
+                    <div class="image-container">
+                        <a href="{% url 'event' event.name %}">
+                            <img src="{{event.image.url}}"/>
+                        </a>
+                    </div>
+                    <div class="event-body">
+                        <h3 style="margin: 0;">
+                            {{event.name}}
+                        </h3>
+                        <div>
+                            Date: {{event.event_date}}
+                            {% if event.coordinator.all %}
+                            <div style="display: flex;">
+                                Coordinators:
+                                {% for coo in event.coordinator.all %}
+                                <div style="width: 25px;height: 25px;">
+                                    <a href="{% url 'profile' coo.user %}" style="width: 100%;">
+                                        <img style="border-radius: 50%;aspect-ratio: 1;" src="{{coo.profile_pic.url}}" width="100%">
+                                    </a>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </siv>
+                {% endfor %}
+                {% for event in other %}
+                <a class="event" href="{% url 'event' event.name %}">
+                    <div class="image-container">
+                        <img src="{{event.image.url}}"/>
+                    </div>
+                    <div class="event-body">
+                        <h3 style="margin: 0;">{{event.name}}</h3>
+                        <div style="margin-top: 5px;">
+                            Date: {{event.event_date}}
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
         </div>
     </div>
 </div>

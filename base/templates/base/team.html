@@ -2,63 +2,13 @@
 
 {% block title %}ACM Team{% endblock %}
 
+{% load static %}
 {% block stylesheet %}
-<style>
-    .main-container {
-        position: absolute;
-        top: 0; bottom: 0; left: 0; right: 0;
-        width: 100%;
-        overflow-y: auto;
-    }
-    ::-webkit-scrollbar-track {
-        margin-top: 20px;
-        margin-bottom: 20px;
-    }
-    .stu-container {
-        border: 2px solid rgba(255, 255, 255, 0.5);
-        margin: auto;
-        margin-top: 2%;
-        border-radius: 8px;
-        background-color: white;
-        border: 1px solid rgba(0, 0, 0, 0.2);
-    }
-    .pro-container {
-        padding: 0 10px 0 10px;
-        display: grid;
-        grid-template-columns: 50% 50%;
-        column-gap: 2%;
-    }
-    .pro {
-        display: grid;
-        grid-template-columns: 30% 70% 0%;
-        margin-bottom: 5%;
-        width: 95%;
-        height: 150px;
-        overflow: hidden;
-        transition: all 0.5s;
-    }
-    .desc {
-        opacity: 0;
-        height: 120px;
-        overflow-y: auto;
-        overflow-x: hidden;
-        border: 1px solid rgba(0, 0, 0, 0.3);
-        border-radius: 10px;
-        word-break: break-all;
-        transition: opacity 0.5s;
-    }
-    .pro:hover {
-        grid-template-columns: 20% 30% 50%;
-    }
-    .pro:hover .desc{
-        opacity: 1;
-    }
-
-</style>
+<link rel="stylesheet" href="{% static 'base/css/team.css' %}">
 {% endblock %}
 
 {% block content %}
-<div style="height: calc(100% - 50px); max-width: 1200px; display: flex; position: relative; margin: auto;">
+<div style="height: calc(100% - 50px); display: flex;">
     <div class="main-container">
         <div class="stu-container">
             <div style="margin: 1%;">
@@ -66,13 +16,22 @@
                 <div class="pro-container">
                     {% for stu in student %}
                     <div class="pro">
-                        <a href="{% url 'profile' stu.user.username %}" style="text-align: center;"><img src="{{stu.profile_pic.url}}" style="border-radius: 200px;" width="90%"></a>
+                        <a href="{% url 'profile' stu.user.username %}" style="text-align: center;height: 100%;">
+                            <span class="helper"></span>
+                            <img src="{{stu.profile_pic.url}}" style="border: 3px solid {% if stu.year == '3rd' %} gold {% elif stu.year == '2nd' %} silver {% else %} brown {% endif %};">
+                        </a>
                         <div style="margin-left: 2%;">
                             <h2 style="margin-bottom: 2px;">{{stu.name}}</h2>
-                            <span>{{stu.core}}<br>{{stu.role}}<br>
+                            <span>{{stu.core}}<br>
+                                {{stu.role}}<br>
+                                {% if stu.year != 'other' %}
                                 {% with ''|center:stu.year.0 as range %}
                                 {% for _ in range %}{{ '|' }}{% endfor %}
-                                {% endwith %}</span>
+                                {% endwith %}
+                                {% else %}
+                                {{stu.year}}
+                                {% endif %}
+                            </span>
                         </div>
                         <div class="desc">
                             <p style="margin: 5%;">{{stu.short_desc}}</p>
@@ -82,18 +41,30 @@
                 </div>
             </div>
         </div>
-        <div class="stu-container" style="margin-bottom: 5%;">
+        <div class="stu-container">
             <div style="margin: 1%;">
                 <h1 style="margin-left: 2%;">ACM Women Chapter</h1>
                 <div class="pro-container">
                     {% for stu in wchapter %}
                     <div class="pro">
-                        <a href="{% url 'profile' stu.user.username %}" style="text-align: center;"><img src="{{stu.profile_pic.url}}" style="border-radius: 200px;" width="90%"></a>
+                        <a href="{% url 'profile' stu.user.username %}" style="text-align: center;height: 100%;">
+                            <span class="helper"></span>
+                            <img src="{{stu.profile_pic.url}}" style="border: 3px solid {% if stu.year == '3rd' %} gold {% elif stu.year == '2nd' %} silver {% else %} brown {% endif %};">
+                        </a>
                         <div style="margin-left: 2%;">
                             <h3 style="margin-bottom: 2px;">{{stu.name}}</h3>
-                            <span>{{stu.core}}<br>{{stu.role}}</span>
+                            <span>{{stu.core}}<br>
+                                {{stu.role}}<br>
+                                {% if stu.year != 'other' %}
+                                {% with ''|center:stu.year.0 as range %}
+                                {% for _ in range %}{{ '|' }}{% endfor %}
+                                {% endwith %}
+                                {% else %}
+                                {{stu.year}}
+                                {% endif %}
+                            </span>
                         </div>
-                        <div class="desc" style="width: 100%;">
+                        <div class="desc">
                             <p style="margin: 5%;">{{stu.short_desc}}</p>
                         </div>
                     </div>

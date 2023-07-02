@@ -8,96 +8,94 @@
 {% endblock %}
 
 {% block content %}
-<div style="height: calc(100% - 50px);display: flex; position: relative;">
-    <div class="prof-container">
-        <div class="inner">
-            <div class="left-pane">
-                <div style="text-align: center;">
-                    <img src="{{user.profile_pic.url}}" width="50%" style="object-fit: cover; margin-top: -40%; border-radius: 50%;{% if member %} border: 5px solid {% if user.year == '3rd' or user.faculty %} gold {% elif user.year == '2nd' %} silver {% else %} brown {% endif %} {% else %} border: 1px solid rgba(0,0,0,0.2) {% endif %};">
-                    <div style="margin-top: 20px;margin-bottom: 20px;"><b style="font-size: 26px;">{{user.name}} </b>{{user.user}}</div>
-                    {% if user.linked_in %}<a href="https://{{user.linked_in}}" style="margin-right: 10px;"><i class="fa fa-linkedin" style="font-size: 20px;"></i></a>{% endif %}
-                    {% if user.github %}<a href="https://{{user.github}}"><i class="fa fa-github" style="font-size: 20px;"></i></a>{% endif %}
+<div style="height: calc(100vh - 51px);width: 100%;" >
+    <div class="outer-container">
+        <div class="prof-container">
+            <div class="inner">
+                <div class="left-pane">
+                    <div style="text-align: center;">
+                        <img src="{{user.profile_pic.url}}" style="{% if member %} border: 5px solid {% if user.year == '3rd' or user.faculty %} gold {% elif user.year == '2nd' %} silver {% else %} brown {% endif %} {% else %} border: 1px solid rgba(0,0,0,0.2) {% endif %};">
+                        <div style="margin-top: 20px;margin-bottom: 20px;"><h2 style="margin-bottom: 0px;">{{user.name}}</h2>{{user.user}}</div>
+                        {% if user.linked_in %}<a href="https://{{user.linked_in}}" style="margin-right: 10px;"><i class="fa fa-linkedin" style="font-size: 20px;"></i></a>{% endif %}
+                        {% if user.github %}<a href="https://{{user.github}}"><i class="fa fa-github" style="font-size: 20px;"></i></a>{% endif %}
+                    </div>
+                    <div>
+                        {% if member %}
+                            <div style="font-weight: bold;">Role </div>
+                            <div>{{user.role}}</div>
+                        {% endif %}
+                        {% if user.core %}
+                            <div style="font-weight: bold;">Branch </div>
+                            <div>{{user.core}}</div>
+                        {% elif is_owner %}
+                        <div><a href="{% url 'edit_profile' %}">Add Branch</a></div>{% endif %}
+                        {% if user.admission %}
+                            <div style="font-weight: bold;">Admission id: </div>
+                            <div>{{user.admission}}</div>
+                        {% elif is_owner %}
+                            <div><a href="{% url 'edit_profile' %}">Add Admisssion no.</a></div>
+                        {% endif %}
+                    </div>
                 </div>
-                <div>
-                    {% if member %}
-                        <div style="font-weight: bold;">Role </div>
-                        <div>{{user.role}}</div>
-                    {% endif %}
-                    {% if user.core %}
-                        <div style="font-weight: bold;">Branch </div>
-                        <div>{{user.core}}</div>
-                    {% elif is_owner %}
-                    <div><a href="{% url 'edit_profile' %}">Add Branch</a></div>{% endif %}
-                    {% if user.admission %}
-                        <div style="font-weight: bold;">Admission id: </div>
-                        <div>{{user.admission}}</div>
-                    {% elif is_owner %}
-                        <div><a href="{% url 'edit_profile' %}">Add Admisssion no.</a></div>
-                    {% endif %}
-                </div>
-            </div>
-            <div style="margin: 5%;">
-                <div>
-                    <span style="font-size: 25px; font-weight: bold;">ABOUT</span>
+                <div class="right-pane" style="margin: 5%;">
+                    <span>ABOUT</span>
                     {% if is_owner %}
-                    <form action="{% url 'edit_profile' %}" style="display: inline;">
+                    <a href="{% url 'edit_profile' %}">
                         <button class="edit-btn" type="submit"><i class='fa fa-edit'></i></button>
-                    </form>
+                    </a>
+                    {% endif %}
+                    <p>{{user.desc}}</p>
+                </div>
+            </div>
+            <div class="participation-container">
+                <h2 style="margin-left: 5%;">Your Participation</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; margin: 0 5% 0 5%; text-align: center; padding-bottom: 20px;">
+                    <div class="heading">Event Name</div>
+                    <div class="heading">Date</div>
+                    {% if member %}
+                        <div class="heading">Role</div>
+                        {% if event_info %}
+                            {% for event in event_info %}
+                                <a href="{% url 'event' event.name %}" style="text-decoration: none;">
+                                    <div class="tvalues">{{event.name}}</div>
+                                </a>
+                                <div class="tvalues">{{event.event_date.date}}</div>
+                                <div class="tvalues">Tech</div>
+                            {% endfor %}
+                        {% else %}
+                            {% if is_owner %}
+                            <div></div>
+                            <div>You have not coordinated in any events yet</div>
+                            <div></div>
+                            {% endif %}
+                        {% endif %}
+                    {% else %}
+                        <div class="heading">Position</div>
+                        {% if event_info %}
+                            {% for event in event_info %}
+                                <a href="{% url 'event' event.name %}" style="text-decoration: none;">
+                                    <div class="tvalues">{{event.name}}</div>
+                                </a>
+                                <div class="tvalues">{{event.event_date.date}}</div>
+                                {% if user == event.first.first %}
+                                <div class="tvalues" style="color: gold;font-weight: bold;">FIRST🥇</div>
+                                {% elif user == event.second.first %}
+                                <div class="tvalues" style="color: silver;font-weight: bold;">SECOND🥈</div>
+                                {% elif user == event.third.first %}
+                                <div class="tvalues" style="color: brown;font-weight: bold;">THIRD🥉</div>
+                                {% else %}
+                                <div class="tvalues">-</div>
+                                {% endif %}
+                                {% endfor %}
+                        {% else %}
+                            {% if is_owner %}
+                            <div></div>
+                            <div>You have not participated in any events yet</div>
+                            <div></div>
+                            {% endif %}
+                        {% endif %}
                     {% endif %}
                 </div>
-                <p>{{user.desc}}</p>
-            </div>
-        </div>
-        <div style="background-color: white;border: 1px solid rgba(0, 0, 0, 0.2);border-radius: 10px; margin-bottom: 5%;">
-            <section style="margin-left: 5%;">
-                <h2>Your Participation</h2>
-            </section>
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; margin: 0 5% 0 5%; text-align: center; margin-bottom: 3%;">
-                <div class="heading">Event Name</div>
-                <div class="heading">Date</div>
-                {% if member %}
-                    <div class="heading">Role</div>
-                    {% if event_info %}
-                        {% for event in event_info %}
-                            <a href="{% url 'event' event.name %}" style="text-decoration: none;">
-                                <div class="tvalues">{{event.name}}</div>
-                            </a>
-                            <div class="tvalues">{{event.event_date.date}}</div>
-                            <div class="tvalues">Tech</div>
-                        {% endfor %}
-                    {% else %}
-                        {% if is_owner %}
-                        <div></div>
-                        <div>You have not coordinated in any events yet</div>
-                        <div></div>
-                        {% endif %}
-                    {% endif %}
-                {% else %}
-                    <div class="heading">Position</div>
-                    {% if event_info %}
-                        {% for event in event_info %}
-                            <a href="{% url 'event' event.name %}" style="text-decoration: none;">
-                                <div class="tvalues">{{event.name}}</div>
-                            </a>
-                            <div class="tvalues">{{event.event_date.date}}</div>
-                            {% if user == event.first.first %}
-                            <div class="tvalues" style="color: gold;font-weight: bold;">FIRST🥇</div>
-                            {% elif user == event.second.first %}
-                            <div class="tvalues" style="color: silver;font-weight: bold;">SECOND🥈</div>
-                            {% elif user == event.third.first %}
-                            <div class="tvalues" style="color: brown;font-weight: bold;">THIRD🥉</div>
-                            {% else %}
-                            <div class="tvalues">-</div>
-                            {% endif %}
-                            {% endfor %}
-                    {% else %}
-                        {% if is_owner %}
-                        <div></div>
-                        <div>You have not participated in any events yet</div>
-                        <div></div>
-                        {% endif %}
-                    {% endif %}
-                {% endif %}
             </div>
         </div>
     </div>

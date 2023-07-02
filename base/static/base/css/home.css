@@ -1,0 +1,208 @@
+.welcome-container {
+    width: 80%;
+    height: 60%;
+    margin: auto;
+}
+.cover-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+.cover-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+}
+.welcome {
+    font-size: 1.5vi;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+    transform: translateY(-50%);
+    color: white;
+    background-color: rgba(0,0,0,0.5);
+}
+.main {
+    width: 80%;
+    display: grid;
+    margin: auto;
+    grid-template-columns: 30% 70%;
+}
+.main a:link, .main a:visited {
+    color: black;
+    text-decoration: none;
+}
+.right-pane {
+    margin-left: 10%;
+}
+.home-event-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-bottom: 1%;
+}
+.event {
+    position: relative;
+    margin: 3%;
+    margin-top: 0;
+    margin-left: 0;
+    background-color: white;
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.2);
+    transition: all 0.15s;
+}
+.event:hover {
+    transform: scale(1.04);
+}
+.event-body {
+    margin: 2%;
+    margin-left: 5%;
+}
+.image-container {
+    text-align: center;
+    margin: auto;
+    padding: 10px;
+    height: 20vw;
+    transition: all 0.15s;
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+.image-container img{
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 2px gray);
+}
+.new {
+    position: absolute;
+    z-index: 1;
+    width: 75px;
+    text-align: center;
+    font-weight: bold;
+    color: rgb(43, 95, 55);
+    left: -15px;
+    top: 10px;
+    border-radius: 5px;
+    transform: rotate(-40deg);
+    background-color: rgb(112, 185, 130);
+    border: 2px dashed rgb(43, 95, 55);
+}
+.news {
+    margin-bottom: 2%;
+    background-color: white;
+    height: fit-content;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.2);
+    transition: all 0.15s;
+}
+.news-image-container {
+    height: 125px;
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+.news-image-container img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+.news-body {
+    margin: 2%;
+    margin-left: 15px;
+}
+.news-body p {
+    max-width: calc(100%);
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+@media screen and (max-width: 958px){
+    .news-body{
+        font-size: 12px;
+        height: 100px;
+    }
+    .news-image-container {
+        height: 100px;
+    }
+    .news-body p {
+        margin-top: 2px;
+    }
+}
+
+@media screen and (max-width: 767px){
+    .main {
+        width: 98%;
+        grid-template-columns: 40% 60%;
+    }
+    .main h1 {
+        font-size: 16px;
+    }
+    .news h2{
+        font-size: 12px;
+    }
+    .news-body {
+        margin: 5px;
+        font-size: 10px;
+        padding-bottom: 2px;
+    }
+    .news-image-container {
+        height: 50px;
+    }
+    .home-event-container {
+        grid-template-columns: 1fr;
+    }
+    .home-event-container h3 {
+        font-size: 14px;
+    }
+    .home-event-container div {
+        font-size: 12px;
+    }
+    .event {
+        height: fit-content;
+        margin-right: 0;
+    }
+    .image-container {
+        padding: 5px;
+        height: 180px;
+    }
+    .event-body {
+        margin-top: 0;
+    }
+    .new {
+        width: 50px;
+        left: -5px;
+    }
+    .news-body p {
+        -webkit-line-clamp: 6;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .welcome-container {
+        width: 95%;
+        height: 40vh;
+    }
+    .cover-container h1 {
+        font-size: 5vi;
+    }
+    .horizontal-scroll {
+        width: 95vi;
+    }
+    .main {
+        width: 95%;
+        grid-template-columns: 1fr;
+    }
+    .news-container {
+        display: inline-flex;
+    }
+    .news {
+        margin-right: 5px;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        width: 200px;
+    }
+    .right-pane {
+        margin: 0;
+    }
+}

@@ -4,7 +4,6 @@
 <style>
     .main {
         width: 100%;
-        min-width: 1200px;
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
@@ -49,12 +48,44 @@
         z-index: 2;
         border-radius: 5px;
     }
+    .signup-container {
+        background-color: white;
+        border: 1px solid rgba(0, 0, 0, 0.5);
+        width: 50%;
+        border-radius: 10px;
+        margin: auto;
+    }
+    @media screen and (max-width:767px) {
+        .signup-container {
+            width: 95%;
+        }
+    }
+    @media screen and (max-width:500px) {
+        .signup-container {
+            font-size: 12px;
+        }
+        .signup-container h1 {
+            font-size: 24px;
+        }
+        .signup-container input {
+            height: 20px;
+            font-size: 10px;
+        }
+        #id_captcha_1 {
+            width: 50px;
+        }
+        .signup-submit {
+            width: 100%;
+            font-size: 12px;
+            height: 25px;
+        }
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="main">
-    <div style="background-color: white; border: 1px solid rgba(0, 0, 0, 0.5);width: 50%; border-radius: 10px;margin: auto;">
+    <div class="signup-container">
         <h1 style="text-align: center;">Create Account</h1>
         <form class="f" method="POST" action="">
             {% csrf_token %}

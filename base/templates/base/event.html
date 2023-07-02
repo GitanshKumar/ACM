@@ -9,7 +9,7 @@
 
 {% block content %}
 <div class="event-container">
-    <div style="position: relative;">
+    <div class="poster-plane">
         <div class="event">
             <h2 style="margin-bottom: 0 ;">
                 {{event.name}}
@@ -17,7 +17,7 @@
             <div class="poster-container">
                 <img src="{{event.image.url}}" width="100%" height="100%"/>
             </div>
-            <div style="font-weight: bold;text-align: left; font-size: 18px; margin: auto;">
+            <div class="event-info">
                 <div style="display: flex;">
                     <div>Date:<br>Time:<br>Location:<br>{% if event.ongoing %}Fee: <br>{% endif %}
                         {% if event.coordinator.all %}
@@ -36,7 +36,7 @@
                         {% for coo in event.coordinator.all %}
                             <div style="width: 25px;height: 25px;">
                                 <a href="{% url 'profile' coo.user %}" style="width: fit-content;">
-                                    <img style="border-radius: 50%;" src="{{coo.profile_pic.url}}" width="100%">
+                                    <img style="border-radius: 50%;aspect-ratio: 1;" src="{{coo.profile_pic.url}}" width="100%">
                                 </a>
                             </div>
                         {% endfor %}
@@ -65,22 +65,22 @@
                 </form>
                 {% else %}
                 <a href="{% url 'register' event.name 'join' %}" style="text-decoration: none;">
-                    <button class="register" style="width: 30%;">Join Team</button>
+                    <button class="register team">Join Team</button>
                 </a>
                 <a href="{% url 'register' event.name 'create' %}" style="text-decoration: none;">
-                    <button class="register" style="margin-top: 0;width: 30%;">Create Team</button>
+                    <button class="register team">Create Team</button>
                 </a>
                 {% endif %}
             </div>
         </div>
     </div>
-    <div style="overflow-y: auto;">
+    <div class="right-plane">
         {% if photos %}
         <div class="images-container">
             <label class="slider">
                 {% for photo in event.photos.all %}
                     <div class="slide">
-                        <div style="width: 300px;height: 300px;margin: auto;margin-top: 5px;margin-bottom: 5px;">
+                        <div class="event-images-container">
                             <img style="object-fit: contain; filter: drop-shadow(0 0 5px gray);" src="{{photo.image.url}}" width="100%" height="100%"/>
                         </div>
                     </div>

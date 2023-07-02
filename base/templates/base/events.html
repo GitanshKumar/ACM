@@ -8,30 +8,32 @@
 {% endblock %}
 
 {% block content %}
-<div style="height: calc(100% - 50px); max-width: 1200px; margin: auto;overflow-y: auto;">
-    <div style="width: 100%;margin: auto;margin-top: 3%;margin-bottom: 3%;">
-        <form id="event-search-form" class="f" method="GET" onsubmit="return validateSearch('event-search-form', 'search-bar-events')">
-            <div style="width: 60%;">
-                <input type="text" placeholder="Search events..." id="search-bar-events" name="q" value="{{search}}" style="width: 90%;box-sizing: border-box;float: left;">
+<div class="outer-container">
+    <div class="search-container">
+        <form id="event-search-form" class="f" method="GET" onsubmit="return validateSearch('event-search-form', 'search-bar-events') || document.getElementById('from').value && document.getElementById('from').value != 'mm/dd/yy'">
+            <div class="event-search-container">
+                <input type="text" placeholder="Search events..." id="search-bar-events" name="q" value="{{search}}">
                 <button type="button" onclick="clearinput('search-bar-events')" style="float: left;"><i class="fa fa-times"></i></button>
                 <button type="submit" name="s" style="border-radius: 0 5px 5px 0;"><i class="fa fa-search"></i></button>
             </div>
-            <label>Start:</label>
-            <input type="date" name="start" value="{{start}}">
-            <label>End:</label>
-            <input type="date" value="{{end}}" name="end">
-            <button type="submit" name="clear" style="border-radius: 5px;border: 1px solid rgba(0, 0, 0, 0.2);">Clear</button>
+            <div class="date-container">
+                <label>From:</label>
+                <input id="from" type="date" name="start" value="{{start}}">
+                <label>To:</label>
+                <input type="date" value="{{end}}" name="end">
+                <button type="submit" name="clear" style="width: 50px; border-radius: 5px;border: 1px solid rgba(0, 0, 0, 0.2);">Clear</button>
+            </div>
         </form>
     </div>
-    <div style="display: grid;grid-template-columns: 20% 80%;">
-        <div style="display: grid;height: fit-content;">
+    <div class="search-result-container">
+        <div class="tags-container">
             <a class="tag" href="{% url 'events' %}?q=">All({{total}})</a>
             {% for tag in tags %}
-            <a class="tag" href="{% url 'events' %}?q={{tag.name}}">{{tag}}({{tag.related_events}})</a>
+            <a class="tag" href="{% url 'events' %}?q={{tag.name}}">{{tag}} ({{tag.related_events}})</a>
             {% endfor %}
         </div>
         {% if events %}
-        <div>
+        <div class="events-container">
             <div id="events">
                 {% for event in events %}
                     <div class="event">
@@ -46,19 +48,20 @@
                                     </div>
                                 </h2>
                             </a>
-                            <div>{{event.event_date.date|date:"j M Y"}}</div>
+                            <div class="event-date">{{event.event_date.date|date:"j M Y"}}</div>
                             <p>{{event.description}}</p>
-                            <div style="font-size: 14px;">{% for tag in event.tag.all %}{% if not forloop.last %}{{tag}}, {% else %}{{tag}}{% endif %}{% endfor %}</div>
+                            <div class="event-tag">{% for tag in event.tag.all %}{% if not forloop.last %}{{tag}}, {% else %}{{tag}}{% endif %}{% endfor %}</div>
                         </div>
                     </div>
                 {% endfor %}
             </div>
-            {% if left %}
-            <div id="load-more-container" style="margin: auto;margin-bottom: 50px;margin-top: 20px;width: 30%;">
-                <input class="more" type="button" id="load-more" onclick="load()" value="Load More Events">
-            </div>
-            {% endif %}
         </div>
+        {% if left %}
+        <div></div>
+        <div id="load-more-container" style="margin: auto;margin-bottom: 50px;margin-top: 20px;width: 30%;">
+            <input class="more" type="button" id="load-more" onclick="load()" value="Load More Events">
+        </div>
+        {% endif %}
         {% else %}
         <div style="text-align: center;">
             <img src="media/icons/no result.png" width="20%"/>
