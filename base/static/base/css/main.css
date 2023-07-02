@@ -4,6 +4,7 @@ body, html {
     background-color: #f6f8fa;
     font-family: 'Inria Sans', sans-serif;
     width: 100%;
+    height: fit-content;
 }
 a {
 color: black;

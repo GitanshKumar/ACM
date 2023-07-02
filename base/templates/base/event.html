@@ -17,7 +17,7 @@
             <div class="poster-container">
                 <img src="{{event.image.url}}" width="100%" height="100%"/>
             </div>
-            <div style="font-weight: bold;text-align: left; font-size: 18px; margin: auto;">
+            <div class="event-info">
                 <div style="display: flex;">
                     <div>Date:<br>Time:<br>Location:<br>{% if event.ongoing %}Fee: <br>{% endif %}
                         {% if event.coordinator.all %}

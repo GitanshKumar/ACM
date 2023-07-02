@@ -8,7 +8,7 @@
         </div>
         <div class="search">
             <form id="search-form" method="GET" action="/search" onsubmit="return validateSearch('search-form', 'search-bar')">
-                <input id="search-bar" type="text" name="search" placeholder="Search people or events..." value="{{request.GET.search}}">
+                <input id="search-bar" type="text" name="search" placeholder="Search people or events..." value="{{request.GET.search}}" autocomplete="off">
                 <button class="clear" onclick="clearinput('search-bar')" type="button"><i class="fa fa-times" style="font-size: 12px;"></i></button>
                 <button class="search-icon" type="submit"><i class="fa fa-search"></i></button>
             </form>

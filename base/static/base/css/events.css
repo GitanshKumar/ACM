@@ -4,9 +4,16 @@
     margin: auto;
     overflow-y: auto;
 }
+.search-container {
+    width: 100%;
+    margin: auto;
+    margin-top: 3%;
+}
+
 .tags-container {
     display: grid;
     height: fit-content;
+    margin-top: 5px;
 }
 .tag {
     margin-bottom: 5px;
@@ -105,6 +112,7 @@
 }
 .search-result-container {
     display: grid;
+    margin-top: 3%;
     grid-template-columns: 20% 80%;
 }
 .event-tag {
@@ -130,13 +138,24 @@
 @media screen and (max-width:500px) {
     .outer-container {
         font-size: 14px;
+        height: calc(100vh - 51px);
+        display: flex;
+        flex-direction: column;
     }
     .search-result-container {
+        padding-top: 10px;
         grid-template-columns: 1fr;
+        overflow-y: auto;
     }
     .tags-container {
         grid-template-columns: 1fr 1fr;
         margin-bottom: 5px;
+        position: relative;
+        z-index: 1;
+        box-shadow: 0 0 20px 15px #f6f8fa;
+    }
+    .events-container {
+        overflow-y: auto;
     }
     .f {
         display: grid;

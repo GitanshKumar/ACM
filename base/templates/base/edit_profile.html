@@ -31,8 +31,16 @@
         padding-left: 10px;
         margin-bottom: 5px;
     }
-    .file input {
+    .file input[type="checkbox"] {
+        margin: 0;
+        position: relative;
+        top: 10px;
+        left: 5px;
+    }
+    .file input[type="file"] {
         background-color: transparent;
+        resize: none;
+        margin-bottom: 10px;
     }
     .confirm {
         width: 100%;
@@ -64,9 +72,6 @@
         .f input, .f textarea, .f select {
             min-height: 25px;
             font-size: 12px;
-        }
-        .f textarea {
-            margin-left: -40px;
         }
         .confirm-btn {
             width: 100%;
@@ -101,19 +106,21 @@
                     <label for="{{ form.mobile_no.id_for_label }}">Mobile No(Kept Private): </label>
                     {{ form.mobile_no }}
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="grid-template-columns: 25% 75%;">
                     <label for="{{ form.desc.id_for_label }}">Description:<p id="char-count" style="font-size: 12px;margin-top: 0;"></p></label>
                     {{ form.desc }}
                 </div>
                 {% if member %}
-                <div class="form-group">
+                <div class="form-group" style="grid-template-columns: 25% 75%;">
                     <label for="{{ form.desc.id_for_label }}">Short Description:<p id="char-count-short" style="font-size: 12px;margin-top: 0;"></p></label>
                     {{ form.short_desc }}
                 </div>
                 {% endif %}
-                <div class="form-group">
+                <div class="form-group" style="grid-template-columns: 25% 75%;">
                     <label for="{{ form.profile_pic.id_for_label }}">Profile Picture:</label>
-                    <div class="file">{{ form.profile_pic }}</div>
+                    <div class="file">
+                        {{ form.profile_pic }}
+                    </div>
                 </div>
                 <div class="confirm-btn">
                     <button class="confirm" type="submit">Confirm</button>

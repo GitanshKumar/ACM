@@ -1,13 +1,9 @@
-.home-container {
-    display: inline-block;
-    height: 100%;
-    margin-top: 5px;
-}
 .nav-container{
     background-color: rgb(210, 233, 227);
     height: 50px;
     z-index: 2;
-    position: relative;
+    position: sticky;
+    top: 0;
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     box-shadow: 0 0px 15px 20px white;
 }
@@ -16,6 +12,11 @@
     margin: auto;
     height: 100%;
     position: relative;
+}
+.home-container {
+    display: inline-block;
+    height: 100%;
+    margin-top: 5px;
 }
 .search {
     position: absolute;
