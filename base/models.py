@@ -161,7 +161,7 @@ def nameEventImage(instance, filename):
         this = Event.objects.get(id=instance.id)
         if this.image.path and os.path.isfile(this.image.path):
             os.remove(this.image.path)
-    except ObjectDoesNotExist:
+    except (ObjectDoesNotExist, PermissionError):
         pass
     return 'images/events/' + instance.name[:30] + "/" + instance.name[:30] + "_poster.jpg"
 

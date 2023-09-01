@@ -32,9 +32,8 @@
 }
 .f {
     display: flex;
-    padding-left: 5%;
-    padding-right: 5%;
-    justify-content: space-between;
+    width: fit-content;
+    margin: auto;
 }
 .f input {
     border-radius: 5px;
@@ -99,17 +98,24 @@
     transform: scale(1.5);
 }
 .event-search-container {
-    width: 60%;
+    width: 40vw;
 }
 #search-bar-events {
     width: 90%;
     box-sizing: border-box;
     float: left;
 }
-.date-container {
-    width: 40%;
+.year-container {
     justify-content: space-between;
+    margin-left: 20px;
 }
+
+#year {
+    height: 100%;
+    border-radius: 5px;
+    padding: 5px;
+}
+
 .search-result-container {
     display: grid;
     margin-top: 3%;
@@ -130,7 +136,7 @@
     .f input {
         width: 15px;
     }
-    .date-container {
+    .year-container {
         width: fit-content;
         margin: auto;
     }
@@ -181,7 +187,7 @@
         font-size: 10px;
         width: 80px;
     }
-    .date-container {
+    .year-container {
         margin-top: 5px;
     }
     .tag {

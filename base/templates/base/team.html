@@ -10,6 +10,17 @@
 {% block content %}
 <div style="height: calc(100% - 50px); display: flex;">
     <div class="main-container">
+        {% if wchapter and student %}
+        <div style="width: 50%;margin: 50px auto; display: grid;grid-template-columns: 1fr 1fr;column-gap: 20px;">
+            <a href="{% url 'studentchapter' %}">
+                <button style="width: 100%;">Student Chapter</button>
+            </a>
+            <a href="{% url 'wchapter' %}">
+                <button style="width: 100%;">W Chapter</button>
+            </a>
+        </div>
+        {% endif %}
+        {% if student %}
         <div class="stu-container">
             <div style="margin: 1%;">
                 <h1 style="margin-left: 2%;">ACM Student Chapter</h1>
@@ -41,6 +52,8 @@
                 </div>
             </div>
         </div>
+        {% endif %}
+        {% if wchapter %}
         <div class="stu-container">
             <div style="margin: 1%;">
                 <h1 style="margin-left: 2%;">ACM Women Chapter</h1>
@@ -72,6 +85,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

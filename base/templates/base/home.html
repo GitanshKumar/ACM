@@ -10,12 +10,28 @@
 {% block content %}
 <div>
     <div class="welcome-container">
-        <div class="cover-container">
-            <img src="/media/images/Cover.jpg">
-            <div class="welcome">
-                <h1>Welcome to ABES Engineering college's ACM chapter</h1>
+        <label class="slider">
+            <div class="slide">
+                <div class="welcome">
+                    <h1>Welcome to ABES Engineering college's ACM chapter</h1>
+                </div>
+                <img src="/media/images/Cover.jpg" style="object-fit: cover; width: 100%; height: 100%;">
             </div>
-        </div>
+            {% for event in ongoing %}
+            <div class="slide">
+                <a href="{% url 'event' event %}">
+                <div class="welcome">
+                    <h1>{{event}}</h1>
+                </div>
+                <div class="event-slide-image">
+                    <img src="{{event.image.url}}" style="object-fit: contain; width: 100%; height: 100%;">
+                </div>
+                </a>
+            </div>
+            {% endfor %}
+        </label>
+        <button class="btn btn-next">></button>
+        <button class="btn btn-prev"><</button>
     </div>
     <div class="main">
         <div style="width: 100%;position: relative;">
@@ -40,10 +56,11 @@
             </div>
         </div>
         <div class="right-pane">
-            <h1>Ongoing and Latest Events</h1>
+            {% if ongoing %}
+            <h1>Ongoing Events</h1>
             <div class="home-event-container">
                 {% for event in ongoing %}
-                <siv class="event" >
+                <div class="event" >
                     <div class="new">
                         NEW
                     </div>
@@ -72,23 +89,47 @@
                             {% endif %}
                         </div>
                     </div>
-                </siv>
+                </div>
                 {% endfor %}
+            </div>
+            {% endif %}
+            <h1>Latest Events</h1>
+            <div class="home-event-container">
                 {% for event in other %}
-                <a class="event" href="{% url 'event' event.name %}">
+                <div class="event" >
                     <div class="image-container">
-                        <img src="{{event.image.url}}"/>
+                        <a href="{% url 'event' event.name %}">
+                            <img src="{{event.image.url}}"/>
+                        </a>
                     </div>
                     <div class="event-body">
-                        <h3 style="margin: 0;">{{event.name}}</h3>
-                        <div style="margin-top: 5px;">
+                        <h3 style="margin: 0;">
+                            {{event.name}}
+                        </h3>
+                        <div>
                             Date: {{event.event_date}}
+                            {% if event.coordinator.all %}
+                            <div style="display: flex;">
+                                Coordinators:
+                                {% for coo in event.coordinator.all %}
+                                <div style="width: 25px;height: 25px;">
+                                    <a href="{% url 'profile' coo.user %}" style="width: 100%;">
+                                        <img style="border-radius: 50%;aspect-ratio: 1;" src="{{coo.profile_pic.url}}" width="100%">
+                                    </a>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
-                </a>
+                </div>
                 {% endfor %}
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'base/js/home.js' %}" defer></script>
 {% endblock %}

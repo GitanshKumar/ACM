@@ -1,8 +1,3 @@
-.welcome-container {
-    width: 80%;
-    height: 60%;
-    margin: auto;
-}
 .cover-container {
     width: 100%;
     height: 100%;
@@ -14,16 +9,83 @@
     object-fit: cover;
     border-radius: 20px;
 }
+
+.welcome-container {
+    width: 80%;
+    height: 65vh;
+    margin: auto;
+    margin-top: 10px;
+    position: relative;
+}
+
 .welcome {
-    font-size: 1.5vi;
     position: absolute;
     top: 50%;
-    width: 100%;
-    text-align: center;
-    transform: translateY(-50%);
-    color: white;
+    left: 0;
+    right: 0;
     background-color: rgba(0,0,0,0.5);
+    color: white;
+    transform: translateY(-50%);
 }
+
+.slider {
+    position: relative;
+    transform-style: preserve-3d;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin: 15px auto;
+    border: 5px solid rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    text-align: center;
+}
+
+.slide {
+    width: 100%;
+    height: 100%;
+    left: 0;
+    right: 0;
+    position: absolute;
+    transition: all 0.5s;
+}
+
+.event-slide-image {
+    width: 50%;
+    height: 100%;
+    margin: auto;
+}
+
+.btn {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    padding: 10px;
+    border: none;
+    border-radius: 50%;
+    z-index: 10px;
+    cursor: pointer;
+    background-color: #fff;
+    font-size: 18px;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+.btn:hover {
+    transform: scale(1.1);
+}
+
+.btn-prev {
+    top: 45%;
+    left: -5%;
+}
+
+.btn-next {
+    top: 45%;
+    right: -5%;
+}
+
 .main {
     width: 80%;
     display: grid;
@@ -183,7 +245,7 @@
         width: 95%;
         height: 40vh;
     }
-    .cover-container h1 {
+    .slider h1 {
         font-size: 5vi;
     }
     .horizontal-scroll {

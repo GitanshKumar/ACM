@@ -94,19 +94,21 @@ def event(request, pk):
 
 def events(request):
     q = request.GET.get("q", "")
-    start = request.GET.get("start") if request.GET.get("start") and request.GET.get("start") != "mm-dd-yyyy" else "1900-01-01"
-    end = request.GET.get("end") if request.GET.get("end") and request.GET.get("end") != "mm-dd-yyyy" else "9999-01-01"
+    year = request.GET.get("year", None)
     events = Event.objects.all().order_by("-event_date")
     count = total = events.count()
     context = {"events": events}
     shown = 10
 
-    if "clear" in request.GET:
-        q, start, end = "", "1900-01-01", "9999-01-01"
 
     if "q" in request.GET:
-        events = events.filter(Q(name__icontains=q) | Q(tag__name__icontains=q), event_date__date__range=(start, end)).order_by("-event_date").distinct()
-        count = events.count()
+        if year:
+            events = events.filter(Q(name__icontains=q) | Q(tag__name__icontains=q), event_date__year=year).order_by("-event_date").distinct()
+            count = events.count()
+        else:
+            events = events.filter(Q(name__icontains=q) | Q(tag__name__icontains=q)).order_by("-event_date").distinct()
+            count = events.count()
+
     
     if "loadmore" in request.GET:
         prev = int(request.GET["count"])
@@ -121,8 +123,7 @@ def events(request):
                "total": total,
                "left":shown < count,
                "search":q,
-               "start":"mm-dd-yyyy" if start == "1900-01-01" else start,
-               "end": "mm-dd-yyyy" if end == "9999-01-01" else end}
+               "year":year}
     
     return render(request, 'base/events.html', context)
 
@@ -134,11 +135,17 @@ def aboutus(request):
                                                  "wchapter":stu_team.filter(w_chapter=True)})
 
 def team(request):
-    fac_team = Member.objects.filter(faculty= True)
-    stu_team = Member.objects.filter(faculty= False).order_by("-role")
-    return render(request, 'base/team.html', {"faculty":fac_team,
-                                                 "student":stu_team.filter(w_chapter= False),
-                                                 "wchapter":stu_team.filter(w_chapter=True)})
+    stu_team = Member.objects.filter(w_chapter=False).order_by("-role")
+    w_team = Member.objects.filter(w_chapter=True).order_by("-role")
+    return render(request, 'base/team.html', {"student":stu_team, "wchapter": w_team})
+
+def student_chapter(request):
+    stu_team = Member.objects.filter(w_chapter=False).order_by("-role")
+    return render(request, 'base/team.html', {"student":stu_team})
+
+def w_chapter(request):
+    stu_team = Member.objects.filter(w_chapter=True).order_by("-role")
+    return render(request, 'base/team.html', {"wchapter":stu_team})
 
 def valid_password(p1: str, p2: str):
     res = []
@@ -307,14 +314,13 @@ def viewteam(request, pk):
     return render(request, "base/viewteam.html", {"leader":leader, "members":members, "team":team, "event":event})
 
 def event_details(request, pk):
-    request.user.member
     event = Event.objects.get(name=pk)
     teams, participants = "", ""
     q = request.GET.get("q", "")
     if "clear" in request.GET: q = ""
 
     if event.team_members > 1: teams = Team.objects.filter(Q(team_name__startswith= q) | Q(leaders__name__startswith= q), event=event)
-    else: participants = event.participants.all()
+    else: participants = event.participants.filter(name__startswith=q)
     
     context = {"values":participants or teams, "team": teams != "", "event": event, "search":q}
     return render(request, "base/event_details.html", context)
