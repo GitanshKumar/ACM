@@ -25,9 +25,9 @@ SECRET_KEY = 'django-insecure-=lp7yf)9exb08tv*((94hfkx78vp1%xb$rb_da)^t(0u)%#4h8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["f104-2405-201-4014-b29c-dd9-172f-c972-2ccd.ngrok-free.app", "127.0.0.1"]
+ALLOWED_HOSTS = ["3b90-2405-201-4014-b29c-dd9-172f-c972-2ccd.ngrok-free.app", "127.0.0.1"]
 
-CSRF_TRUSTED_ORIGINS = ["https://f104-2405-201-4014-b29c-dd9-172f-c972-2ccd.ngrok-free.app", "https://127.0.0.1"]
+CSRF_TRUSTED_ORIGINS = ["https://3b90-2405-201-4014-b29c-dd9-172f-c972-2ccd.ngrok-free.app", "https://127.0.0.1"]
 
 # Application definition
 
@@ -40,11 +40,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'base.apps.BaseConfig',
     'ckeditor',
+    'whitenoise.runserver_nostatic',
     'captcha'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

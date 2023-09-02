@@ -125,6 +125,19 @@
     font-size: 14px;
 }
 
+#myBtn {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+    z-index: 99;
+    background-color: rgba(210, 233, 227, 0.5);
+    cursor: pointer;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 18px;
+}
+
 @media screen and (max-width:958px) {
     .outer-container {
         width: 95%;
@@ -144,7 +157,6 @@
 @media screen and (max-width:500px) {
     .outer-container {
         font-size: 14px;
-        height: calc(100vh - 51px);
         display: flex;
         flex-direction: column;
     }
@@ -156,12 +168,6 @@
     .tags-container {
         grid-template-columns: 1fr 1fr;
         margin-bottom: 5px;
-        position: relative;
-        z-index: 1;
-        box-shadow: 0 0 20px 15px #f6f8fa;
-    }
-    .events-container {
-        overflow-y: auto;
     }
     .f {
         display: grid;
@@ -227,5 +233,9 @@
     #load-more-container input {
         font-size: 12px;
         width: fit-content;
+    }
+    #myBtn {
+        padding: 10px;
+        font-size: 16px;
     }
 }

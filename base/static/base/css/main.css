@@ -5,6 +5,7 @@ body, html {
     font-family: 'Inria Sans', sans-serif;
     width: 100%;
     height: fit-content;
+    scroll-behavior: smooth;
 }
 a {
 color: black;

@@ -1,7 +1,12 @@
+.outer-container {
+    width: 80%;
+    position: relative;
+    height: 100%;
+    margin: auto;
+}
 .prof-container {
     position: absolute;
     top: 0; bottom: 0; left: 0; right: 0;
-    max-width: 1200px;
     overflow-y: auto;
     margin: auto;
     padding: 1%;
@@ -24,6 +29,18 @@
     border-right: 2px solid rgba(0, 0, 0, 0.2);
     margin: 5% 0 5% 5%;
 }
+.left-pane img {
+    object-fit: cover;
+    width: 25vmin;
+    height: 25vmin;
+    min-width: 100px;
+    margin-top: -40%;
+    border-radius: 50%;
+}
+.right-pane span {
+    font-size: 25px;
+    font-weight: bold;
+}
 .edit-btn {
     text-align: center;
     font-size: 20px;
@@ -40,6 +57,13 @@
 .edit-btn:active {
     background-color: rgba(210, 233, 227, 0.6);
 }
+.participation-container {
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    margin-bottom: 5%;
+}
+
 .heading {
     font-size: 18px;
     font-weight: bold;
@@ -49,9 +73,56 @@
 }
 .tvalues {
     margin-top: 5px;
-    height: 30px;
+    padding-bottom: 5px;
     border-bottom: 1px solid black;
 }
 ::-webkit-scrollbar-track {
         margin: 50px 0 50px 0;
+}
+@media screen and (max-width:958px) {
+    .left-pane img {
+        width: 20vmin;
+        height: 20vmin;
+    }
+}
+
+@media screen and (max-width:500px) {
+    .outer-container {
+        font-size: 14px;
+        width: 95%;
+    }
+    .inner {
+        grid-template-columns: 1fr;
+        margin-top: 30%;
+    }
+    .left-pane {
+        margin: 0 5% 0 5%;
+        border-right: none;
+    }
+    .left-pane img {
+        width: 40vw;
+        height: 40vw;
+        margin-top: -30%;
+    }
+    .left-pane div {
+        font-size: 14px;
+    }
+    .right-pane span {
+        font-size: 18px;
+    }
+    .edit-btn {
+        font-size: 14px;
+    }
+    .participation-container h2 {
+        font-size: 18px;
+    }
+    .heading {
+        font-size: 14px;
+    }
+    .tvalues {
+        font-size: 12px;
+        height: 100%;
+        margin-top: 2px;
+        padding-bottom: 0;
+    }
 }

@@ -2,22 +2,28 @@ const slides = document.querySelectorAll(".slide");
 let maxSlide = slides.length - 1;
 let curSlide = Math.floor(maxSlide / 2);
 let timeId;
+var transformvals = []
+for (let i = 0; i < slides.length; i++) {
+    var pos = i - curSlide;
+    if (-3 < pos && pos < 3){
+        transformvals.push([pos * (40 - 10 * Math.abs(pos)), 1 - 0.3 * Math.abs(pos), 10 - Math.abs(pos), 1 - 0.3 * Math.abs(pos)])
+    }
+    else {
+        transformvals.push([pos * 50, 1 - 0.3 * Math.abs(pos), 10 - Math.abs(pos), 0])
+    }
+}
 
 function arrange() {
     slides.forEach((slide, i) => {
-        var pos = i - curSlide;
-        slide.setAttribute("style", `transform:translateX(${pos * 40}%) scale(${1 - 0.3 * Math.abs(pos)});z-index:${10 - Math.abs(pos)};`);
+        var val = transformvals[i];
+        slide.setAttribute("style", `transform:translateX(${val[0]}%) scale(${val[1]});z-index:${val[2]};opacity:${val[3]};`);
     });
 }
 
 function startLoop(auto) {
     clearTimeout(timeId);
     if (auto === 1) {
-        if (curSlide === maxSlide) {
-            curSlide = 0;
-        } else {
-            curSlide++;
-        }
+        transformvals.unshift(transformvals.pop())
     }
     arrange();
     timeId = setTimeout(function() {startLoop(1)}, 5000);
@@ -25,21 +31,13 @@ function startLoop(auto) {
 
 const nextslide = document.querySelector(".btn-next");
 nextslide.addEventListener("click", function () {
-    if (curSlide === maxSlide) {
-        curSlide = 0;
-    } else {
-        curSlide++;
-    }
+    transformvals.unshift(transformvals.pop())
     startLoop(0);
 });
 
 const prevslide = document.querySelector(".btn-prev");
 prevslide.addEventListener("click", function () {
-    if (curSlide === 0) {
-        curSlide = maxSlide;
-    } else {
-        curSlide--;
-    }
+    transformvals.push(transformvals.shift())
     startLoop(0);
 });
 

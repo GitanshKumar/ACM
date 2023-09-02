@@ -42,7 +42,7 @@
                             {% for fac in faculty %}
                                 <div class="profile">
                                     <a href="{% url 'profile' fac.user.username %}">
-                                        <img src="{{fac.profile_pic.url}}" style="border: 3px solid gold;">
+                                        <img src="{{fac.profile_pic.url}}" style="border: 2px solid white;outline: 3px solid rgb(148, 222, 202);">
                                         {% if fac.w_chapter %}<b style="color: rgb(25, 25, 155);">W</b>{% endif %}
                                     </a>
                                     <h4 style="margin-bottom: 2px;">{{fac.name}}</h4>
@@ -61,7 +61,7 @@
                         <div class="pro-container">
                             {% for stu in student %}
                                 <div>
-                                    <a href="{% url 'profile' stu.user.username %}"><img src="{{stu.profile_pic.url}}" style="border: 3px solid {% if stu.year == '3rd' %} gold {% elif stu.year == '2nd' %} silver {% else %} brown {% endif %};"></a>
+                                    <a href="{% url 'profile' stu.user.username %}"><img src="{{stu.profile_pic.url}}" style="border: 2px solid white;outline: 3px solid rgb(148, 222, 202);"></a>
                                     <h4 style="margin: 2px;">{{stu.name}}</h4>
                                     <p style="margin-top: 0;">
                                         {{stu.role}}<br>
@@ -80,7 +80,7 @@
                         <div class="pro-container">
                             {% for stu in wchapter %}
                                 <div>
-                                    <a href="{% url 'profile' stu.user.username %}"><img src="{{stu.profile_pic.url}}" style="border: 3px solid {% if stu.year == '3rd' %} gold {% elif stu.year == '2nd' %} silver {% else %} brown {% endif %};"></a>
+                                    <a href="{% url 'profile' stu.user.username %}"><img src="{{stu.profile_pic.url}}" style="border: 2px solid white;outline: 3px solid rgb(148, 222, 202);"></a>
                                     <h4 style="margin-bottom: 2px;">{{stu.name}}</h4>
                                     <p style="margin: 0;">{{stu.core}}</p>
                                     <p style="margin: 0 0 10% 0;">{{stu.role}}</p>
@@ -97,7 +97,7 @@
                         <div class="pro-container">
                             {% for alu in alumnis %}
                                 <div>
-                                    <a href="{% url 'profile' alu.user.username %}"><img src="{{alu.profile_pic.url}}" style="border: 3px solid {% if stu.year == '3rd' %} gold {% elif stu.year == '2nd' %} silver {% else %} brown {% endif %};"></a>
+                                    <a href="{% url 'profile' alu.user.username %}"><img src="{{alu.profile_pic.url}}" style="border: 2px solid white;outline: 3px solid rgb(148, 222, 202);"></a>
                                     <h4 style="margin-bottom: 2px;">{{alu.name}}</h4>
                                     <p style="margin: 0;">{{alu.core}}</p>
                                     <p style="margin: 0 0 10% 0;">{{alu.role}}</p>

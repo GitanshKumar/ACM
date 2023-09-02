@@ -14,6 +14,13 @@ from .models import Event, Member, Student, Team, Tag, News
 from .forms import EditMemberForm, EditStudentForm, CaptchaForm
 from .custom import send_mail
 
+
+def error_404(request, exception):
+    return render(request, 'base/404.html')
+
+def error_500(request, *args, **argv):
+    return render(request, 'base/500.html')
+
 def home(request):
     ongoing = Event.objects.filter(ongoing= True).order_by("event_date")
     other = Event.objects.filter(ongoing= False).order_by("-event_date")[:8 - ongoing.count()]
@@ -166,23 +173,73 @@ def signup(request):
         password = request.POST.get("password")
         re_password = request.POST.get("re-password")
         form = CaptchaForm(request.POST)
+        valid_details = True
+
         if not form.is_valid():
             context["captcha"] = True
+            valid_details = False
         
+        context["name"] = name
+        context["username"] = username
         if User.objects.filter(username=username).first():
-            context["username"] = username
+            valid_details = False
         
         errors, valid = valid_password(password, re_password)
         if not valid:
             context["password"] = errors
+            valid_details = False
         
+        context["email"] = email
         if Student.objects.filter(email=email).first():
-            context["email"] = email
+            valid_details = False
         
-        if not context:
+        member_list = ["anujmishraan2005@gmail.com",
+                       "krati.21b1541093@abes.ac.in",
+                       "shreya.22b0121006@abes.ac.in",
+                       "aryan.22b0101199@abes.ac.in",
+                       "jahnavi.21b0121149@abes.ac.in",
+                       "parthsinghal.abes@gmail.com",
+                       "samarthdec12@gmail.com",
+                       "guptaaditya3200@gmail.com",
+                       "ys751693@gmail.com",
+                       "palak.21b1541080@abes.ac.in",
+                       "tarunsinghsheoran9703@gmail.com",
+                       "pundir.aditya@outlook.com",
+                       "kumar.22b0121180@abes.ac.in",
+                       "chitra1234pandey@gmail.com",
+                       "shreshtharastogi5@gmail.com",
+                       "hritik.22b0123012@abes.ac.in",
+                       "niharika.22b0121055@abes.ac.in",
+                       "mysatyam99@gmail.com",
+                       "ps070242@gmail.com",
+                       "vkssrivastava237@gmail.com",
+                       "gaurav.21b0121020@abes.ac.in",
+                       "disha.pathak@abes.ac.in",
+                       "abhilasha.varshney@abes.ac.in",
+                       "Kalpana.artofcreatinglife@gmail.com",
+                       "Laxmi.saraswat@abes.ac.in",
+                       "tomarharsh71@gmail.com",
+                       "pgoel134@gmail.com",
+                       "devbhardwaj7078@gmail.com",
+                       "radhi.gupta3092001@gmail.com",
+                       "khushi.20b0121053@abes.ac.in",
+                       "manmeet.20b0121116@abes.ac.in",
+                       "Bharti.20B0121002@abes.ac.in",
+                       "shagunkesarwani8@gmail.com",
+                       "Shubhansh.20b0121112@abes.ac.in",
+                       "shreya.20B0121206@abes.ac.in",
+                       "adarsh.21b0121042@abes.ac.in",
+                       "prince.21b0121107@abes.ac.in",
+                       "pooja.21b0121032@abes.ac.in",
+                       ]
+
+        if valid_details:
             user = User.objects.create_user(username=username, email=email, password=password)
             user.save()
-            mem = Student(user=user, name=name, email=email)
+            if email in member_list:
+                mem = Member(user=user, name=name, email=email)
+            else:
+                mem = Student(user=user, name=name, email=email)
             mem.save()
             user = authenticate(request, username= username, password=password)
             login(request, user)

@@ -12,21 +12,33 @@
     <div class="welcome-container">
         <label class="slider">
             <div class="slide">
-                <div class="welcome">
-                    <h1>Welcome to ABES Engineering college's ACM chapter</h1>
+                <div class="welcome-inner-main">
+                    <div style="text-align: center;height: calc(80vh);">
+                        <img src="/media/images/blue-gray-circle.png" style="object-fit: contain; width: 80%; height: 100%;">
+                    </div>
+                    <div>
+                        <h2>Welcome to ABES Engineering college's ACM chapter</h2>
+                        <p>Association of computing machine is a US-based international learned society for computing which ensures opportunities and mentoring to students for better exposure.</p>
+                        <div class="welcome-team-image">
+                            <img src="/media/images/acmteam-22-23.jpeg" alt="acmteam-22-23" style="object-fit: contain;width: 100%;height: 100%;">
+                        </div>
+                        <p>ACM in collaboration with ABES EC has two student chapter ACM and ACM W. The club run along with department of CS is a technical club which has conducted various events such as National Virtual Hackathon, hour of code etc. Which provided various students to come forward, gave them the platform to learn and enrich from experience. Acm will soon be recruiting . STAY TUNED AND BE THE PART OF THE ELITE CLUB.</p>
+                    </div>
                 </div>
-                <img src="/media/images/Cover.jpg" style="object-fit: cover; width: 100%; height: 100%;">
             </div>
-            {% for event in ongoing %}
+            {% for article in news %}
             <div class="slide">
-                <a href="{% url 'event' event %}">
-                <div class="welcome">
-                    <h1>{{event}}</h1>
+                <div style="height: 100%;width: 100%;">
+                    <img src="{{article.image.url}}" style="object-fit: cover; width: 100%; height: 100%;">
                 </div>
-                <div class="event-slide-image">
-                    <img src="{{event.image.url}}" style="object-fit: contain; width: 100%; height: 100%;">
+                <div class="moving-news-content">
+                    <h2>{{article}}</h2>
+                    <p>
+                        Date: {{article.created.date}}
+                    </p>
+                    <p>{{article.desc}}</p>
                 </div>
-                </a>
+                <div style="z-index: 1; height: 100%;width: 100%;position: absolute;bottom: 0; background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 50%);"></div>
             </div>
             {% endfor %}
         </label>
@@ -34,27 +46,6 @@
         <button class="btn btn-prev"><</button>
     </div>
     <div class="main">
-        <div style="width: 100%;position: relative;">
-            <h1>Latest News</h1>
-            <div class="horizontal-scroll" style="overflow-x: auto;">
-                <div class="news-container">
-                {% for article in news %}
-                    <div class="news">
-                        <div class="news-image-container">
-                            <img src="{{article.image.url}}"/>
-                        </div>
-                        <div class="news-body">
-                            <h2 style="margin: 0;">{{article.headline}}</h2>
-                            <div>
-                                Date: {{article.created.date}}
-                            </div>
-                            <p>{{article.desc}}</p>
-                        </div>
-                    </div>
-                {% endfor %}
-                </div>
-            </div>
-        </div>
         <div class="right-pane">
             {% if ongoing %}
             <h1>Ongoing Events</h1>

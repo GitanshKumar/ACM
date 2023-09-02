@@ -32,7 +32,7 @@ class Member(models.Model):
     name = models.CharField(max_length= 100)
     email = models.EmailField(max_length= 254, default="")
     admission = models.CharField(max_length=50, default="",blank=True)
-    year = models.CharField(max_length=20, choices=[('1st', 'First year'), ('2nd', 'Second year'), ('3rd', 'Third year'), ('4th', 'Fourth year'), ('faculty', 'Faculty'), ('alumni', 'Alumni')], default="1st")
+    year = models.CharField(max_length=20, choices=[('1st Year', 'First year'), ('2nd Year', 'Second year'), ('3rd Year', 'Third year'), ('4th Year', 'Fourth year'), ('Faculty', 'Faculty'), ('Alumni', 'Alumni')], default="1st")
     mobile_no = models.CharField(max_length=10, default="", blank=True)
     faculty = models.BooleanField(default=False)
     profile_pic = models.ImageField(upload_to=nameAndOverwriteMemberImage, default="images/profile_pics/default.png", blank=True)
@@ -59,15 +59,15 @@ def nameNewsImage(instance, filename):
         this = News.objects.get(id=instance.id)
         if this.image.path and os.path.isfile(this.image.path):
             os.remove(this.image.path)
-    except ObjectDoesNotExist:
+    except (ObjectDoesNotExist, PermissionError):
         pass
     return 'images/news/' + instance.headline + ".jpg"
 
 class News(models.Model):
     headline = models.CharField(max_length=80)
     image = models.ImageField(upload_to=nameNewsImage, blank=True)
-    desc = models.TextField(max_length=300)
-    created = models.DateTimeField(auto_now=True)
+    desc = models.TextField(max_length=500)
+    created = models.DateTimeField()
     
     def save(self, *args, **kwargs):
         new_image = compressImage(self.image)
@@ -95,7 +95,7 @@ class Byte(models.Model):
 def nameEventPhotos(instance, filename):
     try:
         this = Photo.objects.get(id=instance.id)
-        if this.image.path  and os.path.isfile(this.image.path):
+        if this.image.path and os.path.isfile(this.image.path):
             os.remove(this.image.path)
     except ObjectDoesNotExist:
         pass
@@ -135,7 +135,7 @@ class Student(models.Model):
     user = models.OneToOneField(User, on_delete= models.CASCADE, default="", related_name="student")
     name = models.CharField(max_length= 100)
     college = models.CharField(max_length=150, null=True, blank=True)
-    year = models.CharField(max_length=20, choices=[('1st', 'First year'), ('2nd', 'Second year'), ('3rd', 'Third year'), ('4th', 'Fourth year'), ('Alumni', 'Alumni')], default="1st")
+    year = models.CharField(max_length=20, choices=[('1st Year', 'First year'), ('2nd Year', 'Second year'), ('3rd Year', 'Third year'), ('4th Year', 'Fourth year'), ('Alumni', 'Alumni')], default="1st")
     admission = models.CharField(max_length=50, default="")
     email = models.EmailField(max_length= 254, default="", unique=True)
     mobile_no = models.CharField(max_length=10, default="", blank=True)
@@ -203,6 +203,7 @@ class Team(models.Model):
     event = models.ManyToManyField(Event, related_name="teams")
     leaders = models.ManyToManyField(Student, related_name="team_leader")
     members = models.ManyToManyField(Student, blank=True, related_name="myteams")
+    verified_by = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="verifications", null=True, blank=True)
 
     def __str__(self) -> str:
         return self.team_name

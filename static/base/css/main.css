@@ -3,7 +3,9 @@ body, html {
     height: 100%;
     background-color: #f6f8fa;
     font-family: 'Inria Sans', sans-serif;
-    min-width: 1150px;
+    width: 100%;
+    height: fit-content;
+    scroll-behavior: smooth;
 }
 a {
 color: black;
@@ -11,6 +13,7 @@ text-decoration: none;
 }
 ::-webkit-scrollbar {
 width: 8px;
+height: 8px;
 }
 ::-webkit-scrollbar-track {
 margin: 15px 0 15px 0;
@@ -44,4 +47,14 @@ transition: all 0.1s;
 button:hover {
 background-color: rgba(89, 191, 164,0.5);
 border-color: rgba(0, 0, 0, 0.5);
+}
+
+@media screen and (max-width:767px) {
+    body, html {
+        width: 100%;
+    }   
+    ::-webkit-scrollbar {
+        width: 3px;
+        height: 3px;
+    }
 }

@@ -1,8 +1,8 @@
 .event-container {
     display: grid;
-    max-width: 1200px;
+    width: 80%;
     margin: auto;
-    height: calc(100% - 50px);
+    height: calc(100vh - 51px);
     grid-template-columns: 40% 60%;
 }
 .event {
@@ -29,6 +29,12 @@
     border-radius: 10px;
     object-fit: contain;
     filter: drop-shadow(0 0 5px gray);
+}
+.event-info {
+    font-weight: bold;
+    text-align: left;
+    font-size: clamp(14px, 2vw, 18px);
+    margin: auto;
 }
 .details {
     margin-top: 20px;
@@ -105,4 +111,59 @@
 .btn-next {
     top: 45%;
     right: 2%;
+}
+.poster-plane {
+    position: relative;
+}
+.right-plane {
+    overflow-y: auto;
+}
+.team {
+    width: 30%;
+    min-width: 120px;
+}
+.event-images-container {
+    width: 80%;
+    height: 95%;
+    margin: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+@media screen and (max-width:767px) {
+    .event-container {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width:500px) {
+    .event-container {
+        grid-template-columns: 1fr;
+        width: 95%;
+    }
+    .event-info {
+        font-size: 18px;
+    }
+    .poster-plane {
+        height: 90vh;
+    }
+    .event-container {
+        overflow-y: auto;
+    }
+    .right-plane {
+        overflow: visible;
+    }
+    .details {
+        padding-bottom: 10px;
+    }
+    .details h3 {
+        font-size: 18px;
+    }
+    .details p{
+        font-size: 14px;
+    }
+    .poster-container {
+        padding: 5px;
+        height: 55%;
+    }
 }

@@ -65,13 +65,12 @@
                     </div>
                 {% endfor %}
             </div>
+            {% if left %}
+            <div id="load-more-container" style="margin: auto;margin-bottom: 50px;margin-top: 20px;width: 30%;">
+                <input class="more" type="button" id="load-more" onclick="load()" value="Load More Events">
+            </div>
+            {% endif %}
         </div>
-        {% if left %}
-        <div></div>
-        <div id="load-more-container" style="margin: auto;margin-bottom: 50px;margin-top: 20px;width: 30%;">
-            <input class="more" type="button" id="load-more" onclick="load()" value="Load More Events">
-        </div>
-        {% endif %}
         {% else %}
         <div style="text-align: center;">
             <img src="media/icons/no result.png" width="20%"/>
@@ -81,9 +80,9 @@
         {% endif %}
     </div>
 </div>
-
+<button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fa fa-arrow-circle-up"></i></button>
 {% endblock %}
 
 {% block script %}
-<script src="{% static 'base/js/events.js' %}"></script>
+<script src="{% static 'base/js/events.js' %}" defer></script>
 {% endblock %}
