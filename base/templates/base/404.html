@@ -1,0 +1,17 @@
+{% extends "main.html" %}
+
+{% block title %}404:Page Not Found{% endblock %}
+
+{% block content %}
+{{exception}}
+<div style="text-align: center;width: 100%;height: calc(100vh - 51px);display: inline-block;position: relative;">
+    <div style="position: relative;top: 50%;transform: translateY(-75%);">
+        <div style="font-size: 120px;font-weight: bold;">404</div>
+        <div style="font-size: 24px;font-weight: bold;">Page Not Found</div>
+        <div style="margin-top: 20px;">
+            The resource requested could not be found on the server!<br>
+            <a href="{% url 'home' %}" style="color: rgb(26, 121, 202); font-weight: bold;">Go to Home?</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

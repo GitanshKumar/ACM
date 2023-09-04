@@ -5,8 +5,10 @@ from django.utils import timezone
 from PIL import Image
 from io import BytesIO
 from django.core.files import File
-from ckeditor.fields import RichTextField
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.files.storage import default_storage
+from ckeditor.fields import RichTextField
+from colorfield.fields import ColorField
 
 # Create your models here.
 
@@ -19,12 +21,6 @@ def compressImage(image):
     return new_image
 
 def nameAndOverwriteMemberImage(instance, filename):
-    try:
-        this = Member.objects.get(id=instance.id)
-        if this.profile_pic.path and os.path.isfile(this.profile_pic.path):
-            os.remove(this.profile_pic.path)
-    except ObjectDoesNotExist:
-        pass
     return 'images/profile_pics/' + instance.user.username + str(instance.id) + ".jpg"
 
 class Member(models.Model):
@@ -32,7 +28,7 @@ class Member(models.Model):
     name = models.CharField(max_length= 100)
     email = models.EmailField(max_length= 254, default="")
     admission = models.CharField(max_length=50, default="",blank=True)
-    year = models.CharField(max_length=20, choices=[('1st', 'First year'), ('2nd', 'Second year'), ('3rd', 'Third year'), ('4th', 'Fourth year'), ('faculty', 'Faculty'), ('alumni', 'Alumni')], default="1st")
+    year = models.CharField(max_length=20, choices=[('1st Year', 'First year'), ('2nd Year', 'Second year'), ('3rd Year', 'Third year'), ('4th Year', 'Fourth year'), ('Faculty', 'Faculty'), ('Alumni', 'Alumni')], default="1st")
     mobile_no = models.CharField(max_length=10, default="", blank=True)
     faculty = models.BooleanField(default=False)
     profile_pic = models.ImageField(upload_to=nameAndOverwriteMemberImage, default="images/profile_pics/default.png", blank=True)
@@ -47,8 +43,20 @@ class Member(models.Model):
     url_timeout = models.TimeField(auto_now= False, auto_now_add=False, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        new_image = compressImage(self.profile_pic)
-        self.image = new_image
+        try:
+            this = Member.objects.get(id=self.id)
+            if not self.profile_pic:
+                if self.profile_pic.field.default != this.profile_pic:
+                    default_storage.delete(this.profile_pic.path)
+                self.profile_pic = self.profile_pic.field.default
+            
+            if this.profile_pic and this.profile_pic != self.profile_pic and this.profile_pic != self.profile_pic.field.default and os.path.isfile(this.profile_pic.path):
+                default_storage.delete(this.profile_pic.path)
+                new_image = compressImage(self.profile_pic)
+                self.profile_pic = new_image
+        except ObjectDoesNotExist:
+            pass
+        
         super(Member, self).save(*args, **kwargs)
 
     def __str__(self) -> str:
@@ -59,15 +67,15 @@ def nameNewsImage(instance, filename):
         this = News.objects.get(id=instance.id)
         if this.image.path and os.path.isfile(this.image.path):
             os.remove(this.image.path)
-    except ObjectDoesNotExist:
+    except (ObjectDoesNotExist, PermissionError):
         pass
     return 'images/news/' + instance.headline + ".jpg"
 
 class News(models.Model):
     headline = models.CharField(max_length=80)
     image = models.ImageField(upload_to=nameNewsImage, blank=True)
-    desc = models.TextField(max_length=300)
-    created = models.DateTimeField(auto_now=True)
+    desc = models.TextField(max_length=500)
+    created = models.DateTimeField()
     
     def save(self, *args, **kwargs):
         new_image = compressImage(self.image)
@@ -95,7 +103,7 @@ class Byte(models.Model):
 def nameEventPhotos(instance, filename):
     try:
         this = Photo.objects.get(id=instance.id)
-        if this.image.path  and os.path.isfile(this.image.path):
+        if this.image.path and os.path.isfile(this.image.path):
             os.remove(this.image.path)
     except ObjectDoesNotExist:
         pass
@@ -115,6 +123,8 @@ class Photo(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(max_length=100)
+    tag_bg_color = ColorField(null=True)
+    tag_text_color = ColorField(null=True)
     
     def related_events(self) -> int:
         return self.events.count()
@@ -123,19 +133,14 @@ class Tag(models.Model):
         return self.name
 
 def nameAndOverwriteStudentImage(instance, filename):
-    try:
-        this = Student.objects.get(id=instance.id)
-        if this.profile_pic.path  and os.path.isfile(this.profile_pic.path):
-            os.remove(this.profile_pic.path)
-    except ObjectDoesNotExist:
-        pass
+    
     return 'images/profile_pics/' + instance.user.username + str(instance.id) + ".jpg"
 
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete= models.CASCADE, default="", related_name="student")
     name = models.CharField(max_length= 100)
     college = models.CharField(max_length=150, null=True, blank=True)
-    year = models.CharField(max_length=20, choices=[('1st', 'First year'), ('2nd', 'Second year'), ('3rd', 'Third year'), ('4th', 'Fourth year'), ('Alumni', 'Alumni')], default="1st")
+    year = models.CharField(max_length=20, choices=[('1st Year', 'First year'), ('2nd Year', 'Second year'), ('3rd Year', 'Third year'), ('4th Year', 'Fourth year'), ('Alumni', 'Alumni')], default="1st")
     admission = models.CharField(max_length=50, default="")
     email = models.EmailField(max_length= 254, default="", unique=True)
     mobile_no = models.CharField(max_length=10, default="", blank=True)
@@ -149,8 +154,20 @@ class Student(models.Model):
     url_timeout = models.TimeField(auto_now= False, auto_now_add=False, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        new_image = compressImage(self.profile_pic)
-        self.image = new_image
+        try:
+            this = Student.objects.get(id=self.id)
+            if not self.profile_pic:
+                if self.profile_pic.field.default != this.profile_pic:
+                    default_storage.delete(this.profile_pic.path)
+                self.profile_pic = self.profile_pic.field.default
+            
+            if this.profile_pic and this.profile_pic != self.profile_pic and this.profile_pic != self.profile_pic.field.default and os.path.isfile(this.profile_pic.path):
+                default_storage.delete(this.profile_pic.path)
+                new_image = compressImage(self.profile_pic)
+                self.profile_pic = new_image
+        except ObjectDoesNotExist:
+            pass
+        
         super(Student, self).save(*args, **kwargs)
     
     def __str__(self) -> str:
@@ -161,7 +178,7 @@ def nameEventImage(instance, filename):
         this = Event.objects.get(id=instance.id)
         if this.image.path and os.path.isfile(this.image.path):
             os.remove(this.image.path)
-    except ObjectDoesNotExist:
+    except (ObjectDoesNotExist, PermissionError):
         pass
     return 'images/events/' + instance.name[:30] + "/" + instance.name[:30] + "_poster.jpg"
 
@@ -203,6 +220,7 @@ class Team(models.Model):
     event = models.ManyToManyField(Event, related_name="teams")
     leaders = models.ManyToManyField(Student, related_name="team_leader")
     members = models.ManyToManyField(Student, blank=True, related_name="myteams")
+    verified_by = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="verifications", null=True, blank=True)
 
     def __str__(self) -> str:
         return self.team_name

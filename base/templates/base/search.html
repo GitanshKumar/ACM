@@ -41,13 +41,13 @@
             {% else %}
                 <div class="result">
                     <div style="margin: 2%;">
-                        <div style="display: flex;">
+                        <div class="search-prof">
                             <a class="profile-image" href="{% url 'profile' res.user.username %}" style="color: black;">
-                                <img src="{{res.profile_pic.url}}" width="100px" style="border-radius: 50%; border: 1px solid rgba(0,0,0,0.2);">
+                                <img src="{{res.profile_pic.url}}" width="100px" style="border-radius: 50%; border: 1px solid rgba(0,0,0,0.2);aspect-ratio: 1">
                             </a>
                             <div class="profile-info">
                                 <h2 style="margin: 0;">{{res.name}}</h2>
-                                <div style="margin-bottom: 5px;">{{res.core}} {{res.year}} year</div>
+                                <div style="margin-bottom: 5px;">{{res.core}}<br> {{res.year}}</div>
                             </div>
                             <div class="profile-desc">
                                 <p style="margin-top: 0;">{{res.desc}}</p>
@@ -60,7 +60,7 @@
     </div>
     {% if left %}
     <div id="load-more-container">
-        <input class="more" type="button" id="load-more" onclick="load()" value="Load More Events">
+        <input class="more" type="button" id="load-more" onclick="load()" value="Load More">
     </div>
     {% endif %}
     {% endif %}

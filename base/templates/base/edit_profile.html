@@ -4,9 +4,16 @@
 
 {% block stylesheet %}
 <style>
+    .main-edit {
+        width: 100%;
+        height: calc((100vh - 51px));
+    }
     .outer-container {
         width: 60%;
         margin: auto;
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
     }
     .form-group {
         width: 100%;
@@ -24,12 +31,15 @@
     }
     .f input, .f textarea, .f select {
         border-radius: 10px;
-        border: none;
-        background-color: rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        outline-color: rgb(89, 191, 164);
         min-height: 30px;
         resize: vertical;
         padding-left: 10px;
         margin-bottom: 5px;
+    }
+    .desc {
+        grid-template-columns: 25% 75%;
     }
     .file input[type="checkbox"] {
         margin: 0;
@@ -55,9 +65,15 @@
         }
     }
     @media screen and (max-width:500px) {
+        .main-edit {
+            height: fit-content;
+        }
         .outer-container {
             width: 95%;
             font-size: 12px;
+            margin: 20px auto;
+            position:static;
+            transform: translateY(0);
         }
         .outer-container h1 {
             font-size: 20px;
@@ -67,7 +83,7 @@
             margin: 10px;
         }
         .form-group {
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
         }
         .f input, .f textarea, .f select {
             min-height: 25px;
@@ -81,8 +97,7 @@
 {% endblock %}
 
 {% block content %}
-<div style="width: 100%;">
-    <h4 style="text-align: center;">Note: To contact you, we will use your email and Mobile number, please enter correct information.</h4>
+<div class="main-edit">
     <div class="outer-container">
         <div style="padding: 10px; padding-top: 0; background-color: white; border: 1px solid rgba(0, 0, 0, 0.5); border-radius: 10px;">
             <h1 style="text-align: center;">Edit Profile</h1>
@@ -106,17 +121,17 @@
                     <label for="{{ form.mobile_no.id_for_label }}">Mobile No(Kept Private): </label>
                     {{ form.mobile_no }}
                 </div>
-                <div class="form-group" style="grid-template-columns: 25% 75%;">
+                <div class="form-group desc">
                     <label for="{{ form.desc.id_for_label }}">Description:<p id="char-count" style="font-size: 12px;margin-top: 0;"></p></label>
                     {{ form.desc }}
                 </div>
                 {% if member %}
-                <div class="form-group" style="grid-template-columns: 25% 75%;">
+                <div class="form-group desc">
                     <label for="{{ form.desc.id_for_label }}">Short Description:<p id="char-count-short" style="font-size: 12px;margin-top: 0;"></p></label>
                     {{ form.short_desc }}
                 </div>
                 {% endif %}
-                <div class="form-group" style="grid-template-columns: 25% 75%;">
+                <div class="form-group desc">
                     <label for="{{ form.profile_pic.id_for_label }}">Profile Picture:</label>
                     <div class="file">
                         {{ form.profile_pic }}

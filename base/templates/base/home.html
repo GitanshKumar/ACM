@@ -10,40 +10,48 @@
 {% block content %}
 <div>
     <div class="welcome-container">
-        <div class="cover-container">
-            <img src="/media/images/Cover.jpg">
-            <div class="welcome">
-                <h1>Welcome to ABES Engineering college's ACM chapter</h1>
-            </div>
-        </div>
-    </div>
-    <div class="main">
-        <div style="width: 100%;position: relative;">
-            <h1>Latest News</h1>
-            <div class="horizontal-scroll" style="overflow-x: auto;">
-                <div class="news-container">
-                {% for article in news %}
-                    <div class="news">
-                        <div class="news-image-container">
-                            <img src="{{article.image.url}}"/>
-                        </div>
-                        <div class="news-body">
-                            <h2 style="margin: 0;">{{article.headline}}</h2>
-                            <div>
-                                Date: {{article.created.date}}
-                            </div>
-                            <p>{{article.desc}}</p>
-                        </div>
+        <label class="slider">
+            <div class="slide">
+                <div class="welcome-inner-main">
+                    <div style="text-align: center;height: calc(80vh);">
+                        <img src="/media/images/blue-gray-circle.png" style="object-fit: contain; width: 80%; height: 100%;">
                     </div>
-                {% endfor %}
+                    <div>
+                        <h2>Welcome to ABES Engineering college's ACM chapter</h2>
+                        <p>Association of computing machine is a US-based international learned society for computing which ensures opportunities and mentoring to students for better exposure.</p>
+                        <div class="welcome-team-image">
+                            <img src="/media/images/acmteam-22-23.jpeg" alt="acmteam-22-23" style="object-fit: contain;width: 100%;height: 100%;">
+                        </div>
+                        <p>ACM in collaboration with ABES EC has two student chapter ACM and ACM W. The club run along with department of CS is a technical club which has conducted various events such as National Virtual Hackathon, hour of code etc. Which provided various students to come forward, gave them the platform to learn and enrich from experience. Acm will soon be recruiting . STAY TUNED AND BE THE PART OF THE ELITE CLUB.</p>
+                    </div>
                 </div>
             </div>
-        </div>
+            {% for article in news %}
+            <div class="slide">
+                <div style="height: 100%;width: 100%;">
+                    <img src="{{article.image.url}}" style="object-fit: cover; width: 100%; height: 100%;">
+                </div>
+                <div class="moving-news-content">
+                    <h1>{{article}}</h1>
+                    <p>
+                        Date: {{article.created.date}}
+                    </p>
+                    <p>{{article.desc}}</p>
+                </div>
+                <div style="z-index: 1; height: 100%;width: 100%;position: absolute;bottom: 0; background: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 50%);"></div>
+            </div>
+            {% endfor %}
+        </label>
+        <button class="btn btn-next">></button>
+        <button class="btn btn-prev"><</button>
+    </div>
+    <div class="main">
         <div class="right-pane">
-            <h1>Ongoing and Latest Events</h1>
+            {% if ongoing %}
+            <h1>Ongoing Events</h1>
             <div class="home-event-container">
                 {% for event in ongoing %}
-                <siv class="event" >
+                <div class="event" >
                     <div class="new">
                         NEW
                     </div>
@@ -57,12 +65,16 @@
                             {{event.name}}
                         </h3>
                         <div>
-                            Date: {{event.event_date}}
+                            <div style="background-color: rgb(210, 233, 227); width: fit-content;padding: 4px 10px;margin: 2px 0; border-radius: 10px;color: rgb(49, 89, 79);font-size: clamp(10px, 1vw, 14px);">
+                                Date: {{event.event_date.date}}
+                            </div>
                             {% if event.coordinator.all %}
                             <div style="display: flex;">
-                                Coordinators:
+                                <div style="background-color: rgb(228, 210, 233); width: fit-content;padding: 4px 10px;margin: 2px 0; border-radius: 10px;color: rgb(75, 24, 90);font-size: clamp(10px, 1vw, 14px);">
+                                    Coordinators
+                                </div>
                                 {% for coo in event.coordinator.all %}
-                                <div style="width: 25px;height: 25px;">
+                                <div class="coordinator-event" style="width: clamp(25px, 3vw, 30px);height: clamp(25px, 3vw, 30px);border-radius: 50%;margin: 0 4px;">
                                     <a href="{% url 'profile' coo.user %}" style="width: 100%;">
                                         <img style="border-radius: 50%;aspect-ratio: 1;" src="{{coo.profile_pic.url}}" width="100%">
                                     </a>
@@ -72,23 +84,51 @@
                             {% endif %}
                         </div>
                     </div>
-                </siv>
+                </div>
                 {% endfor %}
+            </div>
+            {% endif %}
+            <h1>Latest Events</h1>
+            <div class="home-event-container">
                 {% for event in other %}
-                <a class="event" href="{% url 'event' event.name %}">
+                <div class="event" >
                     <div class="image-container">
-                        <img src="{{event.image.url}}"/>
+                        <a href="{% url 'event' event.name %}">
+                            <img src="{{event.image.url}}"/>
+                        </a>
                     </div>
                     <div class="event-body">
-                        <h3 style="margin: 0;">{{event.name}}</h3>
-                        <div style="margin-top: 5px;">
-                            Date: {{event.event_date}}
+                        <h3 style="margin: 0;">
+                            {{event.name}}
+                        </h3>
+                        <div>
+                            <div style="background-color: rgb(210, 233, 227); width: fit-content;padding: 4px 10px;margin: 2px 0; border-radius: 10px;color: rgb(49, 89, 79);font-size: clamp(10px, 1vw, 14px);">
+                                Date: {{event.event_date.date}}
+                            </div>
+                            {% if event.coordinator.all %}
+                            <div style="display: flex;">
+                                <div style="background-color: rgb(228, 210, 233); width: fit-content;padding: 4px 10px;margin: 2px 0; border-radius: 10px;color: rgb(75, 24, 90);font-size: clamp(10px, 1vw, 14px);">
+                                    Coordinators
+                                </div>
+                                {% for coo in event.coordinator.all %}
+                                <div class="coordinator-event" style="width: clamp(25px, 3vw, 30px);height: clamp(25px, 3vw, 30px);border-radius: 50%;margin: 0 4px;">
+                                    <a href="{% url 'profile' coo.user %}" style="width: 100%;">
+                                        <img style="border-radius: 50%;aspect-ratio: 1;" src="{{coo.profile_pic.url}}" width="100%">
+                                    </a>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
-                </a>
+                </div>
                 {% endfor %}
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'base/js/home.js' %}" defer></script>
 {% endblock %}

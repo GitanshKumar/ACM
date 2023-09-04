@@ -14,7 +14,7 @@
             <div class="inner">
                 <div class="left-pane">
                     <div style="text-align: center;">
-                        <img src="{{user.profile_pic.url}}" style="{% if member %} border: 5px solid {% if user.year == '3rd' or user.faculty %} gold {% elif user.year == '2nd' %} silver {% else %} brown {% endif %} {% else %} border: 1px solid rgba(0,0,0,0.2) {% endif %};">
+                        <img src="{{user.profile_pic.url}}?" style="{% if member %} border: 5px solid gold {% else %} border: 4px solid rgb(148, 222, 202) {% endif %};">
                         <div style="margin-top: 20px;margin-bottom: 20px;"><h2 style="margin-bottom: 0px;">{{user.name}}</h2>{{user.user}}</div>
                         {% if user.linked_in %}<a href="https://{{user.linked_in}}" style="margin-right: 10px;"><i class="fa fa-linkedin" style="font-size: 20px;"></i></a>{% endif %}
                         {% if user.github %}<a href="https://{{user.github}}"><i class="fa fa-github" style="font-size: 20px;"></i></a>{% endif %}
@@ -48,7 +48,7 @@
                 </div>
             </div>
             <div class="participation-container">
-                <h2 style="margin-left: 5%;">Your Participation</h2>
+                <h2 style="margin-left: 5%;">{% if is_owner %}Your Participation{% else %}Participation{% endif %}</h2>
                 <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; margin: 0 5% 0 5%; text-align: center; padding-bottom: 20px;">
                     <div class="heading">Event Name</div>
                     <div class="heading">Date</div>

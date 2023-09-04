@@ -32,9 +32,8 @@
 }
 .f {
     display: flex;
-    padding-left: 5%;
-    padding-right: 5%;
-    justify-content: space-between;
+    width: fit-content;
+    margin: auto;
 }
 .f input {
     border-radius: 5px;
@@ -99,24 +98,64 @@
     transform: scale(1.5);
 }
 .event-search-container {
-    width: 60%;
+    width: 40vw;
 }
 #search-bar-events {
     width: 90%;
     box-sizing: border-box;
     float: left;
 }
-.date-container {
-    width: 40%;
+.year-container {
     justify-content: space-between;
+    margin-left: 20px;
 }
+
+#year {
+    height: 100%;
+    border-radius: 5px;
+    padding: 5px;
+}
+
 .search-result-container {
     display: grid;
     margin-top: 3%;
     grid-template-columns: 20% 80%;
 }
+
+.event-tags {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    font-size: 12px;
+    font-weight: bold;
+}
+
 .event-tag {
-    font-size: 14px;
+    padding: 4px 10px;
+    border-radius: 10px;
+    width: fit-content;
+}
+
+.event-date {
+    background-color: rgb(210, 233, 227);
+    width: fit-content;
+    padding: 4px 10px;
+    margin: 2px 0;
+    border-radius: 10px;
+    color: rgb(49, 89, 79);
+    font-size: 14px
+}
+
+#myBtn {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+    z-index: 99;
+    background-color: rgba(210, 233, 227, 0.5);
+    cursor: pointer;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 18px;
 }
 
 @media screen and (max-width:958px) {
@@ -130,7 +169,7 @@
     .f input {
         width: 15px;
     }
-    .date-container {
+    .year-container {
         width: fit-content;
         margin: auto;
     }
@@ -138,7 +177,6 @@
 @media screen and (max-width:500px) {
     .outer-container {
         font-size: 14px;
-        height: calc(100vh - 51px);
         display: flex;
         flex-direction: column;
     }
@@ -150,12 +188,6 @@
     .tags-container {
         grid-template-columns: 1fr 1fr;
         margin-bottom: 5px;
-        position: relative;
-        z-index: 1;
-        box-shadow: 0 0 20px 15px #f6f8fa;
-    }
-    .events-container {
-        overflow-y: auto;
     }
     .f {
         display: grid;
@@ -181,7 +213,7 @@
         font-size: 10px;
         width: 80px;
     }
-    .date-container {
+    .year-container {
         margin-top: 5px;
     }
     .tag {
@@ -206,6 +238,9 @@
     .event-date {
         font-size: 12px;
     }
+    .event-tags {
+        grid-template-columns: 1fr 1fr;
+    }
     .event-tag {
         font-size: 10px;
     }
@@ -221,5 +256,9 @@
     #load-more-container input {
         font-size: 12px;
         width: fit-content;
+    }
+    #myBtn {
+        padding: 10px;
+        font-size: 16px;
     }
 }

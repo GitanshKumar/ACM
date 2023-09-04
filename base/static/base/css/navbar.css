@@ -1,11 +1,11 @@
 .nav-container{
     background-color: rgb(210, 233, 227);
     height: 50px;
-    z-index: 2;
+    z-index: 99;
     position: sticky;
     top: 0;
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-    box-shadow: 0 0px 15px 20px white;
+    box-shadow: 0 0px 50px 20px #f6f8fa;
 }
 .navbar {
     width: 80%;

@@ -17,3 +17,6 @@ if not settings.DEBUG:
         path('media/<path:path>', serve, {'document_root': settings.MEDIA_ROOT}),
         path('media/<path:path>', serve, {'document_root': settings.STATIC_ROOT}),
     ]
+
+handler404 = "base.views.error_404"
+handler500 = "base.views.error_500"

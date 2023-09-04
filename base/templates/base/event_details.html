@@ -87,15 +87,15 @@
                 {% else %}Total: {{values.count}}{% endif %}
             </div>
         </div>
-        <div style="display: grid; grid-template-columns:{% if team %} 0.5fr 2fr 2fr 2fr 2fr  {% else %} 1fr 2fr 2fr 2fr {% endif %}; margin: 0 5% 0 5%; text-align: center; margin-bottom: 3%;">
+        <div style="display: grid; grid-template-columns:{% if team %} 0.5fr 2fr 2fr 2fr 2fr  {% else %} 0.5fr 2fr 2fr 2fr {% endif %}; margin: 0 5%; text-align: center; margin-bottom: 3%;">
             {% if team %}
-            <div class="heading"></div>
+            <div class="heading">No.</div>
             <div class="heading">Team Name</div>
             <div class="heading">Leader Name</div>
             <div class="heading">Leader Admission id</div>
             <div class="heading">Leader Mobile</div>
             {% else %}
-            <div class="heading"></div>
+            <div class="heading">No.</div>
             <div class="heading">Name</div>
             <div class="heading">Admission id</div>
             <div class="heading">Mobile</div>

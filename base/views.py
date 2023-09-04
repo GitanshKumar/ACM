@@ -14,6 +14,13 @@ from .models import Event, Member, Student, Team, Tag, News
 from .forms import EditMemberForm, EditStudentForm, CaptchaForm
 from .custom import send_mail
 
+
+def error_404(request, exception):
+    return render(request, 'base/404.html')
+
+def error_500(request, *args, **argv):
+    return render(request, 'base/500.html')
+
 def home(request):
     ongoing = Event.objects.filter(ongoing= True).order_by("event_date")
     other = Event.objects.filter(ongoing= False).order_by("-event_date")[:8 - ongoing.count()]
@@ -94,26 +101,29 @@ def event(request, pk):
 
 def events(request):
     q = request.GET.get("q", "")
-    start = request.GET.get("start") if request.GET.get("start") and request.GET.get("start") != "mm-dd-yyyy" else "1900-01-01"
-    end = request.GET.get("end") if request.GET.get("end") and request.GET.get("end") != "mm-dd-yyyy" else "9999-01-01"
+    year = request.GET.get("year", None)
     events = Event.objects.all().order_by("-event_date")
     count = total = events.count()
     context = {"events": events}
     shown = 10
 
-    if "clear" in request.GET:
-        q, start, end = "", "1900-01-01", "9999-01-01"
 
     if "q" in request.GET:
-        events = events.filter(Q(name__icontains=q) | Q(tag__name__icontains=q), event_date__date__range=(start, end)).order_by("-event_date").distinct()
-        count = events.count()
+        if year:
+            events = events.filter(Q(name__icontains=q) | Q(tag__name__icontains=q), event_date__year=year).order_by("-event_date").distinct()
+            count = events.count()
+        else:
+            events = events.filter(Q(name__icontains=q) | Q(tag__name__icontains=q)).order_by("-event_date").distinct()
+            count = events.count()
+
     
     if "loadmore" in request.GET:
         prev = int(request.GET["count"])
         shown = prev + 5
         res = []
         for i in events[prev:shown]:
-             res.append([i.name, i.image.url, i.event_date.date(), i.description, list(i.tag.all().values_list("name", flat=True))])
+            print(i.tag.all().values())
+            res.append([i.name, i.image.url, i.event_date.date(), i.description, list(i.tag.all().values_list("name","tag_bg_color","tag_text_color"))])
         return JsonResponse([shown < count] + res, safe=False)
     
     context = {"tags": sorted(Tag.objects.all().order_by("name"), key= lambda a: a.related_events(), reverse=True),
@@ -121,8 +131,7 @@ def events(request):
                "total": total,
                "left":shown < count,
                "search":q,
-               "start":"mm-dd-yyyy" if start == "1900-01-01" else start,
-               "end": "mm-dd-yyyy" if end == "9999-01-01" else end}
+               "year":year}
     
     return render(request, 'base/events.html', context)
 
@@ -134,11 +143,17 @@ def aboutus(request):
                                                  "wchapter":stu_team.filter(w_chapter=True)})
 
 def team(request):
-    fac_team = Member.objects.filter(faculty= True)
-    stu_team = Member.objects.filter(faculty= False).order_by("-role")
-    return render(request, 'base/team.html', {"faculty":fac_team,
-                                                 "student":stu_team.filter(w_chapter= False),
-                                                 "wchapter":stu_team.filter(w_chapter=True)})
+    stu_team = Member.objects.filter(w_chapter=False).order_by("-role")
+    w_team = Member.objects.filter(w_chapter=True).order_by("-role")
+    return render(request, 'base/team.html', {"student":stu_team, "wchapter": w_team})
+
+def student_chapter(request):
+    stu_team = Member.objects.filter(w_chapter=False).order_by("-role")
+    return render(request, 'base/team.html', {"student":stu_team})
+
+def w_chapter(request):
+    stu_team = Member.objects.filter(w_chapter=True).order_by("-role")
+    return render(request, 'base/team.html', {"wchapter":stu_team})
 
 def valid_password(p1: str, p2: str):
     res = []
@@ -159,23 +174,73 @@ def signup(request):
         password = request.POST.get("password")
         re_password = request.POST.get("re-password")
         form = CaptchaForm(request.POST)
+        valid_details = True
+
         if not form.is_valid():
             context["captcha"] = True
+            valid_details = False
         
+        context["name"] = name
+        context["username"] = username
         if User.objects.filter(username=username).first():
-            context["username"] = username
+            valid_details = False
         
         errors, valid = valid_password(password, re_password)
         if not valid:
             context["password"] = errors
+            valid_details = False
         
+        context["email"] = email
         if Student.objects.filter(email=email).first():
-            context["email"] = email
+            valid_details = False
         
-        if not context:
+        member_list = ["anujmishraan2005@gmail.com",
+                       "krati.21b1541093@abes.ac.in",
+                       "shreya.22b0121006@abes.ac.in",
+                       "aryan.22b0101199@abes.ac.in",
+                       "jahnavi.21b0121149@abes.ac.in",
+                       "parthsinghal.abes@gmail.com",
+                       "samarthdec12@gmail.com",
+                       "guptaaditya3200@gmail.com",
+                       "ys751693@gmail.com",
+                       "palak.21b1541080@abes.ac.in",
+                       "tarunsinghsheoran9703@gmail.com",
+                       "pundir.aditya@outlook.com",
+                       "kumar.22b0121180@abes.ac.in",
+                       "chitra1234pandey@gmail.com",
+                       "shreshtharastogi5@gmail.com",
+                       "hritik.22b0123012@abes.ac.in",
+                       "niharika.22b0121055@abes.ac.in",
+                       "mysatyam99@gmail.com",
+                       "ps070242@gmail.com",
+                       "vkssrivastava237@gmail.com",
+                       "gaurav.21b0121020@abes.ac.in",
+                       "disha.pathak@abes.ac.in",
+                       "abhilasha.varshney@abes.ac.in",
+                       "Kalpana.artofcreatinglife@gmail.com",
+                       "Laxmi.saraswat@abes.ac.in",
+                       "tomarharsh71@gmail.com",
+                       "pgoel134@gmail.com",
+                       "devbhardwaj7078@gmail.com",
+                       "radhi.gupta3092001@gmail.com",
+                       "khushi.20b0121053@abes.ac.in",
+                       "manmeet.20b0121116@abes.ac.in",
+                       "Bharti.20B0121002@abes.ac.in",
+                       "shagunkesarwani8@gmail.com",
+                       "Shubhansh.20b0121112@abes.ac.in",
+                       "shreya.20B0121206@abes.ac.in",
+                       "adarsh.21b0121042@abes.ac.in",
+                       "prince.21b0121107@abes.ac.in",
+                       "pooja.21b0121032@abes.ac.in",
+                       ]
+
+        if valid_details:
             user = User.objects.create_user(username=username, email=email, password=password)
             user.save()
-            mem = Student(user=user, name=name, email=email)
+            if email in member_list:
+                mem = Member(user=user, name=name, email=email)
+            else:
+                mem = Student(user=user, name=name, email=email)
             mem.save()
             user = authenticate(request, username= username, password=password)
             login(request, user)
@@ -307,14 +372,13 @@ def viewteam(request, pk):
     return render(request, "base/viewteam.html", {"leader":leader, "members":members, "team":team, "event":event})
 
 def event_details(request, pk):
-    request.user.member
     event = Event.objects.get(name=pk)
     teams, participants = "", ""
     q = request.GET.get("q", "")
     if "clear" in request.GET: q = ""
 
     if event.team_members > 1: teams = Team.objects.filter(Q(team_name__startswith= q) | Q(leaders__name__startswith= q), event=event)
-    else: participants = event.participants.all()
+    else: participants = event.participants.filter(name__startswith=q)
     
     context = {"values":participants or teams, "team": teams != "", "event": event, "search":q}
     return render(request, "base/event_details.html", context)

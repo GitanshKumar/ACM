@@ -10,6 +10,17 @@
 {% block content %}
 <div style="height: calc(100% - 50px); display: flex;">
     <div class="main-container">
+        {% if wchapter and student %}
+        <div style="width: 50%;min-width: 250px; margin: 50px auto; display: grid;grid-template-columns: 1fr 1fr;column-gap: 20px;">
+            <a href="{% url 'studentchapter' %}">
+                <button style="width: 100%;">Student Chapter</button>
+            </a>
+            <a href="{% url 'wchapter' %}">
+                <button style="width: 100%;">W Chapter</button>
+            </a>
+        </div>
+        {% endif %}
+        {% if student %}
         <div class="stu-container">
             <div style="margin: 1%;">
                 <h1 style="margin-left: 2%;">ACM Student Chapter</h1>
@@ -18,19 +29,13 @@
                     <div class="pro">
                         <a href="{% url 'profile' stu.user.username %}" style="text-align: center;height: 100%;">
                             <span class="helper"></span>
-                            <img src="{{stu.profile_pic.url}}" style="border: 3px solid {% if stu.year == '3rd' %} gold {% elif stu.year == '2nd' %} silver {% else %} brown {% endif %};">
+                            <img src="{{stu.profile_pic.url}}" style="border: 2px solid white;outline: 4px solid rgb(148, 222, 202);">
                         </a>
                         <div style="margin-left: 2%;">
                             <h2 style="margin-bottom: 2px;">{{stu.name}}</h2>
                             <span>{{stu.core}}<br>
                                 {{stu.role}}<br>
-                                {% if stu.year != 'other' %}
-                                {% with ''|center:stu.year.0 as range %}
-                                {% for _ in range %}{{ '|' }}{% endfor %}
-                                {% endwith %}
-                                {% else %}
-                                {{stu.year}}
-                                {% endif %}
+                                <div class="year" style="width: fit-content;border-radius: 10px;color: rgb(0,0,0,0.9); background-color: {% if stu.year == 'Faculty' or stu.year == '4th Year' %} bisque {% elif stu.year == '3rd Year' %} #d0ded8 {% else %} #afabc9 {% endif %};">{{stu.year}}</div>
                             </span>
                         </div>
                         <div class="desc">
@@ -41,6 +46,8 @@
                 </div>
             </div>
         </div>
+        {% endif %}
+        {% if wchapter %}
         <div class="stu-container">
             <div style="margin: 1%;">
                 <h1 style="margin-left: 2%;">ACM Women Chapter</h1>
@@ -49,19 +56,13 @@
                     <div class="pro">
                         <a href="{% url 'profile' stu.user.username %}" style="text-align: center;height: 100%;">
                             <span class="helper"></span>
-                            <img src="{{stu.profile_pic.url}}" style="border: 3px solid {% if stu.year == '3rd' %} gold {% elif stu.year == '2nd' %} silver {% else %} brown {% endif %};">
+                            <img src="{{stu.profile_pic.url}}" style="border: 2px solid white;outline: 4px solid rgb(148, 222, 202);">
                         </a>
                         <div style="margin-left: 2%;">
-                            <h3 style="margin-bottom: 2px;">{{stu.name}}</h3>
+                            <h2 style="margin-bottom: 2px;">{{stu.name}}</h2>
                             <span>{{stu.core}}<br>
                                 {{stu.role}}<br>
-                                {% if stu.year != 'other' %}
-                                {% with ''|center:stu.year.0 as range %}
-                                {% for _ in range %}{{ '|' }}{% endfor %}
-                                {% endwith %}
-                                {% else %}
-                                {{stu.year}}
-                                {% endif %}
+                                <div class="year" style="width: fit-content;border-radius: 10px;color: rgb(0,0,0,0.9); background-color: {% if stu.year == 'Faculty' or stu.year == '4th Year' %} bisque {% elif stu.year == '3rd Year' %} #d0ded8 {% else %} #afabc9 {% endif %};">{{stu.year}}</div>
                             </span>
                         </div>
                         <div class="desc">
@@ -72,6 +73,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
