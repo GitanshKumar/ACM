@@ -11,39 +11,56 @@
 <div class="event-container">
     <div class="poster-plane">
         <div class="event">
-            <h2 style="margin-bottom: 0 ;">
+            <h2>
                 {{event.name}}
             </h2>
             <div class="poster-container">
                 <img src="{{event.image.url}}" width="100%" height="100%"/>
             </div>
             <div class="event-info">
-                <div style="display: flex;">
-                    <div>Date:<br>Time:<br>Location:<br>{% if event.ongoing %}Fee: <br>{% endif %}
+                <div style="display: grid;grid-template-columns: 10% 40% 50%;">
+                    <span style="text-align: center;">
+                        <i class="fa fa-calendar" aria-hidden="true"></i><br>
+                        <i class="fa fa-clock-o" aria-hidden="true"></i><br>
+                        <i class="fa fa-map-marker" aria-hidden="true"></i><br>
+                        {% if event.ongoing %}
+                        <i class="fa fa-money" aria-hidden="true"></i><br>
+                        {% endif %}
+                        {% if event.coordinator.all %}
+                        <i class="fa fa-users" aria-hidden="true"></i>
+                        {% endif %}
+                    </span>
+                    <span>
+                        Date:<br>
+                        Time:<br>
+                        Location:<br>
+                        {% if event.ongoing %}
+                        Fee: <br>
+                        {% endif %}
                         {% if event.coordinator.all %}
                             Coordinators:
                         {% endif %}
-                    </div>
-                    <div style="font-weight: normal; margin-left: 5px;">
+                    </span>
+                    <span style="font-weight: normal; margin-left: 5px;">
                         {{event.event_date.date}}<br>{{event.event_date.time}}<br>{{event.location}}<br>
                         {% if event.ongoing %}
                             {% if event.fee == '0' %}
-                                <div style="color: rgb(49, 89, 79);">FREE ENTRY</div>
+                                <div style="background-color: #d0ded8;color: rgba(0,0,0,0.8);width: fit-content;padding: 0 10px;border-radius: 10px;">FREE ENTRY</div>
                             {% else %}
                                 {{event.fee}}
                             {% endif %}
                         {% endif %}
                         {% for coo in event.coordinator.all %}
-                            <div style="width: 25px;height: 25px;">
-                                <a href="{% url 'profile' coo.user %}" style="width: fit-content;">
-                                    <img style="border-radius: 50%;aspect-ratio: 1;" src="{{coo.profile_pic.url}}" width="100%">
-                                </a>
-                            </div>
+                        <div class="coordinator-event" style="width: clamp(25px, 3vw, 30px);height: clamp(25px, 3vw, 30px);border-radius: 50%;margin: 0 4px;">
+                            <a href="{% url 'profile' coo.user %}" style="width: 100%;">
+                                <img style="border-radius: 50%;aspect-ratio: 1;" src="{{coo.profile_pic.url}}" width="100%">
+                            </a>
+                        </div>
                         {% endfor %}
-                    </div>
+                    </span>
                 </div>
             </div>
-            <div style="margin-top: auto; margin-bottom: 5%;">
+            <div style="margin-bottom: 5%;">
                 {% if member %}
                     <a href="{% url 'event_detail' event.name %}" style="text-decoration: none;">
                         <button class="register">See event details</button>

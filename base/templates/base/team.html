@@ -11,7 +11,7 @@
 <div style="height: calc(100% - 50px); display: flex;">
     <div class="main-container">
         {% if wchapter and student %}
-        <div style="width: 50%;margin: 50px auto; display: grid;grid-template-columns: 1fr 1fr;column-gap: 20px;">
+        <div style="width: 50%;min-width: 250px; margin: 50px auto; display: grid;grid-template-columns: 1fr 1fr;column-gap: 20px;">
             <a href="{% url 'studentchapter' %}">
                 <button style="width: 100%;">Student Chapter</button>
             </a>
@@ -35,7 +35,7 @@
                             <h2 style="margin-bottom: 2px;">{{stu.name}}</h2>
                             <span>{{stu.core}}<br>
                                 {{stu.role}}<br>
-                                {{stu.year}}
+                                <div class="year" style="width: fit-content;border-radius: 10px;color: rgb(0,0,0,0.9); background-color: {% if stu.year == 'Faculty' or stu.year == '4th Year' %} bisque {% elif stu.year == '3rd Year' %} #d0ded8 {% else %} #afabc9 {% endif %};">{{stu.year}}</div>
                             </span>
                         </div>
                         <div class="desc">
@@ -59,10 +59,10 @@
                             <img src="{{stu.profile_pic.url}}" style="border: 2px solid white;outline: 4px solid rgb(148, 222, 202);">
                         </a>
                         <div style="margin-left: 2%;">
-                            <h3 style="margin-bottom: 2px;">{{stu.name}}</h3>
+                            <h2 style="margin-bottom: 2px;">{{stu.name}}</h2>
                             <span>{{stu.core}}<br>
                                 {{stu.role}}<br>
-                                {{stu.year}}
+                                <div class="year" style="width: fit-content;border-radius: 10px;color: rgb(0,0,0,0.9); background-color: {% if stu.year == 'Faculty' or stu.year == '4th Year' %} bisque {% elif stu.year == '3rd Year' %} #d0ded8 {% else %} #afabc9 {% endif %};">{{stu.year}}</div>
                             </span>
                         </div>
                         <div class="desc">

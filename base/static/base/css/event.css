@@ -1,7 +1,7 @@
 .event-container {
     display: grid;
     width: 80%;
-    margin: auto;
+    margin: 20px auto;
     height: calc(100vh - 51px);
     grid-template-columns: 40% 60%;
 }
@@ -13,6 +13,7 @@
     flex-direction: column;
     margin: auto;
     margin-left: 10px;
+    padding: 15px;
     left:0; right:0;
     top:0; bottom:0;
     border-radius: 8px;
@@ -21,8 +22,8 @@
 }
 .poster-container {
     text-align: center;
-    margin: auto;
-    height: 60%;
+    margin: 0px auto;
+    height: 55%;
     transition: all 0.15s;
 }
 .poster-container img {
@@ -35,6 +36,7 @@
     text-align: left;
     font-size: clamp(14px, 2vw, 18px);
     margin: auto;
+    margin-top: 20px;
 }
 .details {
     margin-top: 20px;
@@ -53,7 +55,6 @@
 }
 .register {
     margin: auto;
-    margin-top: 5%;
     width: 50%;
     transition: all 0.15s;
     font-family: 'Inria Sans', sans-serif;
@@ -136,16 +137,24 @@
     }
 }
 
-@media screen and (max-width:500px) {
+@media screen and (max-width:600px) {
     .event-container {
         grid-template-columns: 1fr;
-        width: 95%;
-    }
-    .event-info {
-        font-size: 18px;
+        height: auto;
+        overflow: visible;
+        height: auto;
     }
     .poster-plane {
         height: 90vh;
+    }
+}
+
+@media screen and (max-width:500px) {
+    .event-container {
+        width: 95%;
+    }
+    .event-info {
+        font-size: 16px;
     }
     .event-container {
         overflow-y: auto;
@@ -165,5 +174,9 @@
     .poster-container {
         padding: 5px;
         height: 55%;
+    }
+    .register {
+        margin-top: 4%;
+        font-size: 16px;
     }
 }

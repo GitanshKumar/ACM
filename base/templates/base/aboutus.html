@@ -16,7 +16,9 @@
             <a href="#facteam">Faculty Team</a>
             <a href="#chapter">Student Chapter</a>
             <a href="#wchapter">Women Chapter</a>
+            {% if alumnis %}
             <a href="#alumni">Alumni</a>
+            {% endif %}
         </div>
     </div>
     <div style="overflow-y: hidden;">
@@ -90,6 +92,7 @@
                     </div>
                 </div>
             </div>
+            {% if alumnis %}
             <div id="alumni" style="margin-bottom: 5%;">
                 <div class="container">
                     <div style="margin: 2%; padding-bottom: 1%; padding-top: 1%;">
@@ -107,6 +110,7 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
         </div>
     </div>
 </div>

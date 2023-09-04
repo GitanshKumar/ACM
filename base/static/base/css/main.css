@@ -34,6 +34,7 @@ color: rgb(136, 24, 24);
 }
 input {
 outline-color: rgb(89, 191, 164);
+border: 1px solid rgba(0, 0, 0, 0.1);
 }
 button {
 border-radius: 10px;
@@ -56,5 +57,49 @@ border-color: rgba(0, 0, 0, 0.5);
     ::-webkit-scrollbar {
         width: 3px;
         height: 3px;
+    }
+}
+
+.footer {
+    width: 85%;
+    margin: auto;
+    border-radius: 10px 10px 0 0;
+    border: 1px solid rgba(0,0,0,0.2);
+    background-color: white;
+    text-align: center;
+    padding: 50px 0;
+    box-shadow: 0 0 50px 20px #f6f8fa;
+    position: relative;
+}
+
+.footer-links {
+    margin: 10px;
+    border-bottom: 2px solid rgba(0,0,0,0);
+    padding-bottom: 5px;
+    transition: all 0.3s;
+}
+.footer-links:hover {
+    border-bottom: 2px solid black;
+}
+
+
+@media screen and (max-width:500px) {
+    .footer {
+        width: 100%;
+        padding: 30px 0;
+    }
+    .footer h2 {
+        font-size: 18px;
+    }
+    .footer div {
+        font-size: 14px;
+        padding: 0 5px;
+    }
+    .footer-links {
+        font-size: 14px;
+    }
+    .footer h4 {
+        font-size: 14px;
+        padding: 0 10px;
     }
 }

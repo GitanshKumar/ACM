@@ -5,8 +5,10 @@ from django.utils import timezone
 from PIL import Image
 from io import BytesIO
 from django.core.files import File
-from ckeditor.fields import RichTextField
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.files.storage import default_storage
+from ckeditor.fields import RichTextField
+from colorfield.fields import ColorField
 
 # Create your models here.
 
@@ -19,12 +21,6 @@ def compressImage(image):
     return new_image
 
 def nameAndOverwriteMemberImage(instance, filename):
-    try:
-        this = Member.objects.get(id=instance.id)
-        if this.profile_pic.path and os.path.isfile(this.profile_pic.path):
-            os.remove(this.profile_pic.path)
-    except ObjectDoesNotExist:
-        pass
     return 'images/profile_pics/' + instance.user.username + str(instance.id) + ".jpg"
 
 class Member(models.Model):
@@ -47,8 +43,20 @@ class Member(models.Model):
     url_timeout = models.TimeField(auto_now= False, auto_now_add=False, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        new_image = compressImage(self.profile_pic)
-        self.image = new_image
+        try:
+            this = Member.objects.get(id=self.id)
+            if not self.profile_pic:
+                if self.profile_pic.field.default != this.profile_pic:
+                    default_storage.delete(this.profile_pic.path)
+                self.profile_pic = self.profile_pic.field.default
+            
+            if this.profile_pic and this.profile_pic != self.profile_pic and this.profile_pic != self.profile_pic.field.default and os.path.isfile(this.profile_pic.path):
+                default_storage.delete(this.profile_pic.path)
+                new_image = compressImage(self.profile_pic)
+                self.profile_pic = new_image
+        except ObjectDoesNotExist:
+            pass
+        
         super(Member, self).save(*args, **kwargs)
 
     def __str__(self) -> str:
@@ -115,6 +123,8 @@ class Photo(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(max_length=100)
+    tag_bg_color = ColorField(null=True)
+    tag_text_color = ColorField(null=True)
     
     def related_events(self) -> int:
         return self.events.count()
@@ -123,12 +133,7 @@ class Tag(models.Model):
         return self.name
 
 def nameAndOverwriteStudentImage(instance, filename):
-    try:
-        this = Student.objects.get(id=instance.id)
-        if this.profile_pic.path  and os.path.isfile(this.profile_pic.path):
-            os.remove(this.profile_pic.path)
-    except ObjectDoesNotExist:
-        pass
+    
     return 'images/profile_pics/' + instance.user.username + str(instance.id) + ".jpg"
 
 class Student(models.Model):
@@ -149,8 +154,20 @@ class Student(models.Model):
     url_timeout = models.TimeField(auto_now= False, auto_now_add=False, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        new_image = compressImage(self.profile_pic)
-        self.image = new_image
+        try:
+            this = Student.objects.get(id=self.id)
+            if not self.profile_pic:
+                if self.profile_pic.field.default != this.profile_pic:
+                    default_storage.delete(this.profile_pic.path)
+                self.profile_pic = self.profile_pic.field.default
+            
+            if this.profile_pic and this.profile_pic != self.profile_pic and this.profile_pic != self.profile_pic.field.default and os.path.isfile(this.profile_pic.path):
+                default_storage.delete(this.profile_pic.path)
+                new_image = compressImage(self.profile_pic)
+                self.profile_pic = new_image
+        except ObjectDoesNotExist:
+            pass
+        
         super(Student, self).save(*args, **kwargs)
     
     def __str__(self) -> str:

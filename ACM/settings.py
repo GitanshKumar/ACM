@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'base.apps.BaseConfig',
     'ckeditor',
     'whitenoise.runserver_nostatic',
-    'captcha'
+    'captcha',
+    "colorfield",
 ]
 
 MIDDLEWARE = [

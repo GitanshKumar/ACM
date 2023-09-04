@@ -11,9 +11,10 @@
 }
 
 .welcome-container {
-    width: 80%;
+    width: 100%;
     height: 80vh;
-    margin: auto;
+    margin: 15px 0;
+    overflow: hidden;
     margin-top: 10px;
     position: relative;
 }
@@ -29,7 +30,6 @@
     height: 40%;
 }
 
-
 .slider {
     position: relative;
     transform-style: preserve-3d;
@@ -37,11 +37,10 @@
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    margin: 15px auto;
-    border: 5px solid rgba(0, 0, 0, 0.1);
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
+    margin: auto;
+    top: 2px;
+    width: 80%;
+    height: calc(100% - 4px);
     text-align: center;
 }
 
@@ -50,6 +49,7 @@
     height: 100%;
     left: 0;
     right: 0;
+    border: 2px solid rgba(0, 0, 0, 0.1);
     position: absolute;
     transition: all 0.5s;
 }
@@ -86,12 +86,12 @@
 
 .btn-prev {
     top: 45%;
-    left: 2%;
+    left: calc(10% + 10px);
 }
 
 .btn-next {
     top: 45%;
-    right: 2%;
+    right: calc(10% + 10px);
 }
 
 .main {
@@ -120,8 +120,14 @@
     transition: all 0.15s;
 }
 .event:hover {
-    transform: scale(1.04);
+    transform: scale(1.02);
+    border: 1px solid rgba(0, 0, 0, 0.8);
 }
+
+.event:hover .image-container {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.8);
+}
+
 .event-body {
     margin: 2%;
     margin-left: 5%;
@@ -134,6 +140,11 @@
     transition: all 0.15s;
     border-bottom: 1px solid rgba(0,0,0,0.2);
 }
+
+.image-container:hover + .event-body h3 {
+    color: rgb(26, 121, 202);
+}
+
 .image-container img{
     object-fit: contain;
     width: 100%;
@@ -184,6 +195,10 @@
     overflow: hidden;
 }
 
+.coordinator-event:hover {
+    border: 1px solid black;
+}
+
 @media screen and (max-width: 958px){
     .news-body{
         font-size: 12px;
@@ -213,7 +228,6 @@
     }
     .welcome-container {
         height: 60vh;
-        width: 95%;
     }
     .btn {
         height: 30px;
@@ -268,8 +282,10 @@
 
 @media screen and (max-width: 500px) {
     .welcome-container {
-        width: 95%;
-        height: 65vh;
+        height: 72vh;
+    }
+    .slider {
+        width: 100%;
     }
     .slider h1 {
         font-size: 5vi;
@@ -295,5 +311,12 @@
     }
     .right-pane {
         margin: 0;
+    }
+    .btn-prev {
+        left: 2%;
+    }
+    
+    .btn-next {
+        right: 2%;
     }
 }
