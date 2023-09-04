@@ -1,9 +1,8 @@
 .aboutus-container {
     display: grid;
     width: 80%;
-    margin: auto;
+    margin: 20px auto;
     grid-template-columns: 20% 80%;
-    height: calc(100vh - 55px);
 }
 .aboutus-container h1 {
     margin-top: 0;
@@ -59,15 +58,10 @@
     }
 }
 @media screen and (max-width:500px) {
-    
     .aboutus-container {
         width: 95%;
         grid-template-columns: 1fr;
-    }
-    .shadow {
-        position: relative;
-        width: 100%;
-        box-shadow: 0 0 10px 18px rgba(255,255,255, 1);
+        margin-top: 0;
     }
     .links {
         display: grid;
@@ -75,12 +69,9 @@
         grid-template-columns: 1fr 1fr 1fr;
     }
     .aboutus-container h1 {
-        font-size: 20px;
+        font-size: 24px;
         margin-left: 5px;
         text-align: center;
-    }
-    .left-pane h1{
-        font-size: 20px;
     }
     .aboutus-container div {
         font-size: 12px;
