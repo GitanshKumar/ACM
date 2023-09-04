@@ -20,7 +20,7 @@ function startLoop(auto) {
         }
     }
     arrange();
-    timeId = setTimeout(function() {startLoop(1)}, 5000);
+    timeId = setTimeout(function() {startLoop(1)}, 5000 * 2);
 }
 
 const nextslide = document.querySelector(".btn-next");

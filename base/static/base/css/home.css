@@ -58,11 +58,14 @@
     z-index: 2;
     position: absolute;
     bottom: 20px;
+    top: 50%;
     left: 20px;
     width: 60%;
-    border-right: 2px solid white;
     text-align: left;
-    height: fit-content;
+    background-color: rgba(0,0,0,0.4);
+    backdrop-filter: blur(10px);
+    padding: 10px;
+    border-radius: 10px;
     color: white;
 }
 
@@ -239,13 +242,13 @@
         font-size: 14px;
     }
     .moving-news-content {
-        width: 95%;
-        padding: 10px;
+        top: auto;
         left: 0;
+        right: 0;
         bottom: 0;
-    }
-    .moving-news-content p {
-        margin: 0;
+        width: auto;
+        height: auto;
+        border-radius: 0;
     }
     .news h2{
         font-size: 12px;
