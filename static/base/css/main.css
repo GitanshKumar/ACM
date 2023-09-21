@@ -34,6 +34,7 @@ color: rgb(136, 24, 24);
 }
 input {
 outline-color: rgb(89, 191, 164);
+border: 1px solid rgba(0, 0, 0, 0.1);
 }
 button {
 border-radius: 10px;

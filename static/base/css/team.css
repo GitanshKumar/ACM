@@ -28,7 +28,6 @@
     margin-bottom: 5%;
     width: 95%;
     height: 150px;
-    overflow: hidden;
     transition: all 0.5s;
 }
 .pro img {
@@ -60,16 +59,35 @@
 .pro:hover {
     grid-template-columns: 20% 30% 50%;
 }
+span, h2 {
+    transition: all 0.5s;
+}
+.pro:hover span {
+    font-size: 14px;
+}
+.pro:hover h2 {
+    font-size: 16px;
+}
 .pro:hover a {
     margin-left: 0;
 }
 .pro:hover .desc{
     opacity: 1;
 }
+.year {
+    padding: 4px 10px;
+    font-size: 12px;
+}
 
 @media screen and (max-width:958px) {
     .pro a {
         margin-left: 15%;
+    }
+    h2 {
+        font-size: 18px;
+    }
+    span {
+        font-size: 12px;
     }
 }
 
@@ -107,5 +125,8 @@
     .desc {
         margin-top: 10px;
         height: 100px;
+    }
+    .year {
+        font-size: 10px;
     }
 }
