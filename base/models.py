@@ -43,20 +43,21 @@ class Member(models.Model):
     url_timeout = models.TimeField(auto_now= False, auto_now_add=False, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        try:
-            this = Member.objects.get(id=self.id)
-            if not self.profile_pic:
-                if self.profile_pic.field.default != this.profile_pic:
-                    default_storage.delete(this.profile_pic.path)
-                self.profile_pic = self.profile_pic.field.default
+        # try:
+        #     this = Member.objects.get(id=self.id)
+        #     if not self.profile_pic:
+        #         if self.profile_pic.field.default != this.profile_pic:
+        #             default_storage.delete(this.profile_pic.path)
+        #         self.profile_pic = self.profile_pic.field.default
             
-            if this.profile_pic and this.profile_pic != self.profile_pic and this.profile_pic != self.profile_pic.field.default and os.path.isfile(this.profile_pic.path):
-                default_storage.delete(this.profile_pic.path)
-                new_image = compressImage(self.profile_pic)
-                self.profile_pic = new_image
-        except ObjectDoesNotExist:
-            pass
-        
+        #     if this.profile_pic and this.profile_pic != self.profile_pic and this.profile_pic != self.profile_pic.field.default and os.path.isfile(this.profile_pic.path):
+        #         default_storage.delete(this.profile_pic.path)
+        #         new_image = compressImage(self.profile_pic)
+        #         self.profile_pic = new_image
+        # except ObjectDoesNotExist:
+        #     pass
+        new_image = compressImage(self.profile_pic)
+        self.profile_pic = new_image
         super(Member, self).save(*args, **kwargs)
 
     def __str__(self) -> str:
@@ -154,32 +155,34 @@ class Student(models.Model):
     url_timeout = models.TimeField(auto_now= False, auto_now_add=False, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        try:
-            this = Student.objects.get(id=self.id)
-            if not self.profile_pic:
-                if self.profile_pic.field.default != this.profile_pic:
-                    default_storage.delete(this.profile_pic.path)
-                self.profile_pic = self.profile_pic.field.default
+        # try:
+        #     this = Student.objects.get(id=self.id)
+        #     if not self.profile_pic:
+        #         if self.profile_pic.field.default != this.profile_pic:
+        #             default_storage.delete(this.profile_pic.path)
+        #         self.profile_pic = self.profile_pic.field.default
             
-            if this.profile_pic and this.profile_pic != self.profile_pic and this.profile_pic != self.profile_pic.field.default and os.path.isfile(this.profile_pic.path):
-                default_storage.delete(this.profile_pic.path)
-                new_image = compressImage(self.profile_pic)
-                self.profile_pic = new_image
-        except ObjectDoesNotExist:
-            pass
+        #     if this.profile_pic and this.profile_pic != self.profile_pic and this.profile_pic != self.profile_pic.field.default and os.path.isfile(this.profile_pic.path):
+        #         default_storage.delete(this.profile_pic.path)
+        #         new_image = compressImage(self.profile_pic)
+        #         self.profile_pic = new_image
+        # except ObjectDoesNotExist:
+        #     pass
         
+        new_image = compressImage(self.profile_pic)
+        self.profile_pic = new_image
         super(Student, self).save(*args, **kwargs)
     
     def __str__(self) -> str:
         return self.user.username
 
 def nameEventImage(instance, filename):
-    try:
-        this = Event.objects.get(id=instance.id)
-        if this.image.path and os.path.isfile(this.image.path):
-            os.remove(this.image.path)
-    except (ObjectDoesNotExist, PermissionError):
-        pass
+    # try:
+    #     this = Event.objects.get(id=instance.id)
+    #     if this.image.path and os.path.isfile(this.image.path):
+    #         os.remove(this.image.path)
+    # except (ObjectDoesNotExist, PermissionError):
+    #     pass
     return 'images/events/' + instance.name[:30] + "/" + instance.name[:30] + "_poster.jpg"
 
 class Event(models.Model):
