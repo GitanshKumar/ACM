@@ -45,9 +45,9 @@ function load(){
                 var innerhtml = `
                 <div class="result">
                     <div style="margin: 2%;">
-                        <div style="display: flex;">
+                        <div class='search-prof'>
                             <a class="profile-image" href="/profile/${res[2]}" style="color: black;">
-                                <img src="${res[3]}" width="100xpx" style="border-radius: 50%; border: 1px solid rgba(0,0,0,0.2);">
+                                <img src="${res[3]}" width="100xpx" style="border-radius: 50%; border: 1px solid rgba(0,0,0,0.2);aspect-ratio: 1">
                             </a>
                             <div class="profile-info">
                                 <h2 style="margin: 0;">${res[1]}</h2>

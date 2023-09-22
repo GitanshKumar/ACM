@@ -121,8 +121,28 @@
     margin-top: 3%;
     grid-template-columns: 20% 80%;
 }
+
+.event-tags {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    font-size: 12px;
+    font-weight: bold;
+}
+
 .event-tag {
-    font-size: 14px;
+    padding: 4px 10px;
+    border-radius: 10px;
+    width: fit-content;
+}
+
+.event-date {
+    background-color: rgb(210, 233, 227);
+    width: fit-content;
+    padding: 4px 10px;
+    margin: 2px 0;
+    border-radius: 10px;
+    color: rgb(49, 89, 79);
+    font-size: 14px
 }
 
 #myBtn {
@@ -217,6 +237,9 @@
     }
     .event-date {
         font-size: 12px;
+    }
+    .event-tags {
+        grid-template-columns: 1fr 1fr;
     }
     .event-tag {
         font-size: 10px;
