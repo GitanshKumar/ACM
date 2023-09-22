@@ -14,10 +14,7 @@
         }
       }
     ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "ACM/wsgi.py"
-      }
+    "rewrites": [
+      { "source": "/(.*)", "destination": "/" }
     ]
   }
