@@ -168,5 +168,16 @@
         });
         {% endif %}
     });
+    $(document).ready(function(){
+    var uploadField = document.getElementById("id_profile_pic");
+
+    uploadField.onchange = function() {
+        if(this.files[0].size > 1048576*4 ){
+            alert("File is too big!");
+            this.value = "";
+        };
+    }
+    });
+
 </script>
 {% endblock %}

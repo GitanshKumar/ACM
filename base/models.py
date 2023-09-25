@@ -9,19 +9,19 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.storage import default_storage
 from ckeditor.fields import RichTextField
 from colorfield.fields import ColorField
+from supabase import create_client
 
-# Create your models here.
-
-def compressImage(image):
-    im = Image.open(image)
-    im = im.convert('RGB')
-    im_io = BytesIO()
-    im.save(im_io, 'JPEG', quality=50)
-    new_image = File(im_io, name=image.name)
-    return new_image
+def existsThenDelete(name):
+    supabase = create_client(os.environ.get("SUPABASE_URL"), os.environ.get("SUPABASE_KEY"))
+    res = supabase.storage.from_('images').list(path=os.path.dirname(name))
+    
+    if any(file['name'] == os.path.basename(name) for file in res):
+        supabase.storage.from_('images').remove(name)
 
 def nameAndOverwriteMemberImage(instance, filename):
-    return ('images/profile_pics/' + instance.user.username + str(instance.id) + ".jpg").replace(" ", "_")
+    name = ('images/profile_pics/' + instance.user.username + str(instance.id) + ".jpg").replace(" ", "_")
+    existsThenDelete(name)
+    return name
 
 class Member(models.Model):
     user = models.OneToOneField(User, on_delete= models.CASCADE, default="", related_name="member")
@@ -31,7 +31,7 @@ class Member(models.Model):
     year = models.CharField(max_length=20, choices=[('1st Year', 'First year'), ('2nd Year', 'Second year'), ('3rd Year', 'Third year'), ('4th Year', 'Fourth year'), ('Faculty', 'Faculty'), ('Alumni', 'Alumni')], default="1st")
     mobile_no = models.CharField(max_length=10, default="", blank=True)
     faculty = models.BooleanField(default=False)
-    profile_pic = models.ImageField(upload_to=nameAndOverwriteMemberImage, default="images/profile_pics/default.png", blank=True)
+    profile_pic = models.ImageField(upload_to=nameAndOverwriteMemberImage, default="images/profile_pics/default.jpg", blank=True)
     linked_in = models.CharField(max_length=150, default="", null=True, blank=True)
     github = models.CharField(max_length=150, default="", null=True, blank=True)
     w_chapter = models.BooleanField(default=False)
@@ -43,45 +43,29 @@ class Member(models.Model):
     url_timeout = models.TimeField(auto_now= False, auto_now_add=False, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        # try:
-        #     this = Member.objects.get(id=self.id)
-        #     if not self.profile_pic:
-        #         if self.profile_pic.field.default != this.profile_pic:
-        #             default_storage.delete(this.profile_pic.path)
-        #         self.profile_pic = self.profile_pic.field.default
-            
-        #     if this.profile_pic and this.profile_pic != self.profile_pic and this.profile_pic != self.profile_pic.field.default and os.path.isfile(this.profile_pic.path):
-        #         default_storage.delete(this.profile_pic.path)
-        #         new_image = compressImage(self.profile_pic)
-        #         self.profile_pic = new_image
-        # except ObjectDoesNotExist:
-        #     pass
-        new_image = compressImage(self.profile_pic)
-        self.profile_pic = new_image
+        try:
+            this = Member.objects.get(id=self.id)
+            if not self.profile_pic:
+                if self.profile_pic.field.default != this.profile_pic:
+                    create_client(os.environ.get("SUPABASE_URL"), os.environ.get("SUPABASE_KEY")).storage.from_("images").remove(this.profile_pic.name)
+                self.profile_pic = self.profile_pic.field.default
+        except ObjectDoesNotExist:
+            pass
         super(Member, self).save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.name
 
 def nameNewsImage(instance, filename):
-    try:
-        this = News.objects.get(id=instance.id)
-        if this.image.path and os.path.isfile(this.image.path):
-            os.remove(this.image.path)
-    except (ObjectDoesNotExist, PermissionError):
-        pass
-    return ('images/news/' + filename + ".jpg").replace(" ", "_")
+    name = ('images/news/' + filename + ".jpg").replace(" ", "_")
+    existsThenDelete(name)
+    return name
 
 class News(models.Model):
     headline = models.CharField(max_length=80)
     image = models.ImageField(upload_to=nameNewsImage, blank=True)
     desc = models.TextField(max_length=500)
     created = models.DateTimeField()
-    
-    def save(self, *args, **kwargs):
-        new_image = compressImage(self.image)
-        self.image = new_image
-        super(News, self).save(*args, **kwargs)
     
     def __str__(self) -> str:
         return self.headline
@@ -102,22 +86,13 @@ class Byte(models.Model):
         return super(User, self).save(*args, **kwargs)
 
 def nameEventPhotos(instance, filename):
-    try:
-        this = Photo.objects.get(id=instance.id)
-        if this.image.path and os.path.isfile(this.image.path):
-            os.remove(this.image.path)
-    except ObjectDoesNotExist:
-        pass
-    return ('images/events/' + instance.event.name + "/" + filename).replace(" ", "_")
+    name = ('images/events/' + instance.event.name + "/" + filename).replace(" ", "_")
+    existsThenDelete(name)
+    return name
 
 class Photo(models.Model):
     image = models.ImageField(upload_to=nameEventPhotos)
     event = models.ForeignKey('Event', on_delete= models.CASCADE, related_name="photos")
-
-    def save(self, *args, **kwargs):
-        new_image = compressImage(self.image)
-        self.image = new_image
-        super(Photo, self).save(*args, **kwargs)
     
     def __str__(self) -> str:
         return self.event.name
@@ -134,7 +109,9 @@ class Tag(models.Model):
         return self.name
 
 def nameAndOverwriteStudentImage(instance, filename):
-    return ('images/profile_pics/' + instance.user.username + str(instance.id) + ".jpg").replace(" ", "_")
+    name = ('images/profile_pics/' + instance.user.username + str(instance.id) + ".jpg").replace(" ", "_")
+    existsThenDelete(name)
+    return name
 
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete= models.CASCADE, default="", related_name="student")
@@ -144,7 +121,7 @@ class Student(models.Model):
     admission = models.CharField(max_length=50, default="")
     email = models.EmailField(max_length= 254, default="", unique=True)
     mobile_no = models.CharField(max_length=10, default="", blank=True)
-    profile_pic = models.ImageField(upload_to=nameAndOverwriteStudentImage, default="images/profile_pics/default.png", blank=True)
+    profile_pic = models.ImageField(upload_to=nameAndOverwriteStudentImage, default="images/profile_pics/default.jpg", blank=True)
     linked_in = models.CharField(max_length=150, default="", null=True, blank=True)
     github = models.CharField(max_length=150, default="", null=True, blank=True)
     core = models.CharField(max_length= 50, null=True, blank=True)
@@ -154,35 +131,23 @@ class Student(models.Model):
     url_timeout = models.TimeField(auto_now= False, auto_now_add=False, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        # try:
-        #     this = Student.objects.get(id=self.id)
-        #     if not self.profile_pic:
-        #         if self.profile_pic.field.default != this.profile_pic:
-        #             default_storage.delete(this.profile_pic.path)
-        #         self.profile_pic = self.profile_pic.field.default
-            
-        #     if this.profile_pic and this.profile_pic != self.profile_pic and this.profile_pic != self.profile_pic.field.default and os.path.isfile(this.profile_pic.path):
-        #         default_storage.delete(this.profile_pic.path)
-        #         new_image = compressImage(self.profile_pic)
-        #         self.profile_pic = new_image
-        # except ObjectDoesNotExist:
-        #     pass
-        
-        new_image = compressImage(self.profile_pic)
-        self.profile_pic = new_image
+        try:
+            this = Student.objects.get(id=self.id)
+            if not self.profile_pic:
+                if self.profile_pic.field.default != this.profile_pic:
+                    create_client(os.environ.get("SUPABASE_URL"), os.environ.get("SUPABASE_KEY")).storage.from_("images").remove(this.profile_pic.name)
+                self.profile_pic = self.profile_pic.field.default
+        except ObjectDoesNotExist:
+            pass
         super(Student, self).save(*args, **kwargs)
     
     def __str__(self) -> str:
         return self.user.username
 
 def nameEventImage(instance, filename):
-    # try:
-    #     this = Event.objects.get(id=instance.id)
-    #     if this.image.path and os.path.isfile(this.image.path):
-    #         os.remove(this.image.path)
-    # except (ObjectDoesNotExist, PermissionError):
-    #     pass
-    return ('images/events/' + instance.name[:30] + "/" + instance.name[:30] + "_poster.jpg").replace(" ", "_")
+    name = ('images/events/' + instance.name[:30] + "/" + instance.name[:30] + "_poster.jpg").replace(" ", "_")
+    existsThenDelete(name)
+    return name
 
 class Event(models.Model):
     name = models.CharField(max_length= 150)
@@ -209,11 +174,6 @@ class Event(models.Model):
     
     def incharge(self):
         return ",".join([str(c) for c in self.coordinator.all()])
-    
-    def save(self, *args, **kwargs):
-        new_image = compressImage(self.image)
-        self.image = new_image
-        super(Event, self).save(*args, **kwargs)
 
 
 class Team(models.Model):
