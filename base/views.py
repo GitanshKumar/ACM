@@ -118,7 +118,6 @@ def events(request):
         else:
             events = events.filter(Q(name__icontains=q) | Q(tag__name__icontains=q)).order_by("-event_date").distinct()
             count = events.count()
-
     
     if "loadmore" in request.GET:
         prev = int(request.GET["count"])
@@ -129,12 +128,13 @@ def events(request):
             res.append([i.name, i.image.url, i.event_date.date(), i.description, list(i.tag.all().values_list("name","tag_bg_color","tag_text_color"))])
         return JsonResponse([shown < count] + res, safe=False)
     
-    context = {"tags": sorted(Tag.objects.all().order_by("name"), key= lambda a: a.related_events(), reverse=True),
+    context = {"tags": Tag.objects.all().order_by("name"),
                "events": events[:shown],
                "total": total,
                "left":shown < count,
                "search":q,
-               "year":year}
+               "year":year
+               }
     
     return render(request, 'base/events.html', context)
 
@@ -375,6 +375,7 @@ def viewteam(request, pk):
     return render(request, "base/viewteam.html", {"leader":leader, "members":members, "team":team, "event":event})
 
 def event_details(request, pk):
+    pk = unquote(pk)
     event = Event.objects.get(name=pk)
     teams, participants = "", ""
     q = request.GET.get("q", "")
