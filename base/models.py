@@ -10,6 +10,9 @@ from django.core.files.storage import default_storage
 from ckeditor.fields import RichTextField
 from colorfield.fields import ColorField
 from supabase import create_client
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def existsThenDelete(name):
     supabase = create_client(os.environ.get("SUPABASE_URL"), os.environ.get("SUPABASE_KEY"))
