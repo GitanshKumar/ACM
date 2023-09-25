@@ -21,7 +21,7 @@ def compressImage(image):
     return new_image
 
 def nameAndOverwriteMemberImage(instance, filename):
-    return 'images/profile_pics/' + instance.user.username + str(instance.id) + ".jpg"
+    return ('images/profile_pics/' + instance.user.username + str(instance.id) + ".jpg").replace(" ", "_")
 
 class Member(models.Model):
     user = models.OneToOneField(User, on_delete= models.CASCADE, default="", related_name="member")
@@ -70,7 +70,7 @@ def nameNewsImage(instance, filename):
             os.remove(this.image.path)
     except (ObjectDoesNotExist, PermissionError):
         pass
-    return 'images/news/' + instance.headline + ".jpg"
+    return ('images/news/' + filename + ".jpg").replace(" ", "_")
 
 class News(models.Model):
     headline = models.CharField(max_length=80)
@@ -108,7 +108,7 @@ def nameEventPhotos(instance, filename):
             os.remove(this.image.path)
     except ObjectDoesNotExist:
         pass
-    return 'images/events/' + instance.event.name + "/" + filename
+    return ('images/events/' + instance.event.name + "/" + filename).replace(" ", "_")
 
 class Photo(models.Model):
     image = models.ImageField(upload_to=nameEventPhotos)
@@ -134,8 +134,7 @@ class Tag(models.Model):
         return self.name
 
 def nameAndOverwriteStudentImage(instance, filename):
-    
-    return 'images/profile_pics/' + instance.user.username + str(instance.id) + ".jpg"
+    return ('images/profile_pics/' + instance.user.username + str(instance.id) + ".jpg").replace(" ", "_")
 
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete= models.CASCADE, default="", related_name="student")
@@ -183,7 +182,7 @@ def nameEventImage(instance, filename):
     #         os.remove(this.image.path)
     # except (ObjectDoesNotExist, PermissionError):
     #     pass
-    return 'images/events/' + instance.name[:30] + "/" + instance.name[:30] + "_poster.jpg"
+    return ('images/events/' + instance.name[:30] + "/" + instance.name[:30] + "_poster.jpg").replace(" ", "_")
 
 class Event(models.Model):
     name = models.CharField(max_length= 150)

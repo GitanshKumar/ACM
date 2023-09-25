@@ -57,10 +57,10 @@ def search(request):
         
         elif q != "":
             event_results = Event.objects.filter(name__icontains=q).values_list("name")[:5]
-            member = Member.objects.filter(name__startswith= q)[:5]
+            member = Member.objects.filter(Q(name__startswith= q))[:5]
             stu = Student.objects.filter(name__startswith= q)[:5]
             res = list(event_results)
-            print(member)
+            
             for i in stu:
                 res.append([i.name, i.user.username, i.profile_pic.url, "", i.core if i.core else "", ""])
             for i in member:
