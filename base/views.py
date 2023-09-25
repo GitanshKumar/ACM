@@ -9,6 +9,7 @@ from django.http import JsonResponse
 from django.core import serializers
 from itertools import chain
 from django.db.models import Q
+from urllib.parse import unquote
 from datetime import datetime, timedelta, time
 from .models import Event, Member, Student, Team, Tag, News
 from .forms import EditMemberForm, EditStudentForm, CaptchaForm
@@ -59,6 +60,7 @@ def search(request):
             member = Member.objects.filter(name__startswith= q)[:5]
             stu = Student.objects.filter(name__startswith= q)[:5]
             res = list(event_results)
+            print(member)
             for i in stu:
                 res.append([i.name, i.user.username, i.profile_pic.url, "", i.core if i.core else "", ""])
             for i in member:
@@ -76,6 +78,7 @@ def search(request):
     return render(request, "base/search.html", {"results":combined_results[:shown], "left":left, "shown": shown, "total":len(combined_results)})
 
 def event(request, pk):
+    pk = unquote(pk)
     sel_event = Event.objects.get(name=pk)
     mem = False
     registered = False
