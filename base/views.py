@@ -317,6 +317,7 @@ def register(request, pk, cat):
         messages.error(request, "Signup or login to register for the event")
         return redirect("login")
     
+    pk = unquote(pk)
     event = Event.objects.get(name=pk)
     student = request.user.student
     context = {"event": event, "user":student, "join": cat == "join", "error": ""}
