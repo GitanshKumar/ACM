@@ -415,7 +415,7 @@ def reset_password(request, reset_id):
 
             password = request.POST.get("pass")
             re_password = request.POST.get("cpass")
-            errors, valid = valid_password(password, re_password)
+            errors, valid = validate_password(password, re_password)
             if not valid:
                 return render(request, 'base/reset_password.html', {"reset":True, "errors":errors})
             else:
