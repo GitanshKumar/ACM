@@ -9,8 +9,8 @@
 
 {% block content %}
 <div class="main">
-    <h1 style="text-align: center;">{{event.name}}</h1>
     <div class="register-container">
+        <h1 style="text-align: center;">{{event.name}}</h1>
         {%if error%}<h4 style="color: red; text-align: center;">{{error}}</h4>{% endif %}
         <h2 style="text-align: center;">{% if join %}Join Team{% else %}Create Team{% endif %}</h2>
         <form class="f" method="POST" action="">
