@@ -105,6 +105,9 @@ class Tag(models.Model):
     tag_bg_color = ColorField(null=True)
     tag_text_color = ColorField(null=True)
     
+    def related_events(self) -> int:
+        return self.events.count()
+    
     def __str__(self) -> str:
         return self.name
 
