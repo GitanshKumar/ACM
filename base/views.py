@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 from django.core import serializers
 from itertools import chain
-from django.db.models import Q
+from django.db.models import Q, Count
 from urllib.parse import unquote
 from datetime import datetime, timedelta, time
 from .models import Event, Member, Student, Team, Tag, News
@@ -124,11 +124,10 @@ def events(request):
         shown = prev + 5
         res = []
         for i in events[prev:shown]:
-            print(i.tag.all().values())
             res.append([i.name, i.image.url, i.event_date.date(), i.description, list(i.tag.all().values_list("name","tag_bg_color","tag_text_color"))])
         return JsonResponse([shown < count] + res, safe=False)
     
-    context = {"tags": Tag.objects.all().order_by("name"),
+    context = {"tags": Tag.objects.annotate(event_count=Count('events')).order_by('-event_count', 'name'),
                "events": events[:shown],
                "total": total,
                "left":shown < count,
@@ -158,7 +157,7 @@ def w_chapter(request):
     stu_team = Member.objects.filter(w_chapter=True).order_by("-role")
     return render(request, 'base/team.html', {"wchapter":stu_team})
 
-def valid_password(p1: str, p2: str):
+def validate_password(p1: str, p2: str):
     res = []
     if p1 != p2: res.append("Password do not match")
     if len(p1) < 8: res.append("Password must be 8 characters long")
@@ -167,6 +166,15 @@ def valid_password(p1: str, p2: str):
     if not re.search(r'[!@#$%^&*]', p1): res.append("At least one special character")
     if not re.search(r'\d', p1): res.append("At least one digit")
     return res, res == []
+
+def validate_username(username):
+    username_regex = r"^[a-zA-Z_][a-zA-Z0-9_]*$"
+    username_valid = re.match(username_regex, username)
+
+    if not username_valid:
+        return False
+    else:
+        return True
 
 def signup(request):
     context = {}
@@ -185,10 +193,10 @@ def signup(request):
         
         context["name"] = name
         context["username"] = username
-        if User.objects.filter(username=username).first():
+        if User.objects.filter(username=username).first() or not validate_username(username):
             valid_details = False
         
-        errors, valid = valid_password(password, re_password)
+        errors, valid = validate_password(password, re_password)
         if not valid:
             context["password"] = errors
             valid_details = False
@@ -361,6 +369,7 @@ def register(request, pk, cat):
     return render(request, "base/register.html", context)
 
 def viewteam(request, pk):
+    pk = unquote(pk)
     if not request.user.is_authenticated:
         messages.error(request, "Signup to create a team")
         return redirect("home")
