@@ -86,34 +86,28 @@
 <div class="main">
     <div class="signup-container">
         <h1 style="text-align: center;">Create Account</h1>
-        <form class="f" method="POST" action="">
+        <form id="signup" class="f" method="POST" onsubmit="validate()">
             {% csrf_token %}
             <div style="display: grid; grid-template-columns: 40% 60%;">
                 <label>Your name</label>
                 <input type="text" name="name" value="{{name}}" placeholder="Enter name:" required/>
                 <label>Set your username</label>
                 <div>
+                    <h5 id="error-messages-username"></h5>
                     {% if username %}<h5>User name Exists</h5>{% endif %}
-                    <input type="text" name="username" value="{{username}}" placeholder="Enter username:" required/>
+                    <input id="username" type="text" name="username" value="{{username}}" placeholder="Enter username:" required/>
                 </div>
 
                 <label>Enter Email</label>
                 <div>
                     {% if email %}<h5>Email Linked to another account</h5>{% endif %}
-                    <input type="text" name="email" value="{{email}}" placeholder="Enter email:" required/>
+                    <input type="email" name="email" value="{{email}}" placeholder="Enter email:" required/>
                 </div>
 
                 <label>Create Password</label>
                 <div style="position: relative;">
-                    {% if password %}
-                    <ul class="messages" style="margin: 0; padding-left: 10px;">
-                        {% for error in password %}
-                        <li>
-                            <h5>{{error}}</h5>
-                        </li>
-                        {% endfor %}
+                    <ul id="error-messages-pass" class="messages" style="margin: 0; padding-left: 10px;">
                     </ul>
-                    {% endif %}
                     <input id="pass1" type="password" name="password" placeholder="Enter password:" required/>
                     <span class="fa fa-eye field-icon" id="p1" onclick="togglepass('pass1', 'p1')"></span>
                 </div>
@@ -139,4 +133,62 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block script %}
+<script defer>
+    window.onload = function () {
+        const usernameInput = document.getElementById("username");
+        const errorMessagesUsername = document.getElementById("error-messages-username");
+        const pass1Input = document.getElementById("pass1");
+        const pass2Input = document.getElementById("pass2");
+        const errorMessagesPass = document.getElementById("error-messages-pass");
+        const form = document.getElementById("signup")
+
+        usernameInput.addEventListener("input", validateUsername);
+        pass1Input.addEventListener("input", validatePassword);
+        pass2Input.addEventListener("input", validatePassword);
+
+        function validateUsername() {
+            const username = usernameInput.value;
+            const usernameRegex = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
+            const usernameValid = usernameRegex.test(username);
+
+            if (!usernameValid) {
+                errorMessagesUsername.innerHTML = "Username is not valid.";
+                user = false;
+            } else {
+                errorMessagesUsername.innerHTML = "";
+                user = true;
+            }
+        }
+
+        function validatePassword() {
+            const p1 = pass1Input.value;
+            const p2 = pass2Input.value;
+            const res = [];
+
+            if (p1 !== p2) res.push("<li><h5>Password do not match</h5></li>");
+            if (p1.length < 8) res.push("<li><h5>Password must be 8 characters long</li></h5>");
+            if (!/[A-Z]/.test(p1)) res.push("<li><h5>At least one uppercase letter</li></h5>");
+            if (!/[a-z]/.test(p1)) res.push("<li><h5>At least one lowercase letter</li></h5>");
+            if (!/[!@#$%^&*]/.test(p1)) res.push("<li><h5>At least one special character</li></h5>");
+            if (!/\d/.test(p1)) res.push("<li><h5>At least one digit</li></h5>");
+
+            if (res.length > 0) {
+                errorMessagesPass.innerHTML = res.join("");
+                pass = false;
+            } else {
+                errorMessagesPass.innerHTML = "";
+                pass = true;
+            }
+        }
+
+        form.addEventListener("submit", function (event) {
+            if (!(user && pass)) {
+                event.preventDefault();
+            }
+        });
+    }
+</script>
 {% endblock %}
