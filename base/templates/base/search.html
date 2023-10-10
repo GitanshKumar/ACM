@@ -9,10 +9,10 @@
 {% endblock %}
 
 {% block content %}
-<div id="outer-container">
+<div id="outer-container" style="height: calc(100vh - 51px);">
     {% if not results %}
     <div style="position: absolute; text-align: center;transform: translateY(-50%);top: 50%;">
-        <img src="media/icons/no_result.png" width="20%"/>
+        <img src="https://tnkeodykzkpbxthnzaaj.supabase.co/storage/v1/object/public/images/images/icons/no_result.png" width="20%"/>
         <p>No results to show</p>
         <p>Please modify your search</p>
     </div>

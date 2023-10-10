@@ -6,11 +6,10 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
-from django.core import serializers
 from itertools import chain
 from django.db.models import Q, Count
 from urllib.parse import unquote
-from datetime import datetime, timedelta, time
+from datetime import datetime
 from .models import Event, Member, Student, Team, Tag, News
 from .forms import EditMemberForm, EditStudentForm, CaptchaForm
 from .custom import send_mail
