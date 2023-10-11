@@ -39,7 +39,7 @@ class Member(models.Model):
     github = models.CharField(max_length=150, default="", null=True, blank=True)
     w_chapter = models.BooleanField(default=False)
     core = models.CharField(max_length= 50, null=True, blank=True)
-    role = models.CharField(max_length= 100, null=True, blank=True)
+    role = models.CharField(max_length= 100, default="Member", null=True, blank=True)
     short_desc = models.CharField(max_length=120, default="Hello, I love being in ACM's core team", blank=True)
     desc = models.TextField(max_length=500, default="Hello, I love being in ACM's core team", blank=True)
     unique_url = models.CharField(max_length=255, blank=True)

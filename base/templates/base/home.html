@@ -73,7 +73,7 @@
                                     Coordinators
                                 </div>
                                 {% for coo in event.coordinator.all %}
-                                <div class="coordinator-event" style="width: clamp(25px, 3vw, 30px);height: clamp(25px, 3vw, 30px);border-radius: 50%;margin: 0 4px;">
+                                <div class="coordinator-event" style="width: clamp(25px, 3vw, 30px);height: clamp(25px, 3vw, 30px);border-radius: 50%;margin-right: 4px;object-fit: cover;">
                                     <a href="{% url 'profile' coo.user %}" style="width: 100%;">
                                         <img style="border-radius: 50%;aspect-ratio: 1;" src="{{coo.profile_pic.url}}" width="100%">
                                     </a>

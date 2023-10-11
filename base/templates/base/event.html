@@ -41,7 +41,7 @@
                             Coordinators:
                         {% endif %}
                     </span>
-                    <span style="font-weight: normal; margin-left: 5px;">
+                    <span style="font-weight: normal; margin-left: 15px;">
                         {{event.event_date.date}}<br>{{event.event_date.time}}<br>{{event.location}}<br>
                         {% if event.ongoing %}
                             {% if event.fee == '0' %}
@@ -51,9 +51,9 @@
                             {% endif %}
                         {% endif %}
                         {% for coo in event.coordinator.all %}
-                        <div class="coordinator-event" style="width: clamp(25px, 3vw, 30px);height: clamp(25px, 3vw, 30px);border-radius: 50%;margin: 0 4px;">
+                        <div class="coordinator-event" style="width: clamp(25px, 3vw, 30px);height: clamp(25px, 3vw, 30px);border-radius: 50%;">
                             <a href="{% url 'profile' coo.user %}" style="width: 100%;">
-                                <img style="border-radius: 50%;aspect-ratio: 1;" src="{{coo.profile_pic.url}}" width="100%">
+                                <img style="border-radius: 50%;aspect-ratio: 1;object-fit: cover;margin-right: 4px;" src="{{coo.profile_pic.url}}" width="100%">
                             </a>
                         </div>
                         {% endfor %}
