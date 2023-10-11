@@ -63,7 +63,7 @@
                             {% if event.tag.all %}
                             <div class="event-tags">
                                 {% for tag in event.tag.all %}
-                                <div class="event-tag" style="background-color: {{tag.tag_bg_color}};"><a href="{% url 'events' %}?q={{tag.name}}" style="color:{{tag.tag_text_color}};">{{tag}}</a></div>
+                                <div class="event-tag" style="background-color: {{tag.theme}};"><a href="{% url 'events' %}?q={{tag.name}}" style="color:rgba(0, 0, 0, 0.8);">{{tag}}</a></div>
                                 {% endfor %}
                             </div>
                             {% endif %}
