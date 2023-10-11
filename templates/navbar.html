@@ -36,7 +36,7 @@
             </div>
         </div>
         {% if request.user.is_authenticated %}
-        <a class="nav prof" href="{% url 'profile' request.user.username %}"><img width="75%" height="75%" style="border-radius: 50%;border: 1px solid rgba(0,0,0,0.5);" src="{% if request.user.student %} {{request.user.student.profile_pic.url}} {% else %} {{request.user.member.profile_pic.url}} {% endif %}"></a>
+        <a class="nav prof" href="{% url 'profile' request.user.username %}"><img width="75%" height="75%" style="border-radius: 50%;border: 1px solid rgba(0,0,0,0.5);object-fit: cover;" src="{% if request.user.student %} {{request.user.student.profile_pic.url}} {% else %} {{request.user.member.profile_pic.url}} {% endif %}"></a>
         <a class="nav" href="{% url 'logout' %}" style="margin-right: 5px;">Logout</a>
         {% else %}
         <a class="nav" href="{% url 'signup' %}" style="margin-right: 2px;">Sign Up/Login</a>

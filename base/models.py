@@ -102,8 +102,7 @@ class Photo(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(max_length=100)
-    tag_bg_color = ColorField(null=True)
-    tag_text_color = ColorField(null=True)
+    theme = ColorField(null=True)
     
     def related_events(self) -> int:
         return self.events.count()

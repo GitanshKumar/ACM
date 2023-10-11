@@ -137,15 +137,15 @@ def events(request):
     return render(request, 'base/events.html', context)
 
 def aboutus(request):
-    fac_team = Member.objects.filter(faculty= True)
-    stu_team = Member.objects.filter(faculty= False).order_by("-role")
+    fac_team = Member.objects.filter(faculty= True).order_by("name")
+    stu_team = Member.objects.filter(faculty= False).order_by("-year")
     return render(request, 'base/aboutus.html', {"faculty":fac_team,
                                                  "student":stu_team.filter(w_chapter= False),
                                                  "wchapter":stu_team.filter(w_chapter=True)})
 
 def team(request):
-    stu_team = Member.objects.filter(w_chapter=False).order_by("-role")
-    w_team = Member.objects.filter(w_chapter=True).order_by("-role")
+    stu_team = Member.objects.filter(w_chapter=False).order_by("-year")
+    w_team = Member.objects.filter(w_chapter=True).order_by("-year")
     return render(request, 'base/team.html', {"student":stu_team, "wchapter": w_team})
 
 def student_chapter(request):
