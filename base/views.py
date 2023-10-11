@@ -123,7 +123,7 @@ def events(request):
         shown = prev + 5
         res = []
         for i in events[prev:shown]:
-            res.append([i.name, i.image.url, i.event_date.date(), i.description, list(i.tag.all().values_list("name","tag_bg_color","tag_text_color"))])
+            res.append([i.name, i.image.url, i.event_date.date(), i.description, list(i.tag.all().values_list("name","theme"))])
         return JsonResponse([shown < count] + res, safe=False)
     
     context = {"tags": Tag.objects.annotate(event_count=Count('events')).order_by('-event_count', 'name'),
