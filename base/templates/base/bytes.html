@@ -49,7 +49,7 @@
                                 <div class="count">{{byte.likes}}</div>
                             </div>
                             <div class="share">
-                                <input type="text" value="{% url 'byte' byte.id %}" style="display: none;">
+                                <input type="text" value="{{request.get_host}}{% url 'byte' byte.id %}" style="display: none;">
                                 <i class="fa fa-share" aria-hidden="true"></i>
                             </div>
                         </div>
@@ -69,6 +69,11 @@
                         <a href="{% url 'profile' lead.owner %}">
                             <div class="owner">
                                 {% if lead.owner.student %} {{lead.owner.Student.name}} {% else %} {{lead.owner.member.name}} {% endif %}
+                            </div>
+                        </a>
+                        <a href="{% url 'byte' lead.id %}">
+                            <div class="owner" style="color: rgb(100, 100, 225);font-size: 10px;">
+                                BYTE
                             </div>
                         </a>
                         <div class="likes">{{lead.likes}}</div>

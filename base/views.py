@@ -450,7 +450,7 @@ def blog(request, pk=None):
     if pk:
         byte = Byte.objects.get(id= pk)
         owner = byte.owner
-        return render(request, "base/blog.html", {"owner":owner, "byte": byte})
+        return render(request, "base/byte.html", {"owner":owner, "byte": byte})
     
     if request.method == 'POST':
         form = CreateByteForm(request.POST, request.FILES)
@@ -472,7 +472,7 @@ def blog(request, pk=None):
     
     leaderboard = Byte.objects.all().order_by("-likes")[:10]
     
-    return render(request, "base/blogs.html", {'form': form, 'bytes': zip(bytes, owners), 'leaderboard': leaderboard})
+    return render(request, "base/bytes.html", {'form': form, 'bytes': zip(bytes, owners), 'leaderboard': leaderboard})
 
 def updateByteLikeCount(request, pk):
     try:

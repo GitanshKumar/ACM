@@ -1,58 +1,75 @@
-const csrf_token = document.querySelector('input[name=csrfmiddlewaretoken]').value;
-var updatingLike = false
-var timeout;
+var remaining = true;
+var loadingByte = false
+var page = 2;
 
-function updateLikeCount(byte, liked) {
-    clearTimeout(timeout);
 
-    timeout = setTimeout( function () {
-        $.ajax({
-            url: '/updatelikecountforbyte/' + byte.dataset.id + '/',
-            method: 'POST',
-            data: {'csrfmiddlewaretoken': csrf_token, 'liked':liked},
-            success: function(data) {
-                var likeCount = data.like_count;
-                
-                byte.querySelector(".count").innerText = likeCount;
+function loadMoreBytes() {
+    loadingByte = true;
+    $.ajax({
+        url: '/loadmorebytes/',
+        method: 'GET',
+        data: {'page': page},
+        success: function(data) {
+            const bytes = data["bytes"];
+            const owners = data["owners"];
+            if (bytes.length == 0) {remaining = false;return;}
+            
+            const container = $("#bytes-container");
+
+            for (var i = 0; i < bytes.length; i++) {
+                const byte = bytes[i];
+                const owner = owners[i];
+                var child = `
+                        <div class="blog">
+                        <div class="blog-title-container">
+                            <div class="owner">
+                                <a href='/profile/${owner['username']}'>
+                                    <div class="owner-pic">
+                                        <img src="${owner['profile_pic']}" alt="">
+                                    </div>
+                                </a>
+                                <div class="name">
+                                    ${owner['name']}<br>
+                                    <small>${owner['username']}</small>
+                                </div>
+                            </div>
+                            <div class="date">${byte['created']}</div>
+                        </div>
+                        <a href="/blogs/${byte['id']}">
+                            <div class="poster-container">
+                                <img src="${byte['poster']}" alt="">
+                            </div>
+                        </a>
+                        <div class="action-icons">
+                            <div class="likes" data-id="${byte['id']}">
+                                <i class="fa fa-heart${byte['liked'] ? '' : '-o'}" aria-hidden="true"></i>
+                                <div class="count">${byte['likes']}</div>
+                            </div>
+                            <div class="comments">
+                                <i class="fa fa-comment-o" aria-hidden="true"></i>
+                            </div>
+                            <div class="share">
+                                <input type="text" value="/blogs/${byte['id']}" style="display: none;">
+                                <i class="fa fa-share" aria-hidden="true"></i>
+                            </div>
+                            <div class="options">
+                                <i class="fa fa-ellipsis-v" style="width: 20px;text-align: center;" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                        <div class="blog-caption-container">
+                            <div class="caption">${byte['byte']}</div>
+                        </div>
+                    </div>
+                `;
+
+                container.append(child);
             }
-        })
-    },
-        400 * 5
-    )
-}
-
-const likeBtn = document.querySelectorAll(".left .blog .likes");
-likeBtn.forEach((btn) => {
-    btn.addEventListener("click", function() {
-        heart = btn.querySelector("i");
-        if (heart.classList.contains("fa-heart-o")) {
-            updateLikeCount(btn, true);
-            heart.classList.replace("fa-heart-o", "fa-heart");
-            return;
+            addListenerToActionIcons();
+            loadingByte = false;
+            page += 1;
         }
-        updateLikeCount(btn, false);
-        heart.classList.replace("fa-heart", "fa-heart-o");
     })
-})
-
-const shareBtn = document.querySelectorAll(".left .blog .share");
-
-shareBtn.forEach((btn) => {
-    btn.addEventListener("click", async function() {
-        var shareLink = btn.querySelector("input");
-
-        shareLink.select();
-        shareLink.setSelectionRange(0, 99999);
-
-        try {
-            await navigator.clipboard.writeText(shareLink.value);
-            alert("Link Copied Successfully!");
-        } catch (error) {
-            console.error("Copy to clipboard failed: ", error);
-            alert("Copy to clipboard failed. Please copy the link manually.");
-        }
-    });
-})
+}
 
 const uploadBtn = document.querySelector(".submit.upload");
 const submitForm = document.querySelector(".submit-container")
@@ -62,9 +79,23 @@ if (uploadBtn) {
         submitForm.classList.add("active");
     })
 }
+if (submitForm) {
+    submitForm.addEventListener("click", function(event) {
+        if (event.target == submitForm) {
+            submitForm.classList.remove("active");
+        }
+    })
+}
 
-submitForm.addEventListener("click", function(event) {
-    if (event.target == submitForm) {
-        submitForm.classList.remove("active");
+
+window.onscroll = function() {
+    const bodyScrollHeight = document.body.scrollHeight;
+    const windowHeight = window.innerHeight;
+    const currentScroll = window.scrollY;
+    
+    const remainingScrollHeight = bodyScrollHeight - (currentScroll + windowHeight);
+
+    if (remainingScrollHeight <= windowHeight && !loadingByte && remaining) {
+        loadMoreBytes();
     }
-})
+}

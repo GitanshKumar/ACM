@@ -47,7 +47,7 @@
                             <div class="count">{{byte.likes}}</div>
                         </div>
                         <div class="share">
-                            <input type="text" value="{% url 'byte' byte.id %}" style="display: none;">
+                            <input type="text" value="{{request.get_host}}{% url 'byte' byte.id %}" style="display: none;">
                             <i class="fa fa-share" aria-hidden="true"></i>
                         </div>
                         {% if request.user == owner %}
