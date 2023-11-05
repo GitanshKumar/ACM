@@ -15,7 +15,7 @@ if not settings.DEBUG:
     urlpatterns += [
         # Add a URL pattern for serving media files
         path('media/<path:path>', serve, {'document_root': settings.MEDIA_ROOT}),
-        path('media/<path:path>', serve, {'document_root': settings.STATIC_ROOT}),
+        path('static/<path:path>', serve, {'document_root': settings.STATIC_ROOT}),
     ]
 
 handler404 = "base.views.error_404"

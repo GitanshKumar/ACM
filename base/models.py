@@ -1,3 +1,4 @@
+from typing import Any
 import uuid, shutil, os
 from django.db import models
 from django.contrib.auth.models import User
@@ -73,20 +74,6 @@ class News(models.Model):
     def __str__(self) -> str:
         return self.headline
 
-class Byte(models.Model):
-    owner = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="mybytes")
-    byte = models.CharField(max_length=120)
-    created = models.DateTimeField(editable=False)
-    edited = models.DateTimeField()
-    
-    def __str__(self) -> str:
-        return self.name
-    
-    def save(self, *args, **kwargs):
-        if not self.id:
-            self.created = timezone.now()
-        self.edited = timezone.now()
-        return super(User, self).save(*args, **kwargs)
 
 def nameEventPhotos(instance, filename):
     name = ('images/events/' + instance.event.name + "/" + filename).replace(" ", "_")
@@ -188,3 +175,31 @@ class Team(models.Model):
 
     def __str__(self) -> str:
         return self.team_name
+    
+
+
+def nameBytePoster(instance, filename):
+    name = ('images/blogsPosters/' + instance.owner.username +'/' + filename).replace(" ", "_")
+    return name
+
+class Byte(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="mybytes", default='', null=True, blank=True)
+    byte = models.TextField(max_length=500)
+    poster = models.ImageField(upload_to=nameBytePoster, blank=True)
+    likeOwner = models.ManyToManyField(User, blank=True, related_name='liked', default='')
+    likes = models.IntegerField(default=0)
+    created = models.DateTimeField(auto_now_add=True)
+    edited = models.DateTimeField(auto_now=True)
+    
+    def __str__(self) -> str:
+        return self.owner.username
+    
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.created = timezone.now()
+        self.edited = timezone.now()
+        return super(Byte, self).save(*args, **kwargs)
+    
+    def delete(self, *args, **kwargs):
+        create_client(os.environ.get("SUPABASE_URL"), os.environ.get("SUPABASE_KEY")).storage.from_("images").remove(self.poster.name)
+        return super().delete(*args, **kwargs)

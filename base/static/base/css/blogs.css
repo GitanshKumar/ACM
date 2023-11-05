@@ -1,0 +1,232 @@
+main {
+    width: 80%;
+    margin: auto;
+    padding-top: 20px;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    column-gap: 20px;
+}
+
+.left .blogs-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.left .blog {
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px;
+    border: 2px solid rgba(0,0,0,0.1);
+}
+
+.left .blog-title-container {
+    position: relative;
+    display: flex;
+    padding-bottom: 10px;
+}
+
+.left .blog-title-container .owner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.left .blog-title-container .owner .owner-pic {
+    width: 40px;
+    height: 40px;
+}
+.left .blog-title-container .owner .owner-pic img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}
+
+.left .blog .date {
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 12px;
+    color: rgba(0,0,0,0.75);
+}
+
+.left .poster-container {
+    width: 100%;
+    height: 60vh;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+.left .poster-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.left .action-icons {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+}
+
+.left .action-icons > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.left .action-icons i {
+    font-size: 20px;
+    transition: all .3s ease;
+}
+
+.left .action-icons > div:hover i {
+    scale: 1.15;
+}
+
+.right .leaderboard {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: sticky;
+    top: 81px;
+}
+
+.right .blog-title-container {
+    display: grid;
+    grid-template-columns: .35fr 2fr .25fr;
+    padding: 5px 10px;
+    background-color: white;
+    border: 2px solid rgba(0,0,0,0.1);
+    border-radius: 20px;
+    cursor: pointer;
+    align-items: center;
+}
+
+.right .blog-title-container:first-child .pos {
+    background-color: rgb(247, 217, 47);
+}
+
+.right .blog-title-container:nth-child(2) .pos {
+    background-color: silver;
+}
+
+.right .blog-title-container:nth-child(3) .pos {
+    background-color: rgb(165, 128, 42);
+}
+
+.right .blog-title-container .pos {
+    font-size: 18px;
+    justify-self: center;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: bold;
+}
+
+.right .blog-title-container .date {
+    justify-self: center;
+}
+
+.right .blog-title-container .likes {
+    justify-self: end;
+}
+
+.submit {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    border: 2px solid rgba(0,0,0,0.2);
+    z-index: 98;
+    bottom: 30px;
+    background-color: rgb(210, 233, 227);
+}
+.submit:hover {
+    border-color: black;
+}
+
+.submit-container {
+    display: none;
+}
+
+.submit-container.active {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 99;
+    background-color: rgba(0,0,0,0.25);
+    display: flex;
+}
+
+.submit-container .f {
+    background-color: white;
+    width: 50%;
+    margin: auto;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.submit-container .f > p {
+    display: grid;
+    grid-template-columns: .2fr 1fr;
+}
+
+.submit-container .f textarea {
+    width: 100%;
+    height: 45px;
+    min-height: 45px;
+    max-height: 50vh;
+    box-sizing: border-box;
+    font-size: 18px;
+    padding: 10px 15px;
+    resize: vertical;
+}
+
+.submit-container .f button {
+    padding: 5px 25px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+
+@media screen and (max-width: 767px) {
+    main {
+        width: 95%;
+    }
+
+    .container {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .left .poster-container {
+        height: 40vh;
+    }
+
+    .left .owner .name {
+        font-size: 14px;
+    }
+    
+    .left .blog-title-container .date {
+        font-size: 10px;
+    }
+
+    .left .blog-caption-container {
+        font-size: 14px;
+    }
+}

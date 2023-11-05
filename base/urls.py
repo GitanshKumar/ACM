@@ -19,4 +19,10 @@ urlpatterns = [
     path('viewteam/<str:pk>', views.viewteam, name="viewteam"),
     path('detail/<str:pk>', views.event_details, name="event_detail"),
     path('search', views.search, name="search"),
+    
+    path('bytes/', views.blog, name="bytes"),
+    path('bytes/<str:pk>', views.blog, name="byte"),
+    path('updatelikecountforbyte/<str:pk>/', views.updateByteLikeCount, name="updatebytelike"),
+    path('loadmorebytes/', views.loadMoreBytes, name="loadmorebytes"),
+    path('deletebyte/<str:pk>', views.deleteByte, name="deletebyte"),
 ]
