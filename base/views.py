@@ -1,4 +1,4 @@
-import csv, uuid, re
+import pytz, uuid, re
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
@@ -10,8 +10,8 @@ from itertools import chain
 from django.db.models import Q, Count
 from urllib.parse import unquote
 from datetime import datetime
-from .models import Event, Member, Student, Team, Tag, News
-from .forms import EditMemberForm, EditStudentForm, CaptchaForm
+from .models import Event, Member, Student, Team, Tag, News, Byte
+from .forms import EditMemberForm, EditStudentForm, CaptchaForm, CreateByteForm
 from .custom import send_mail
 
 
@@ -282,15 +282,18 @@ def loginuser(request):
     return render(request, 'base/login.html')
 
 def profile(request, pk):
+    user_o = User.objects.get(username=pk)
     try:
-        user = Member.objects.get(user=User.objects.get(username=pk))
+        user = Member.objects.get(user=user_o)
         is_mem = True
         events_info = user.coordinated.all()
     except:
         is_mem = False
-        user = Student.objects.get(user=User.objects.get(username=pk))
+        user = Student.objects.get(user=user_o)
         events_info = user.participated.all()
-    context = {"user":user, "is_owner": request.user == user.user, "member": is_mem, "event_info":events_info}
+    
+    bytes = user_o.mybytes.all()
+    context = {"user":user, "is_owner": request.user == user.user, "member": is_mem, "event_info":events_info, 'bytes': bytes}
     return render(request, 'base/myprofile.html', context)
 
 def logoutuser(request):
@@ -443,3 +446,90 @@ def reset_password(request, reset_id):
     return render(request, 'base/reset_password.html', {"req":True})
 
 
+def blog(request, pk=None):
+    if pk:
+        byte = Byte.objects.get(id= pk)
+        owner = byte.owner
+        return render(request, "base/byte.html", {"owner":owner, "byte": byte})
+    
+    if request.method == 'POST':
+        form = CreateByteForm(request.POST, request.FILES)
+        if form.is_valid():
+            byte = form.cleaned_data['byte']
+            poster = form.cleaned_data['poster']
+            owner = request.user
+            new_byte = Byte(owner=owner, byte=byte, poster=poster)
+            new_byte.save()
+
+            new_byte.likeOwner.add(request.user)
+            new_byte.likes += 1
+            new_byte.save()
+    else:
+        form = CreateByteForm()
+    
+    bytes = Byte.objects.all().order_by("-created")[:10]
+    owners = [byte.owner for byte in bytes]
+    
+    leaderboard = Byte.objects.all().order_by("-likes")[:10]
+    
+    return render(request, "base/bytes.html", {'form': form, 'bytes': zip(bytes, owners), 'leaderboard': leaderboard})
+
+def updateByteLikeCount(request, pk):
+    try:
+        byte = Byte.objects.get(id=pk)
+        if request.user.is_authenticated:
+            hasLiked = request.user in byte.likeOwner.all()
+
+            if request.POST["liked"] != 'false' and not hasLiked:
+                byte.likeOwner.add(request.user)
+                byte.likes += 1
+            elif request.POST["liked"] != 'true' and hasLiked:
+                byte.likeOwner.remove(request.user)
+                byte.likes -= 1
+
+            byte.save()
+
+            response_data = {
+                'like_count': byte.likeOwner.count()
+            }
+            return JsonResponse(response_data)
+    except Byte.DoesNotExist:
+        pass
+
+    # Handle errors or return appropriate response
+    return JsonResponse({'error': 'Unable to update like count.'}, status=400)
+
+def loadMoreBytes(request):
+    page = int(request.GET['page'])
+    bytes = Byte.objects.all().order_by("-created")[page * 10 - 10:page * 10]
+    context = {'bytes': [], 'owners': []}
+    
+    for byte in bytes:
+        liked = False
+        if request.user.is_authenticated:
+            liked = request.user in byte.likeOwner.all()
+        context['bytes'].append({
+            'id':byte.id,
+            'poster':byte.poster.url,
+            'byte': byte.byte,
+            'likes': byte.likes,
+            'liked': liked,
+            'created': byte.created.astimezone(pytz.timezone('Asia/Kolkata')).strftime("%b. %d, %Y, %I:%M %p"),
+            })
+        owner = byte.owner
+        context['owners'].append({
+            'username': owner.username,
+            'name': owner.Student.name if hasattr(owner, 'Student') else owner.member.name,
+            'profile_pic': owner.Student.profile_pic.url if hasattr(owner, 'Student') else owner.member.profile_pic.url
+        })
+    return JsonResponse(context)
+
+@login_required
+def deleteByte(request, pk):
+    try:
+        if request.user.is_authenticated:
+            byte = Byte.objects.get(id= pk)
+            byte.delete()
+            return JsonResponse({"message": "Successfully deleted"})
+    except Exception as e:
+        return JsonResponse({"message": "Unable To delete", "error": e})

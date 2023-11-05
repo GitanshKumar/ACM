@@ -1,6 +1,6 @@
 from django import forms
 from captcha.fields import CaptchaField
-from .models import Member, Student
+from .models import Member, Student, Byte
 
 class CaptchaForm(forms.Form):
     captcha = CaptchaField(label="Please enter the characters in the image")
@@ -21,3 +21,9 @@ class EditStudentForm(forms.ModelForm):
     class Meta:
         model = Student
         fields = ('year', 'mobile_no', 'profile_pic', 'linked_in', 'github', 'desc', 'core', 'admission')
+
+class CreateByteForm(forms.ModelForm):
+    poster = forms.ImageField(required=True)
+    class Meta:
+        model = Byte
+        fields = ('byte', 'poster')

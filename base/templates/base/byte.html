@@ -1,0 +1,90 @@
+{% extends "main.html" %}
+
+{% block title %}Blogs{% endblock %}
+
+{% load static %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'base/css/blogs.css' %}">
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'base/js/blog.js' %}" defer></script>
+{% endblock %}
+
+{% block content %}
+<main>
+    <div class="container" style="grid-template-columns: 1fr; max-width: 1200px;">
+        <div class="left">
+            <div class="blogs-container">
+                <div class="blog">
+                    <div class="blog-title-container">
+                        <div class="owner">
+                            <a href="{% url 'profile' owner.username %}">
+                                <div class="owner-pic">
+                                    <img src="{% if owner.student %} {{owner.Student.profile_pic.url}} {% else %} {{owner.member.profile_pic.url}} {% endif %}" alt="">
+                                </div>
+                            </a>
+                            <div class="name">
+                                {% if owner.student %} {{owner.student.name}} {% else %} {{owner.member.name}} {% endif %}<br>
+                                <small>{{owner}}</small>
+                            </div>
+                        </div>
+                        <div class="date">{{byte.created}}</div>
+                    </div>
+                    <a href="{% url 'byte' byte.id %}">
+                        <div class="poster-container">
+                            <img src="{{byte.poster.url}}" alt="">
+                        </div>
+                    </a>
+                    <div class="action-icons">
+                        <div class="likes" data-id="{{byte.id}}">
+                            {% if request.user in byte.likeOwner.all %}
+                                <i class="fa fa-heart" aria-hidden="true"></i>
+                            {% else %}
+                                <i class="fa fa-heart-o" aria-hidden="true"></i>
+                            {% endif %}
+                            <div class="count">{{byte.likes}}</div>
+                        </div>
+                        <div class="share">
+                            <input type="text" value="{{request.get_host}}{% url 'byte' byte.id %}" style="display: none;">
+                            <i class="fa fa-share" aria-hidden="true"></i>
+                        </div>
+                        {% if request.user == owner %}
+                        <div class="delete" onclick="showAlert()">
+                            <i class="fa fa-trash-o" style="width: 20px;text-align: center;" aria-hidden="true"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="blog-caption-container">
+                        <div class="caption">{{byte.byte}}</div>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{csrf_token}}">
+        </div>
+    </div>
+</main>
+
+<script>
+    function showAlert() {
+        var result = window.confirm("Are you sure you want to delete?");
+
+        if (result) {
+            executeFunction();
+        }
+    }
+
+    function executeFunction() {
+        $.ajax({
+            url: '{% url 'deletebyte' byte.id %}',
+            method: 'POST',
+            data: {'csrfmiddlewaretoken': csrf_token},
+            success: function() {
+                alert("Successfully deleted Byte!");
+            }
+        })
+        window.location.href = '{% url 'profile' owner.username %}';
+    }
+</script>
+{% endblock %}

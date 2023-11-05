@@ -8,7 +8,7 @@
     box-shadow: 0 0px 50px 20px #f6f8fa;
 }
 .navbar {
-    width: 80%;
+    width: 95%;
     margin: auto;
     height: 100%;
     position: relative;
@@ -89,7 +89,7 @@
 }
 .nav {
     float: right;
-    margin-right: 5%;
+    margin-right: 3%;
     margin-top: 12.5px;
     font-weight: bold;
     font-size: 18px;
@@ -209,18 +209,14 @@
         width: 100%;
     }
     .nav {
-        margin-right: 20px;
+        margin-right: 10px;
     }
     .clear {
         right: 10%;
     }
 }
-@media screen and (max-width:842px) {
-    .nav {
-        margin-right: 10px;
-    }
-}
-@media screen and (max-width:767px) {
+
+@media screen and (max-width:869px) {
     .dropdown {
         display: block;
     }
