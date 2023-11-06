@@ -32,11 +32,9 @@
                         </div>
                         <div class="date">{{byte.created}}</div>
                     </div>
-                    <a href="{% url 'byte' byte.id %}">
-                        <div class="poster-container">
-                            <img src="{{byte.poster.url}}" alt="">
-                        </div>
-                    </a>
+                    <div class="poster-container">
+                        <img src="{{byte.poster.url}}" alt="">
+                    </div>
                     <div class="action-icons">
                         <div class="likes" data-id="{{byte.id}}">
                             {% if request.user in byte.likeOwner.all %}
