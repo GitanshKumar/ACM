@@ -92,7 +92,7 @@
                 <button type="submit">Submit</button>
             </form>
         </div>
-    {% elif request.user.mybytes.count < 3 %}
+    {% elif not request.user.is_authenticated or request.user.mybytes.count < 3 %}
         <a href="{% url 'login' %}">
             <div class="submit">Signup/Login To participate</div>
         </a>
