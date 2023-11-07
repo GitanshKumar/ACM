@@ -22,7 +22,7 @@
                         <div class="owner">
                             <a href="{% url 'profile' owner.username %}">
                                 <div class="owner-pic">
-                                    <img src="{% if owner.student %} {{owner.Student.profile_pic.url}} {% else %} {{owner.member.profile_pic.url}} {% endif %}" alt="">
+                                    <img src="{% if owner.student %} {{owner.student.profile_pic.url}} {% else %} {{owner.member.profile_pic.url}} {% endif %}" alt="">
                                 </div>
                             </a>
                             <div class="name">
