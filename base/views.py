@@ -1,3 +1,5 @@
+import json
+from django.db import transaction
 import pytz, uuid, re
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -10,7 +12,7 @@ from itertools import chain
 from django.db.models import Q, Count
 from urllib.parse import unquote
 from datetime import datetime
-from .models import Event, Member, Student, Team, Tag, News, Byte
+from .models import Event, Member, Student, Team, Tag, News, Byte, Question, QuestionResponse
 from .forms import EditMemberForm, EditStudentForm, CaptchaForm, CreateByteForm
 from .custom import send_mail
 
@@ -79,6 +81,7 @@ def search(request):
 def event(request, pk):
     pk = unquote(pk)
     sel_event = Event.objects.get(name=pk)
+    meta = sel_event.questions.all()
     mem = False
     registered = False
     if request.user.is_authenticated:
@@ -91,14 +94,28 @@ def event(request, pk):
 
     if request.method == "POST":
         if request.user.is_authenticated:
-            sel_event.participants.add(request.user.student)
-            sel_event.save()
-            return redirect(reverse("event", args=(sel_event.name,)))
+            if not meta:
+                sel_event.participants.add(request.user.student)
+                sel_event.save()
+                return redirect(reverse("event", args=(sel_event.name,)))
+            with transaction.atomic():
+                for question in meta:
+                    response = QuestionResponse.objects.create(
+                        question=question,
+                        student=request.user.student,
+                        answer=str(json.loads(request.POST.get(str(question.id), '[Did not select]'))).replace("'", '"')
+                        )
+                sel_event.participants.add(request.user.student)
+                sel_event.save()
+                return redirect(reverse("event", args=(sel_event.name,)))
         else:
             messages.error(request, "Signup or Login to register for events")
             return redirect("login")
 
-    context = {'event': sel_event, "member":mem, "registered":registered, "photos": sel_event.photos.all()}
+    if meta:
+        meta = list(map(lambda x: x.toDict(), meta))
+    
+    context = {'event': sel_event, "member":mem, "registered":registered, "photos": sel_event.photos.all(), 'meta':meta}
     return render(request, 'base/event.html', context)
 
 def events(request):

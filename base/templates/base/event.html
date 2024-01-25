@@ -76,10 +76,14 @@
                         <button class="register">Registered</button>
                     {% endif %}
                 {% elif event.team_members == 1 %}
-                <form method="POST">
-                    {% csrf_token %}
-                    <button type="submit" name="register" class="register">Quick Register</button>
-                </form>
+                    {% if meta %}
+                        <button type="submit" name="register" class="register enable-overlay">Register</button>
+                    {% else %}
+                        <form method="POST">
+                            {% csrf_token %}
+                            <button type="submit" name="register" class="register">Quick Register</button>
+                        </form>
+                    {% endif %}
                 {% else %}
                 <a href="{% url 'register' event.name 'join' %}" style="text-decoration: none;">
                     <button class="register team">Join Team</button>
@@ -113,6 +117,29 @@
             {{event.details|safe}}
         </div>
     </div>
+    {% if meta and not registered %}
+    <div class="overlay">
+        <div class="overlay-child">
+            <form method="POST" onsubmit="return validateRegister()">
+                {% csrf_token %}
+                {% for question in meta %}
+                <div class="question-container">
+                    <div class="question">Q {{forloop.counter}})<b> {{question.question}}</b></div>
+                    <input type="hidden" name="{{question.id}}" id="{{forloop.counter}}">
+                    <div class="options">
+                    {% for option in question.options %}
+                        <div class="option" id="">{{option}}</div>
+                    {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+                <div style="width: max-content;margin: auto;">
+                    <button type="submit" name="register" class="register" style="width: max-content;padding: 5px 20px;">Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
 </div>
 
 {% endblock %} 

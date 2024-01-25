@@ -1,4 +1,5 @@
 from typing import Any
+import json
 import uuid, shutil, os
 from django.db import models
 from django.contrib.auth.models import User
@@ -164,6 +165,30 @@ class Event(models.Model):
     def incharge(self):
         return ",".join([str(c) for c in self.coordinator.all()])
 
+
+class Question(models.Model):
+    question = models.TextField()
+    option = models.TextField()
+    belongsTo = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='questions')
+
+    def __str__(self) -> str:
+        return f"{self.question} {self.belongsTo}"
+
+    def toDict(self):
+        return {
+            'question':self.question,
+            'options':json.loads(self.option),
+            'belongsTo':self.belongsTo.id,
+            'id':self.id,
+        }
+
+class QuestionResponse(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='responses')
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='responses')
+    answer = models.TextField()
+
+    def __str__(self) -> str:
+        return f"{self.question} {self.student}"
 
 class Team(models.Model):
     team_name = models.CharField(max_length=100)
