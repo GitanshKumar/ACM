@@ -96,7 +96,7 @@
                 {% endif %}
             </div>
         </div>
-        <h1>My Bytes</h1>
+        <h1>{% if is_owner %}My Bytes{% else %}Bytes{% endif %}</h1>
         <div class="bytes-container">
             {% if bytes %}
                 {% for byte in bytes %}
@@ -113,6 +113,7 @@
                     </div>
                 {% endfor %}
             {% else %}
+            <div></div>
             <div style="text-align: center;">
                 <h2 style="margin: 10px;">Such Empty!</h2>
                 No Bytes Yet
