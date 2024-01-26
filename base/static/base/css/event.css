@@ -161,6 +161,7 @@
 .overlay-child {
     max-height: 80vh;
     min-width: 300px;
+    overflow: auto;
     width: 50vw;
     padding: 14px;
     background-color: white;

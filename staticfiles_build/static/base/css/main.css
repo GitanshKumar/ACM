@@ -50,6 +50,43 @@ background-color: rgba(89, 191, 164,0.5);
 border-color: rgba(0, 0, 0, 0.5);
 }
 
+.overlay {
+    background-color: color-mix(in srgb, rgb(255, 255, 255)50%, transparent);
+    position: fixed;
+    left: 0;right: 0;
+    top: 0;bottom: 0;
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.overlay-child {
+    width: 80vw;
+    margin: auto;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    box-shadow: var(--box-shadow);
+}
+.overlay-child .close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    border-radius: 100px;
+    margin: var(--card-padding);
+    padding: .5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+}
+.overlay-child .close:hover {
+    background-color: var(--color-primary);
+}
+
 @media screen and (max-width:767px) {
     body, html {
         width: 100%;
