@@ -85,4 +85,7 @@ if (viewForm) {
     viewForm.addEventListener('click', function() {
         document.querySelector('.overlay').classList.toggle('active')
     })
+    document.querySelector('.close').addEventListener('click', function() {
+        document.querySelector('.overlay').classList.remove('active');
+    })
 }

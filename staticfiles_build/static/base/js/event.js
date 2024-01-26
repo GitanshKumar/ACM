@@ -30,15 +30,62 @@ function startLoop(auto) {
 }
 
 const nextslide = document.querySelector(".btn-next");
-nextslide.addEventListener("click", function () {
-    transformvals.unshift(transformvals.pop())
-    startLoop(0);
-});
+if (nextslide) {
+    nextslide.addEventListener("click", function () {
+        transformvals.unshift(transformvals.pop())
+        startLoop(0);
+    });
+}
 
 const prevslide = document.querySelector(".btn-prev");
-prevslide.addEventListener("click", function () {
-    transformvals.push(transformvals.shift())
-    startLoop(0);
-});
+if (prevslide) {
+    prevslide.addEventListener("click", function () {
+        transformvals.push(transformvals.shift())
+        startLoop(0);
+    });
+}
 
 startLoop(0);
+
+try{
+document.querySelector('.options').addEventListener('click', function(event) {
+    if (event.target.classList.contains('option')) {
+        event.target.classList.toggle('selected')
+    }
+})}catch{}
+
+function validateRegister() {
+    let hasError = false;
+
+    try{
+    document.querySelectorAll('.overlay .question-container').forEach((questionContainer, key) => {
+        if (!questionContainer.querySelector('.option.selected')) {
+            const div = document.createElement('div');
+            div.className = 'error';
+            div.innerText = 'Please select at least one option!';
+            questionContainer.querySelector('.question').appendChild(div);
+
+            hasError = true;
+        } else {
+            const sel = []
+            questionContainer.querySelectorAll('.option.selected').forEach(selected => {
+                sel.push(selected.innerText);
+            })
+            document.getElementById(key + 1).value = JSON.stringify(sel);
+        }
+    });
+    }
+    catch {console.log('errr');return false}
+
+    return !hasError; 
+}
+
+const viewForm = document.querySelector('.enable-overlay')
+if (viewForm) {
+    viewForm.addEventListener('click', function() {
+        document.querySelector('.overlay').classList.toggle('active')
+    })
+    document.querySelector('.close').addEventListener('click', function() {
+        document.querySelector('.overlay').classList.remove('active');
+    })
+}

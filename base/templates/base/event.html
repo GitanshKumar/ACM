@@ -120,6 +120,7 @@
     {% if meta and not registered %}
     <div class="overlay">
         <div class="overlay-child">
+            <i class="fa fa-times close"></i>
             <form method="POST" onsubmit="return validateRegister()">
                 {% csrf_token %}
                 {% for question in meta %}
@@ -141,9 +142,13 @@
     </div>
     {% endif %}
 </div>
+<script>
+    
+</script>
 
 {% endblock %} 
 
 {% block script %}
 <script src="{% static 'base/js/event.js' %}" defer></script>
+
 {% endblock %}
