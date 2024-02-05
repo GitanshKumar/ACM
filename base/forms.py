@@ -23,7 +23,6 @@ class EditStudentForm(forms.ModelForm):
         fields = ('year', 'mobile_no', 'profile_pic', 'linked_in', 'github', 'desc', 'core', 'admission')
 
 class CreateByteForm(forms.ModelForm):
-    poster = forms.ImageField(required=True)
     class Meta:
         model = Byte
         fields = ('byte', 'poster')
