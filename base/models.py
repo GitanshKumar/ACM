@@ -209,8 +209,8 @@ def nameBytePoster(instance, filename):
 
 class Byte(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="mybytes", default='', null=True, blank=True)
-    byte = models.TextField(max_length=500)
-    poster = models.ImageField(upload_to=nameBytePoster, blank=True)
+    byte = models.TextField()
+    poster = models.ImageField(upload_to=nameBytePoster, blank=True, null=True)
     likeOwner = models.ManyToManyField(User, blank=True, related_name='liked', default='')
     likes = models.IntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
@@ -226,5 +226,6 @@ class Byte(models.Model):
         return super(Byte, self).save(*args, **kwargs)
     
     def delete(self, *args, **kwargs):
-        create_client(os.environ.get("SUPABASE_URL"), os.environ.get("SUPABASE_KEY")).storage.from_("images").remove(self.poster.name)
+        if self.poster:
+            create_client(os.environ.get("SUPABASE_URL"), os.environ.get("SUPABASE_KEY")).storage.from_("images").remove(self.poster.name)
         return super().delete(*args, **kwargs)

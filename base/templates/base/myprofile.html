@@ -100,6 +100,7 @@
         <div class="bytes-container">
             {% if bytes %}
                 {% for byte in bytes %}
+                    {% if byte.poster %}
                     <div class="blog">
                         <a href="{% url 'byte' byte.id %}">
                             <div class="poster-container">
@@ -111,6 +112,7 @@
                             </div>
                         </a>
                     </div>
+                    {% endif %}
                 {% endfor %}
             {% else %}
             <div></div>
