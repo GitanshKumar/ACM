@@ -10,6 +10,7 @@ function loadMoreBytes() {
         method: 'GET',
         data: {'page': page},
         success: function(data) {
+            console.log(data);
             const bytes = data["bytes"];
             const owners = data["owners"];
             if (bytes.length == 0) {remaining = false;return;}
