@@ -21,20 +21,22 @@ function loadMoreBytes() {
                 const owner = owners[i];
                 var child = `
                         <div class="blog">
-                        <div class="blog-title-container">
-                            <div class="owner">
-                                <a href='/profile/${owner['username']}'>
-                                    <div class="owner-pic">
-                                        <img src="${owner['profile_pic']}" alt="">
+                            <div class="blog-title-container">
+                                <div class="owner">
+                                    <a href='/profile/${owner['username']}'>
+                                        <div class="owner-pic">
+                                            <img src="${owner['profile_pic']}" alt="">
+                                        </div>
+                                    </a>
+                                    <div class="name">
+                                        ${owner['name']}<br>
+                                        <small>${owner['username']}</small>
                                     </div>
-                                </a>
-                                <div class="name">
-                                    ${owner['name']}<br>
-                                    <small>${owner['username']}</small>
                                 </div>
+                                <div class="date">${byte['created']}</div>
                             </div>
-                            <div class="date">${byte['created']}</div>
-                        </div>
+                        ${byte['poster'] ? 
+                        `
                         <a href="/blogs/${byte['id']}">
                             <div class="poster-container">
                                 <img src="${byte['poster']}" alt="">
@@ -57,8 +59,31 @@ function loadMoreBytes() {
                             </div>
                         </div>
                         <div class="blog-caption-container">
-                            <div class="caption">${byte['byte']}</div>
+                            <div class="caption">${byte['byte'].slice(0, 500)}${byte['byte'].length > 500 ? '...' : ''}</div>
                         </div>
+                        ` :
+                        `
+                        <div class="blog-caption-container">
+                            <div class="caption">${byte['byte'].slice(0, 500)}${byte['byte'].length > 500 ? '...' : ''}</div>
+                        </div>
+                        <div class="action-icons">
+                            <div class="likes" data-id="${byte['id']}">
+                                <i class="fa fa-heart${byte['liked'] ? '' : '-o'}" aria-hidden="true"></i>
+                                <div class="count">${byte['likes']}</div>
+                            </div>
+                            <div class="comments">
+                                <i class="fa fa-comment-o" aria-hidden="true"></i>
+                            </div>
+                            <div class="share">
+                                <input type="text" value="/blogs/${byte['id']}" style="display: none;">
+                                <i class="fa fa-share" aria-hidden="true"></i>
+                            </div>
+                            <div class="options">
+                                <i class="fa fa-ellipsis-v" style="width: 20px;text-align: center;" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                        `
+                        }
                     </div>
                 `;
 

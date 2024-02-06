@@ -481,6 +481,7 @@ def blog(request, pk=None):
             new_byte.likeOwner.add(request.user)
             new_byte.likes += 1
             new_byte.save()
+            return redirect(reverse('byte', args=(new_byte.id,)))
     else:
         form = CreateByteForm()
     
@@ -527,17 +528,17 @@ def loadMoreBytes(request):
             liked = request.user in byte.likeOwner.all()
         context['bytes'].append({
             'id':byte.id,
-            'poster':byte.poster.url,
+            'poster':byte.poster.url if byte.poster else '',
             'byte': byte.byte,
             'likes': byte.likes,
             'liked': liked,
-            'created': byte.created.astimezone(pytz.timezone('Asia/Kolkata')).strftime("%b. %d, %Y, %I:%M %p"),
+            'created': byte.created.strftime("%b. %d, %Y, %I:%M %p"),
             })
         owner = byte.owner
         context['owners'].append({
             'username': owner.username,
-            'name': owner.Student.name if hasattr(owner, 'Student') else owner.member.name,
-            'profile_pic': owner.Student.profile_pic.url if hasattr(owner, 'Student') else owner.member.profile_pic.url
+            'name': owner.student.name if hasattr(owner, 'student') else owner.member.name,
+            'profile_pic': owner.student.profile_pic.url if hasattr(owner, 'student') else owner.member.profile_pic.url
         })
     return JsonResponse(context)
 
