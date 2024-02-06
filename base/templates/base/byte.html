@@ -56,11 +56,11 @@
                             {% endif %}
                         </div>
                         <div class="blog-caption-container">
-                            <div class="caption">{{byte.byte}}</div>
+                            <div class="caption">{{byte.byte|linebreaks}}</div>
                         </div>
                     {% else %}
                         <div class="blog-caption-container">
-                            <div class="caption">{{byte.byte}}</div>
+                            <div class="caption">{{byte.byte|linebreaks}}</div>
                         </div>
                         <div class="action-icons">
                             <div class="likes" data-id="{{byte.id}}">
