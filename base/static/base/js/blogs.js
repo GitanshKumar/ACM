@@ -59,12 +59,12 @@ function loadMoreBytes() {
                             </div>
                         </div>
                         <div class="blog-caption-container">
-                            <div class="caption">${byte['byte'].slice(0, 500)}${byte['byte'].length > 500 ? '...' : ''}</div>
+                            <div class="caption">${byte['byte'].slice(0, 500).replace(/\n/g, '<br>')}${byte['byte'].length > 500 ? '...' : ''}</div>
                         </div>
                         ` :
                         `
                         <div class="blog-caption-container">
-                            <div class="caption">${byte['byte'].slice(0, 500)}${byte['byte'].length > 500 ? '...' : ''}</div>
+                            <div class="caption">${byte['byte'].slice(0, 500).replace(/\n/g, '<br>')}${byte['byte'].length > 500 ? '...' : ''}</div>
                         </div>
                         <div class="action-icons">
                             <div class="likes" data-id="${byte['id']}">

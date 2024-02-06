@@ -55,12 +55,12 @@
                                 </div>
                             </div>
                             <div class="blog-caption-container">
-                                <div class="caption">{{byte.byte|truncatechars:500}}</div>
+                                <div class="caption">{{byte.byte|truncatechars:500|linebreaks}}</div>
                             </div>
                         {% else %}
                             <a href="{% url 'byte' byte.id %}">
                                 <div class="blog-caption-container">
-                                    <div class="caption">{{byte.byte|truncatechars:500}}</div>
+                                    <div class="caption">{{byte.byte|truncatechars:500|linebreaks}}</div>
                                 </div>
                             </a>
                             <div class="action-icons">
