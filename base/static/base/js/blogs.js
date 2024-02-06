@@ -37,7 +37,7 @@ function loadMoreBytes() {
                             </div>
                         ${byte['poster'] ? 
                         `
-                        <a href="/blogs/${byte['id']}">
+                        <a href="/bytes/${byte['id']}">
                             <div class="poster-container">
                                 <img src="${byte['poster']}" alt="">
                             </div>
@@ -63,9 +63,11 @@ function loadMoreBytes() {
                         </div>
                         ` :
                         `
-                        <div class="blog-caption-container">
-                            <div class="caption">${byte['byte'].slice(0, 500).replace(/\n/g, '<br>')}${byte['byte'].length > 500 ? '...' : ''}</div>
-                        </div>
+                        <a href="/bytes/${byte['id']}">
+                            <div class="blog-caption-container">
+                                <div class="caption">${byte['byte'].slice(0, 500).replace(/\n/g, '<br>')}${byte['byte'].length > 500 ? '...' : ''}</div>
+                            </div>
+                        </a>
                         <div class="action-icons">
                             <div class="likes" data-id="${byte['id']}">
                                 <i class="fa fa-heart${byte['liked'] ? '' : '-o'}" aria-hidden="true"></i>

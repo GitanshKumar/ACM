@@ -1,6 +1,6 @@
 {% extends "main.html" %}
 
-{% block title %}Blogs{% endblock %}
+{% block title %}Byte - {% if owner.student %} {{owner.student.name}} {% else %} {{owner.member.name}} {% endif %}{% endblock %}
 
 {% load static %}
 
